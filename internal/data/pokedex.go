@@ -18,6 +18,7 @@ type Pokemon struct {
 	BaseSpecies string            `json:"baseSpecies,omitempty"`
 	Forme       string            `json:"forme,omitempty"`
 	Gender      string            `json:"gender,omitempty"`
+	CatchRate   int               `json:"catchRate,omitempty"`
 }
 
 // GenderRatio represents the gender distribution of a Pokemon

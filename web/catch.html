@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catch Rate Calculator</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="/js/catch.js"></script>
+</head>
+<body x-data="catchApp()" x-init="init()">
+    <header>
+        <h1>Catch Rate Calculator</h1>
+        <nav>
+            <a href="/calculator">Damage Calculator</a>
+            <a href="/moves">Moves</a>
+            <a href="/party">Party</a>
+            <a href="/catch" class="active">Catch</a>
+        </nav>
+    </header>
+
+    <main class="catch-layout">
+        <!-- Pokemon Selection -->
+        <section class="catch-input-section">
+            <h2>Pokemon</h2>
+
+            <!-- Pokemon Search -->
+            <div class="search-container">
+                <input type="text"
+                       x-model="searchQuery"
+                       @input.debounce.200ms="searchPokemon()"
+                       @focus="showResults = searchResults.length > 0"
+                       placeholder="Search Pokemon..."
+                       autocomplete="off">
+                <ul x-show="showResults && searchResults.length > 0"
+                    class="search-results"
+                    @click.away="showResults = false">
+                    <template x-for="result in searchResults" :key="result.id">
+                        <li @click="selectPokemon(result)" x-text="result.name"></li>
+                    </template>
+                </ul>
+            </div>
+
+            <!-- Selected Pokemon Info -->
+            <div x-show="selectedPokemon" class="selected-pokemon-info">
+                <div class="pokemon-sprite">
+                    <img :src="getSpriteUrl()" :alt="selectedPokemon?.name" @error="handleSpriteError($event)">
+                </div>
+                <div class="pokemon-details">
+                    <span class="pokemon-name" x-text="selectedPokemon?.name"></span>
+                    <div class="type-badges">
+                        <template x-for="type in selectedPokemon?.types || []" :key="type">
+                            <span class="type-badge" :class="'type-' + type.toLowerCase()" x-text="type"></span>
+                        </template>
+                    </div>
+                    <span class="catch-rate-display">Catch Rate: <strong x-text="selectedPokemon?.catchRate || '?'"></strong></span>
+                </div>
+            </div>
+
+            <!-- HP Slider -->
+            <div class="form-section">
+                <h3>Target HP</h3>
+                <div class="hp-slider-container">
+                    <div class="hp-bar-visual">
+                        <div class="hp-fill" :class="getHPBarClass()" :style="'width: ' + hpPercent + '%'"></div>
+                    </div>
+                    <input type="range" x-model.number="hpPercent" min="1" max="100" class="hp-slider">
+                    <div class="hp-labels">
+                        <span class="hp-percent" x-text="hpPercent + '%'"></span>
+                        <span class="hp-zone" :class="getHPBarClass()" x-text="getHPZoneText()"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Status Condition -->
+            <div class="form-section">
+                <h3>Status Condition</h3>
+                <div class="status-options">
+                    <label class="status-option">
+                        <input type="radio" x-model="status" value="none">
+                        <span>None</span>
+                    </label>
+                    <label class="status-option">
+                        <input type="radio" x-model="status" value="sleep">
+                        <span>Sleep (2x)</span>
+                    </label>
+                    <label class="status-option">
+                        <input type="radio" x-model="status" value="freeze">
+                        <span>Freeze (2x)</span>
+                    </label>
+                    <label class="status-option">
+                        <input type="radio" x-model="status" value="paralysis">
+                        <span>Paralysis (1.5x)</span>
+                    </label>
+                    <label class="status-option">
+                        <input type="radio" x-model="status" value="burn">
+                        <span>Burn (1.5x)</span>
+                    </label>
+                    <label class="status-option">
+                        <input type="radio" x-model="status" value="poison">
+                        <span>Poison (1.5x)</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Conditional Ball Settings -->
+            <div class="form-section">
+                <h3>Ball Conditions</h3>
+                <div class="form-row">
+                    <label>Level:</label>
+                    <input type="number" x-model.number="level" min="1" max="100" placeholder="50">
+                    <span class="form-hint">(for Nest Ball)</span>
+                </div>
+                <div class="form-row">
+                    <label>Turns:</label>
+                    <input type="number" x-model.number="turns" min="0" max="100" placeholder="0">
+                    <span class="form-hint">(for Timer Ball)</span>
+                </div>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" x-model="alreadyCaught"> Already caught (Repeat Ball 3x)</label>
+                    <label><input type="checkbox" x-model="inCaveOrNight"> In cave or at night (Dusk Ball 3.5x)</label>
+                    <label><input type="checkbox" x-model="underwater"> Underwater/surfing (Dive Ball 3.5x)</label>
+                </div>
+            </div>
+
+            <!-- Throws Calculator -->
+            <div class="form-section">
+                <h3>Cumulative Probability</h3>
+                <div class="form-row">
+                    <label>After throws:</label>
+                    <input type="number" x-model.number="throwCount" min="1" max="99" placeholder="10">
+                </div>
+            </div>
+        </section>
+
+        <!-- Results Section -->
+        <section class="catch-results-section" x-show="selectedPokemon">
+            <h2>Catch Probabilities</h2>
+
+            <div class="results-table-container">
+                <table class="catch-results-table">
+                    <thead>
+                        <tr>
+                            <th>Ball</th>
+                            <th>Multiplier</th>
+                            <th>Per Throw</th>
+                            <th x-text="'After ' + throwCount"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template x-for="ball in getBallResults()" :key="ball.name">
+                            <tr :class="{'guaranteed': ball.perThrow >= 1}">
+                                <td class="ball-name">
+                                    <span class="ball-icon" :class="'ball-' + ball.id"></span>
+                                    <span x-text="ball.name"></span>
+                                </td>
+                                <td class="ball-mult" x-text="ball.multiplier.toFixed(1) + 'x'"></td>
+                                <td class="catch-percent" :class="getCatchClass(ball.perThrow)">
+                                    <span x-text="ball.perThrow >= 1 ? 'Guaranteed' : (ball.perThrow * 100).toFixed(1) + '%'"></span>
+                                </td>
+                                <td class="cumulative-percent" :class="getCatchClass(ball.cumulative)">
+                                    <span x-text="ball.cumulative >= 1 ? '100%' : (ball.cumulative * 100).toFixed(1) + '%'"></span>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Expected Throws -->
+            <div class="expected-throws" x-show="selectedPokemon">
+                <h3>Expected Throws to Catch</h3>
+                <div class="expected-grid">
+                    <template x-for="ball in getExpectedThrows()" :key="ball.name">
+                        <div class="expected-item">
+                            <span class="ball-name" x-text="ball.name"></span>
+                            <span class="expected-value" x-text="ball.expected"></span>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </section>
+
+        <!-- Empty State -->
+        <div class="empty-state" x-show="!selectedPokemon">
+            <p>Search for a Pokemon to calculate catch rates.</p>
+        </div>
+    </main>
+
+    <footer>
+        <p>Catch Rate Calculator - Gen 3 Formula (Emerald)</p>
+    </footer>
+</body>
+</html>

@@ -83,6 +83,9 @@ func LoadFromDirectory(dir string) (*Store, error) {
 		return nil, fmt.Errorf("loading learnsets: %w", err)
 	}
 
+	// Load catch rates (optional, doesn't fail if missing)
+	_ = store.loadCatchRates(filepath.Join(dir, "catchrates.json"))
+
 	return store, nil
 }
 
@@ -215,6 +218,28 @@ func (s *Store) loadLearnsets(path string) error {
 	}
 
 	return json.Unmarshal(data, &s.Learnsets)
+}
+
+func (s *Store) loadCatchRates(path string) error {
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return err
+	}
+
+	var catchRates map[string]int
+	if err := json.Unmarshal(data, &catchRates); err != nil {
+		return err
+	}
+
+	// Apply catch rates to Pokemon by their dex number
+	for _, pokemon := range s.Pokedex {
+		numStr := fmt.Sprintf("%d", pokemon.Num)
+		if rate, ok := catchRates[numStr]; ok {
+			pokemon.CatchRate = rate
+		}
+	}
+
+	return nil
 }
 
 // GetPokemon returns a Pokemon by name or ID (case-insensitive)
