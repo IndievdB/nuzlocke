@@ -73,6 +73,9 @@ function convertTypechart() {
 function convertItems() {
     const content = fs.readFileSync(path.join(dataDir, 'items.ts'), 'utf8');
 
+    // Load descriptions from text file
+    const descriptions = parseItemDescriptions();
+
     // Parse item entries - extract key properties only
     const items = {};
 
@@ -127,6 +130,15 @@ function convertItems() {
                 boosts[stat] = parseInt(val);
             }
             item.boosts = boosts;
+        }
+
+        // Add descriptions from text file
+        if (descriptions[id]) {
+            if (descriptions[id].desc) {
+                item.desc = descriptions[id].desc;
+            } else if (descriptions[id].shortDesc) {
+                item.desc = descriptions[id].shortDesc;
+            }
         }
 
         if (item.name) {
@@ -193,6 +205,65 @@ function parseAbilityDescriptions() {
                 inAbility = false;
                 currentAbilityId = null;
                 abilityContent = '';
+            }
+        }
+    }
+
+    return descriptions;
+}
+
+/**
+ * Parse item descriptions from text/items.ts
+ */
+function parseItemDescriptions() {
+    const textPath = path.join(dataDir, 'text', 'items.ts');
+    if (!fs.existsSync(textPath)) {
+        console.log('text/items.ts not found, skipping item descriptions');
+        return {};
+    }
+
+    const content = fs.readFileSync(textPath, 'utf8');
+    const descriptions = {};
+
+    // Find each item text block
+    const lines = content.split('\n');
+    let currentItemId = null;
+    let braceCount = 0;
+    let inItem = false;
+    let itemContent = '';
+
+    for (const line of lines) {
+        const itemStart = line.match(/^\t(\w+):\s*\{/);
+
+        if (itemStart && !inItem) {
+            currentItemId = itemStart[1];
+            inItem = true;
+            braceCount = 1;
+            itemContent = line;
+            continue;
+        }
+
+        if (inItem) {
+            itemContent += '\n' + line;
+
+            for (const char of line) {
+                if (char === '{') braceCount++;
+                if (char === '}') braceCount--;
+            }
+
+            if (braceCount === 0) {
+                // Extract desc and shortDesc - handle escaped quotes and apostrophes
+                const descMatch = itemContent.match(/\tdesc:\s*"((?:[^"\\]|\\.)*)"/);
+                const shortDescMatch = itemContent.match(/\tshortDesc:\s*"((?:[^"\\]|\\.)*)"/);
+
+                descriptions[currentItemId] = {
+                    desc: descMatch ? descMatch[1].replace(/\\'/g, "'") : null,
+                    shortDesc: shortDescMatch ? shortDescMatch[1].replace(/\\'/g, "'") : null
+                };
+
+                inItem = false;
+                currentItemId = null;
+                itemContent = '';
             }
         }
     }

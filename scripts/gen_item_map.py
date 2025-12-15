@@ -25,7 +25,7 @@ def main():
     for item_id, item in showdown_items.items():
         showdown_by_name[item_id] = item.get('num', 0)
 
-    # Fetch expansion items.h
+    # Fetch pokeemerald-expansion items.h
     items_url = "https://raw.githubusercontent.com/rh-hideout/pokeemerald-expansion/master/include/constants/items.h"
     items_content = fetch_url(items_url)
 

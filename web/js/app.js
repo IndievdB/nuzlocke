@@ -254,6 +254,42 @@ function calculator() {
             await Promise.all(fetchPromises);
         },
 
+        // Sort level-up moves by level
+        sortedLevelUpMoves() {
+            if (!this.attackerLearnset?.levelup) return [];
+            return [...this.attackerLearnset.levelup].sort((a, b) => a.level - b.level);
+        },
+
+        // Sort TM moves alphabetically by move name
+        sortedTMMoves() {
+            if (!this.attackerLearnset?.tm) return [];
+            return [...this.attackerLearnset.tm].sort((a, b) => {
+                const nameA = this.getMoveDetails(a)?.name || a;
+                const nameB = this.getMoveDetails(b)?.name || b;
+                return nameA.localeCompare(nameB);
+            });
+        },
+
+        // Sort tutor moves alphabetically by move name
+        sortedTutorMoves() {
+            if (!this.attackerLearnset?.tutor) return [];
+            return [...this.attackerLearnset.tutor].sort((a, b) => {
+                const nameA = this.getMoveDetails(a)?.name || a;
+                const nameB = this.getMoveDetails(b)?.name || b;
+                return nameA.localeCompare(nameB);
+            });
+        },
+
+        // Sort egg moves alphabetically by move name
+        sortedEggMoves() {
+            if (!this.attackerLearnset?.egg) return [];
+            return [...this.attackerLearnset.egg].sort((a, b) => {
+                const nameA = this.getMoveDetails(a)?.name || a;
+                const nameB = this.getMoveDetails(b)?.name || b;
+                return nameA.localeCompare(nameB);
+            });
+        },
+
         // Get move details from cache
         getMoveDetails(moveId) {
             return this.moveCache[moveId] || null;

@@ -2,6 +2,7 @@ function partyApp() {
     return {
         party: [],
         fileName: '',
+        lastFile: null,
         error: '',
         loading: false,
 
@@ -13,6 +14,16 @@ function partyApp() {
             const file = event.target.files[0];
             if (!file) return;
 
+            this.lastFile = file;
+            await this.parseFile(file);
+        },
+
+        async refreshFile() {
+            if (!this.lastFile) return;
+            await this.parseFile(this.lastFile);
+        },
+
+        async parseFile(file) {
             this.fileName = file.name;
             this.error = '';
             this.loading = true;

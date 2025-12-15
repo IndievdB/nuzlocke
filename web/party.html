@@ -21,23 +21,24 @@
 
     <main class="party-layout">
         <!-- File Upload Section -->
-        <section class="upload-section">
-            <h2>Upload Save File</h2>
-            <p class="description">Upload a Pokemon Emerald EX Speedchoice Randomizer save file (.sav) to view your party.</p>
-
-            <div class="file-upload-container">
-                <input type="file"
-                       id="saveFile"
-                       accept=".sav"
-                       @change="handleFileUpload($event)"
-                       class="file-input">
-                <label for="saveFile" class="file-label">
-                    <span x-text="fileName || 'Choose a .sav file...'"></span>
-                </label>
+        <section class="upload-section compact">
+            <div class="upload-row">
+                <div class="file-upload-container">
+                    <input type="file"
+                           id="saveFile"
+                           accept=".sav"
+                           @change="handleFileUpload($event)"
+                           class="file-input">
+                    <label for="saveFile" class="file-label">
+                        <span x-text="fileName || 'Choose a .sav file...'"></span>
+                    </label>
+                </div>
+                <button x-show="lastFile" @click="refreshFile()" class="refresh-btn" title="Reload save file">
+                    ↻ Refresh
+                </button>
             </div>
-
             <div x-show="error" class="error-message" x-text="error"></div>
-            <div x-show="loading" class="loading-message">Parsing save file...</div>
+            <div x-show="loading" class="loading-message">Parsing...</div>
         </section>
 
         <!-- Party Display Section -->
@@ -56,12 +57,13 @@
                                 <span class="pokemon-name" x-text="pokemon.species"></span>
                                 <span class="pokemon-nickname" x-show="pokemon.nickname && pokemon.nickname !== pokemon.species" x-text="'\"' + pokemon.nickname + '\"'"></span>
                                 <span class="pokemon-level" x-text="'Lv. ' + pokemon.level"></span>
-                                <span class="pokemon-nature tooltip" x-text="pokemon.nature">
-                                    <span class="tooltip-text" x-text="getNatureTooltip(pokemon.natureEffect)"></span>
-                                </span>
-                                <span class="pokemon-item tooltip" x-show="pokemon.item" x-text="pokemon.item?.name">
-                                    <span class="tooltip-text" x-text="pokemon.item?.description || 'Held item'"></span>
-                                </span>
+                                <span class="pokemon-nature has-tooltip"
+                                      x-text="pokemon.nature"
+                                      :data-tooltip="getNatureTooltip(pokemon.natureEffect)"></span>
+                                <span class="pokemon-item has-tooltip"
+                                      x-show="pokemon.item"
+                                      x-text="pokemon.item?.name"
+                                      :data-tooltip="pokemon.item?.description || 'Held item'"></span>
                             </div>
                             <!-- Stats Display -->
                             <div class="party-stats">

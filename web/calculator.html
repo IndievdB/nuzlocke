@@ -107,6 +107,21 @@
                     </div>
                 </div>
 
+                <!-- IVs -->
+                <div class="stat-group">
+                    <h4>IVs</h4>
+                    <div class="stat-row">
+                        <label>HP:</label><input type="number" x-model.number="attacker.ivs.hp" min="0" max="31">
+                        <label>Atk:</label><input type="number" x-model.number="attacker.ivs.atk" min="0" max="31">
+                        <label>Def:</label><input type="number" x-model.number="attacker.ivs.def" min="0" max="31">
+                    </div>
+                    <div class="stat-row">
+                        <label>SpA:</label><input type="number" x-model.number="attacker.ivs.spa" min="0" max="31">
+                        <label>SpD:</label><input type="number" x-model.number="attacker.ivs.spd" min="0" max="31">
+                        <label>Spe:</label><input type="number" x-model.number="attacker.ivs.spe" min="0" max="31">
+                    </div>
+                </div>
+
                 <!-- Boosts -->
                 <div class="stat-group">
                     <h4>Boosts</h4>
@@ -147,7 +162,7 @@
                     <!-- Level Up Moves -->
                     <template x-if="attackerLearnset?.levelup?.length > 0">
                         <optgroup label="Level Up">
-                            <template x-for="m in attackerLearnset.levelup" :key="'L' + m.move">
+                            <template x-for="m in sortedLevelUpMoves()" :key="'L' + m.move">
                                 <option :value="m.move" :selected="move.name === m.move" x-text="formatMove(m.move, m.level)"></option>
                             </template>
                         </optgroup>
@@ -156,7 +171,7 @@
                     <!-- TM Moves -->
                     <template x-if="attackerLearnset?.tm?.length > 0">
                         <optgroup label="TM/HM">
-                            <template x-for="moveId in attackerLearnset.tm" :key="'TM' + moveId">
+                            <template x-for="moveId in sortedTMMoves()" :key="'TM' + moveId">
                                 <option :value="moveId" :selected="move.name === moveId" x-text="formatMove(moveId)"></option>
                             </template>
                         </optgroup>
@@ -165,7 +180,7 @@
                     <!-- Tutor Moves -->
                     <template x-if="attackerLearnset?.tutor?.length > 0">
                         <optgroup label="Tutor">
-                            <template x-for="moveId in attackerLearnset.tutor" :key="'T' + moveId">
+                            <template x-for="moveId in sortedTutorMoves()" :key="'T' + moveId">
                                 <option :value="moveId" :selected="move.name === moveId" x-text="formatMove(moveId)"></option>
                             </template>
                         </optgroup>
@@ -174,7 +189,7 @@
                     <!-- Egg Moves -->
                     <template x-if="attackerLearnset?.egg?.length > 0">
                         <optgroup label="Egg">
-                            <template x-for="moveId in attackerLearnset.egg" :key="'E' + moveId">
+                            <template x-for="moveId in sortedEggMoves()" :key="'E' + moveId">
                                 <option :value="moveId" :selected="move.name === moveId" x-text="formatMove(moveId)"></option>
                             </template>
                         </optgroup>
@@ -305,6 +320,21 @@
                         <label>SpA:</label><input type="number" x-model.number="defender.evs.spa" min="0" max="252">
                         <label>SpD:</label><input type="number" x-model.number="defender.evs.spd" min="0" max="252">
                         <label>Spe:</label><input type="number" x-model.number="defender.evs.spe" min="0" max="252">
+                    </div>
+                </div>
+
+                <!-- IVs -->
+                <div class="stat-group">
+                    <h4>IVs</h4>
+                    <div class="stat-row">
+                        <label>HP:</label><input type="number" x-model.number="defender.ivs.hp" min="0" max="31">
+                        <label>Atk:</label><input type="number" x-model.number="defender.ivs.atk" min="0" max="31">
+                        <label>Def:</label><input type="number" x-model.number="defender.ivs.def" min="0" max="31">
+                    </div>
+                    <div class="stat-row">
+                        <label>SpA:</label><input type="number" x-model.number="defender.ivs.spa" min="0" max="31">
+                        <label>SpD:</label><input type="number" x-model.number="defender.ivs.spd" min="0" max="31">
+                        <label>Spe:</label><input type="number" x-model.number="defender.ivs.spe" min="0" max="31">
                     </div>
                 </div>
 
