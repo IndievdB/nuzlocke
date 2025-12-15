@@ -997,10 +997,11 @@ func parseBoxPokemon(data []byte) BoxPokemon {
 	}
 
 	// Get experience from Growth substructure (bytes 4-7)
-	experience := binary.LittleEndian.Uint32(decryptedData[growthPos+4 : growthPos+8])
+	// In pokeemerald-expansion, bits 21-28 are used for nickname11, so mask to lower 21 bits
+	expData := binary.LittleEndian.Uint32(decryptedData[growthPos+4 : growthPos+8])
+	experience := expData & 0x001FFFFF // Lower 21 bits only (max ~2M exp, enough for level 100)
 
 	// Get extended nickname characters (11th and 12th) from Growth substruct
-	expData := binary.LittleEndian.Uint32(decryptedData[growthPos+4 : growthPos+8])
 	nickname11 := byte((expData >> 21) & 0xFF)
 	pokeballData := binary.LittleEndian.Uint16(decryptedData[growthPos+10 : growthPos+12])
 	nickname12 := byte((pokeballData >> 6) & 0xFF)
