@@ -180,6 +180,26 @@ func (c *Calculator) applyGen3Modifiers(damage int, attacker, defender *models.B
 		*factors = append(*factors, "Flash Fire")
 	}
 
+	// 4b. Pinch abilities (Torrent, Blaze, Overgrow, Swarm) - activate at 1/3 HP or less
+	if attacker.GetCurrentHPPercent() <= 33.33 {
+		if attacker.HasAbility("torrent") && moveType == "Water" {
+			damage = FloorDiv(damage*3, 2) // 1.5x
+			*factors = append(*factors, "Torrent")
+		}
+		if attacker.HasAbility("blaze") && moveType == "Fire" {
+			damage = FloorDiv(damage*3, 2) // 1.5x
+			*factors = append(*factors, "Blaze")
+		}
+		if attacker.HasAbility("overgrow") && moveType == "Grass" {
+			damage = FloorDiv(damage*3, 2) // 1.5x
+			*factors = append(*factors, "Overgrow")
+		}
+		if attacker.HasAbility("swarm") && moveType == "Bug" {
+			damage = FloorDiv(damage*3, 2) // 1.5x
+			*factors = append(*factors, "Swarm")
+		}
+	}
+
 	// 5. Critical hit (2x in Gen 3, not 1.5x)
 	if move.IsCrit || move.WillCrit() {
 		damage *= 2

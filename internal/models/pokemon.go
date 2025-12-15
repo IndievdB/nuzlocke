@@ -29,9 +29,10 @@ type BattlePokemon struct {
 	ItemData *data.Item `json:"-"`
 
 	// Current battle state
-	CurrentHP int    `json:"currentHP,omitempty"` // If 0, use max HP
-	Status    string `json:"status,omitempty"`    // brn, par, psn, tox, slp, frz
-	Boosts    StatBoosts `json:"boosts"`
+	CurrentHP        int    `json:"currentHP,omitempty"`        // If 0, use max HP
+	CurrentHPPercent int    `json:"currentHPPercent,omitempty"` // If set, calculate currentHP from this
+	Status           string `json:"status,omitempty"`           // brn, par, psn, tox, slp, frz
+	Boosts           StatBoosts `json:"boosts"`
 
 	// Types (can be overridden by Tera, etc.)
 	Types []string `json:"types,omitempty"`
@@ -102,6 +103,10 @@ func (bp *BattlePokemon) GetMaxHP() int {
 
 // GetCurrentHP returns the current HP (defaults to max if not set)
 func (bp *BattlePokemon) GetCurrentHP() int {
+	// If currentHPPercent is set, calculate from that
+	if bp.CurrentHPPercent > 0 && bp.CurrentHPPercent < 100 {
+		return bp.GetMaxHP() * bp.CurrentHPPercent / 100
+	}
 	if bp.CurrentHP > 0 {
 		return bp.CurrentHP
 	}

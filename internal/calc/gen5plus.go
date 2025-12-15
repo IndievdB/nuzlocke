@@ -361,6 +361,27 @@ func (c *Calculator) applyAbilityModifiers(chain *ModifierChain, attacker, defen
 		}
 	}
 
+	// Pinch abilities (Torrent, Blaze, Overgrow, Swarm) - activate at 1/3 HP or less
+	if attacker.GetCurrentHPPercent() <= 33.33 {
+		moveType := move.GetType()
+		if attacker.HasAbility("torrent") && moveType == "Water" {
+			chain.Add(ModPinch, "Torrent")
+			*factors = append(*factors, "Torrent")
+		}
+		if attacker.HasAbility("blaze") && moveType == "Fire" {
+			chain.Add(ModPinch, "Blaze")
+			*factors = append(*factors, "Blaze")
+		}
+		if attacker.HasAbility("overgrow") && moveType == "Grass" {
+			chain.Add(ModPinch, "Overgrow")
+			*factors = append(*factors, "Overgrow")
+		}
+		if attacker.HasAbility("swarm") && moveType == "Bug" {
+			chain.Add(ModPinch, "Swarm")
+			*factors = append(*factors, "Swarm")
+		}
+	}
+
 	// Defensive abilities
 
 	// Filter / Solid Rock / Prism Armor (reduce SE damage)

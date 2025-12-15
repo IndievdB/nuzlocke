@@ -52,7 +52,8 @@ function calculator() {
         showAttackerItemResults: false,
         showDefenderItemResults: false,
 
-        // Defender HP percent (for display)
+        // HP percent (for abilities like Torrent, Blaze, etc.)
+        attackerHPPercent: 100,
         defenderHPPercent: 100,
 
         // Calculation result
@@ -107,6 +108,7 @@ function calculator() {
                     attackerKnownMoves: this.attackerKnownMoves,
                     move: this.move,
                     field: this.field,
+                    attackerHPPercent: this.attackerHPPercent,
                     defenderHPPercent: this.defenderHPPercent
                 };
                 localStorage.setItem('calculator_state', JSON.stringify(state));
@@ -133,6 +135,7 @@ function calculator() {
                 attackerSide: { helpingHand: false },
                 defenderSide: { reflect: false, lightScreen: false }
             };
+            this.attackerHPPercent = 100;
             this.defenderHPPercent = 100;
             this.result = null;
         },
@@ -169,7 +172,8 @@ function calculator() {
                 // Restore field settings
                 if (state.field) this.field = state.field;
 
-                // Restore defender HP percent
+                // Restore HP percents
+                if (state.attackerHPPercent !== undefined) this.attackerHPPercent = state.attackerHPPercent;
                 if (state.defenderHPPercent !== undefined) this.defenderHPPercent = state.defenderHPPercent;
 
                 // Restore attacker
@@ -817,7 +821,10 @@ function calculator() {
         async calculateSingle() {
             const request = {
                 generation: parseInt(this.generation),
-                attacker: this.buildPokemonRequest(this.attacker),
+                attacker: {
+                    ...this.buildPokemonRequest(this.attacker),
+                    currentHPPercent: this.attackerHPPercent
+                },
                 defender: {
                     ...this.buildPokemonRequest(this.defender),
                     currentHP: this.defenderHPPercent < 100 ? Math.floor(this.defender.maxHP * this.defenderHPPercent / 100) : 0
@@ -871,7 +878,8 @@ function calculator() {
                     const request = {
                         generation: parseInt(this.generation),
                         attacker: {
-                            ...this.buildPokemonRequest(this.attacker, atkScenario.evs, atkScenario.ivs)
+                            ...this.buildPokemonRequest(this.attacker, atkScenario.evs, atkScenario.ivs),
+                            currentHPPercent: this.attackerHPPercent
                         },
                         defender: {
                             ...this.buildPokemonRequest(this.defender, defScenario.evs, defScenario.ivs),

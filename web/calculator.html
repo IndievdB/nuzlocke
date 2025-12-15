@@ -200,6 +200,12 @@
                         <option value="tox">Badly Poisoned</option>
                     </select>
                 </div>
+
+                <!-- Current HP -->
+                <div class="form-row">
+                    <label>HP %:</label>
+                    <input type="number" x-model.number="attackerHPPercent" min="1" max="100" placeholder="100" @change="saveState()">
+                </div>
             </div>
         </section>
 

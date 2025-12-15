@@ -47,6 +47,7 @@ const (
 	ModHustle      = 6144 // 1.5x
 	ModFlowerGift  = 6144 // 1.5x
 	ModTechnician  = 6144 // 1.5x (for BP <= 60)
+	ModPinch       = 6144 // 1.5x (Torrent, Blaze, Overgrow, Swarm when HP <= 1/3)
 	ModIronFist    = 4915 // 1.2x
 	ModReckless    = 4915 // 1.2x
 	ModSheerForce  = 5325 // 1.3x
