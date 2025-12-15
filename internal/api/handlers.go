@@ -365,6 +365,8 @@ type PartyPokemonResponse struct {
 	Item         *ItemDetail            `json:"item,omitempty"`
 	Moves        []MoveDetail           `json:"moves"`
 	Stats        savefile.PokemonStats  `json:"stats"`
+	IVs          savefile.PokemonStats  `json:"ivs"`
+	EVs          savefile.PokemonStats  `json:"evs"`
 	CurrentHP    int                    `json:"currentHp"`
 }
 
@@ -406,6 +408,8 @@ func (h *Handler) HandleParseSave(w http.ResponseWriter, r *http.Request) {
 			Nature:       p.Nature,
 			NatureEffect: savefile.GetNatureEffect(p.Nature),
 			Stats:        p.Stats,
+			IVs:          p.IVs,
+			EVs:          p.EVs,
 			CurrentHP:    p.CurrentHP,
 		}
 

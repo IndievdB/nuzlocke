@@ -23,6 +23,16 @@
     <main class="moves-layout">
         <!-- Search Section -->
         <section class="search-section">
+            <!-- Party Import -->
+            <div x-show="partyPokemon.length > 0" class="party-import">
+                <select @change="$event.target.value && importFromParty(partyPokemon[$event.target.value]); $event.target.value = ''">
+                    <option value="">Import from Party...</option>
+                    <template x-for="(p, i) in partyPokemon" :key="i">
+                        <option :value="i" x-text="(p.nickname && p.nickname.toLowerCase() !== p.species.toLowerCase() ? p.nickname + ' (' + p.species + ')' : p.species) + ' Lv.' + p.level"></option>
+                    </template>
+                </select>
+            </div>
+
             <div class="search-container large">
                 <input type="text"
                        x-model="searchQuery"
@@ -172,19 +182,19 @@
                 <!-- Source Filters -->
                 <div class="source-filters">
                     <label>
-                        <input type="checkbox" x-model="showLevelUp"> Level Up
+                        <input type="checkbox" x-model="showLevelUp" @change="saveState()"> Level Up
                         <span class="count" x-text="'(' + (learnset?.levelup?.length || 0) + ')'"></span>
                     </label>
                     <label>
-                        <input type="checkbox" x-model="showTM"> TM/HM
+                        <input type="checkbox" x-model="showTM" @change="saveState()"> TM/HM
                         <span class="count" x-text="'(' + (learnset?.tm?.length || 0) + ')'"></span>
                     </label>
                     <label>
-                        <input type="checkbox" x-model="showEgg"> Egg
+                        <input type="checkbox" x-model="showEgg" @change="saveState()"> Egg
                         <span class="count" x-text="'(' + (learnset?.egg?.length || 0) + ')'"></span>
                     </label>
                     <label>
-                        <input type="checkbox" x-model="showTutor"> Tutor
+                        <input type="checkbox" x-model="showTutor" @change="saveState()"> Tutor
                         <span class="count" x-text="'(' + (learnset?.tutor?.length || 0) + ')'"></span>
                     </label>
                 </div>

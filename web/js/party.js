@@ -7,7 +7,39 @@ function partyApp() {
         loading: false,
 
         init() {
-            // Nothing to initialize
+            this.loadState();
+        },
+
+        loadState() {
+            try {
+                const saved = localStorage.getItem('nuzlocke_party');
+                if (saved) {
+                    const state = JSON.parse(saved);
+                    this.party = state.party || [];
+                    this.fileName = state.fileName || '';
+                }
+            } catch (e) {
+                console.error('Failed to load party state:', e);
+            }
+        },
+
+        saveState() {
+            try {
+                const state = {
+                    party: this.party,
+                    fileName: this.fileName
+                };
+                localStorage.setItem('nuzlocke_party', JSON.stringify(state));
+            } catch (e) {
+                console.error('Failed to save party state:', e);
+            }
+        },
+
+        discardParty() {
+            this.party = [];
+            this.fileName = '';
+            this.lastFile = null;
+            localStorage.removeItem('nuzlocke_party');
         },
 
         async handleFileUpload(event) {
@@ -45,10 +77,17 @@ function partyApp() {
                 }
 
                 const result = await response.json();
+                console.log('Parsed party data:', result);
                 this.party = result.party || [];
 
                 if (this.party.length === 0) {
                     this.error = 'No party Pokemon found in save file.';
+                } else {
+                    if (this.party[0]) {
+                        console.log('First Pokemon IVs:', this.party[0].ivs);
+                        console.log('First Pokemon EVs:', this.party[0].evs);
+                    }
+                    this.saveState();
                 }
             } catch (e) {
                 console.error('Failed to parse save file:', e);

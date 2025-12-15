@@ -34,8 +34,11 @@
                         <span x-text="fileName || 'Choose a .sav file...'"></span>
                     </label>
                 </div>
-                <button x-show="lastFile" @click="refreshFile()" class="refresh-btn" title="Reload save file">
+                <button x-show="lastFile" @click="refreshFile()" class="refresh-btn" title="Reload save file from disk">
                     ↻ Refresh
+                </button>
+                <button x-show="party.length > 0" @click="discardParty()" class="discard-btn" title="Clear party data">
+                    ✕ Discard
                 </button>
             </div>
             <div x-show="error" class="error-message" x-text="error"></div>
@@ -99,6 +102,16 @@
                                         <span class="stat-label">Spe</span>
                                         <span class="stat-value" x-text="pokemon.stats.speed"></span>
                                     </span>
+                                </div>
+                                <!-- IVs -->
+                                <div class="ivs-evs-row" x-show="pokemon.ivs">
+                                    <span class="ivs-label">IVs:</span>
+                                    <span class="ivs-values" x-text="pokemon.ivs?.hp + '/' + pokemon.ivs?.attack + '/' + pokemon.ivs?.defense + '/' + pokemon.ivs?.spAtk + '/' + pokemon.ivs?.spDef + '/' + pokemon.ivs?.speed"></span>
+                                </div>
+                                <!-- EVs -->
+                                <div class="ivs-evs-row" x-show="pokemon.evs">
+                                    <span class="evs-label">EVs:</span>
+                                    <span class="evs-values" x-text="pokemon.evs?.hp + '/' + pokemon.evs?.attack + '/' + pokemon.evs?.defense + '/' + pokemon.evs?.spAtk + '/' + pokemon.evs?.spDef + '/' + pokemon.evs?.speed"></span>
                                 </div>
                             </div>
                             <!-- Moves with Tooltips -->

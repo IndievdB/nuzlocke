@@ -61,6 +61,9 @@ function calculator() {
         natures: [],
         allItems: null, // Cached items list
 
+        // Party data (from localStorage, shared with party page)
+        partyPokemon: [],
+
         // Initialize
         async init() {
             // Load natures for dropdown
@@ -72,6 +75,198 @@ function calculator() {
             }
             // Preload items for autocomplete and descriptions
             this.loadItems();
+            // Load party data from shared localStorage
+            this.loadPartyData();
+            // Restore saved state
+            await this.loadState();
+        },
+
+        // Load party data from shared localStorage
+        loadPartyData() {
+            try {
+                const saved = localStorage.getItem('nuzlocke_party');
+                if (saved) {
+                    const state = JSON.parse(saved);
+                    this.partyPokemon = state.party || [];
+                }
+            } catch (e) {
+                console.error('Failed to load party data:', e);
+            }
+        },
+
+        // Save calculator state to localStorage
+        saveState() {
+            try {
+                const state = {
+                    generation: this.generation,
+                    attacker: this.serializePokemon(this.attacker),
+                    defender: this.serializePokemon(this.defender),
+                    attackerSearch: this.attackerSearch,
+                    defenderSearch: this.defenderSearch,
+                    move: this.move,
+                    field: this.field,
+                    defenderHPPercent: this.defenderHPPercent
+                };
+                localStorage.setItem('calculator_state', JSON.stringify(state));
+            } catch (e) {
+                console.error('Failed to save calculator state:', e);
+            }
+        },
+
+        // Serialize Pokemon state (excluding non-serializable speciesData)
+        serializePokemon(pokemon) {
+            return {
+                species: pokemon.species,
+                selectedForm: pokemon.selectedForm,
+                level: pokemon.level,
+                nature: pokemon.nature,
+                ability: pokemon.ability,
+                item: pokemon.item,
+                status: pokemon.status,
+                evs: pokemon.evs,
+                ivs: pokemon.ivs,
+                boosts: pokemon.boosts,
+                unknownEvs: pokemon.unknownEvs,
+                unknownIvs: pokemon.unknownIvs
+            };
+        },
+
+        // Load calculator state from localStorage
+        async loadState() {
+            try {
+                const saved = localStorage.getItem('calculator_state');
+                if (!saved) return;
+
+                const state = JSON.parse(saved);
+
+                // Restore generation
+                if (state.generation) this.generation = state.generation;
+
+                // Restore field settings
+                if (state.field) this.field = state.field;
+
+                // Restore defender HP percent
+                if (state.defenderHPPercent !== undefined) this.defenderHPPercent = state.defenderHPPercent;
+
+                // Restore attacker
+                if (state.attacker && state.attacker.species) {
+                    await this.restorePokemon('attacker', state.attacker, state.attackerSearch);
+                }
+
+                // Restore defender
+                if (state.defender && state.defender.species) {
+                    await this.restorePokemon('defender', state.defender, state.defenderSearch);
+                }
+
+                // Restore move after attacker is loaded
+                if (state.move) this.move = state.move;
+
+            } catch (e) {
+                console.error('Failed to load calculator state:', e);
+            }
+        },
+
+        // Restore a Pokemon from saved state
+        async restorePokemon(role, savedPokemon, searchText) {
+            try {
+                const response = await fetch(`/api/pokemon/${savedPokemon.species}`);
+                const pokemon = await response.json();
+
+                const target = role === 'attacker' ? this.attacker : this.defender;
+                target.species = savedPokemon.species;
+                target.speciesData = pokemon;
+                target.selectedForm = savedPokemon.selectedForm || '';
+                target.level = savedPokemon.level;
+                target.nature = savedPokemon.nature;
+                target.ability = savedPokemon.ability;
+                target.item = savedPokemon.item;
+                target.status = savedPokemon.status;
+                target.evs = savedPokemon.evs;
+                target.ivs = savedPokemon.ivs;
+                target.boosts = savedPokemon.boosts;
+                target.unknownEvs = savedPokemon.unknownEvs;
+                target.unknownIvs = savedPokemon.unknownIvs;
+
+                if (role === 'attacker') {
+                    this.attackerSearch = searchText || pokemon.name;
+                    await this.loadAttackerLearnset(savedPokemon.species);
+                    await this.loadForms('attacker', pokemon.baseSpecies || pokemon.name);
+                } else {
+                    this.defenderSearch = searchText || pokemon.name;
+                    await this.loadForms('defender', pokemon.baseSpecies || pokemon.name);
+                }
+            } catch (e) {
+                console.error('Failed to restore Pokemon:', e);
+            }
+        },
+
+        // Import Pokemon from party
+        async importFromParty(role, partyPokemon) {
+            try {
+                console.log('Importing from party:', partyPokemon); // Debug
+                console.log('Party Pokemon IVs:', partyPokemon.ivs); // Debug
+                console.log('Party Pokemon EVs:', partyPokemon.evs); // Debug
+
+                // Find species ID
+                const speciesId = partyPokemon.species.toLowerCase().replace(/[^a-z0-9]/g, '');
+                const response = await fetch(`/api/pokemon/${speciesId}`);
+                const pokemon = await response.json();
+
+                const target = role === 'attacker' ? this.attacker : this.defender;
+                target.species = speciesId;
+                target.speciesData = pokemon;
+                target.selectedForm = '';
+                target.level = partyPokemon.level;
+                target.nature = partyPokemon.nature.toLowerCase();
+                target.ability = partyPokemon.ability?.name || '';
+                target.item = partyPokemon.item?.name || '';
+                target.status = '';
+
+                // Import IVs and EVs
+                target.ivs = {
+                    hp: partyPokemon.ivs?.hp ?? 31,
+                    atk: partyPokemon.ivs?.attack ?? 31,
+                    def: partyPokemon.ivs?.defense ?? 31,
+                    spa: partyPokemon.ivs?.spAtk ?? 31,
+                    spd: partyPokemon.ivs?.spDef ?? 31,
+                    spe: partyPokemon.ivs?.speed ?? 31
+                };
+                target.evs = {
+                    hp: partyPokemon.evs?.hp ?? 0,
+                    atk: partyPokemon.evs?.attack ?? 0,
+                    def: partyPokemon.evs?.defense ?? 0,
+                    spa: partyPokemon.evs?.spAtk ?? 0,
+                    spd: partyPokemon.evs?.spDef ?? 0,
+                    spe: partyPokemon.evs?.speed ?? 0
+                };
+                console.log('Imported IVs:', target.ivs); // Debug
+                console.log('Imported EVs:', target.evs); // Debug
+
+                target.boosts = { atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
+                target.unknownEvs = false;
+                target.unknownIvs = false;
+
+                if (role === 'attacker') {
+                    this.attackerSearch = partyPokemon.species;
+                    await this.loadAttackerLearnset(speciesId);
+                    await this.loadForms('attacker', pokemon.baseSpecies || pokemon.name);
+
+                    // Set first move if available
+                    if (partyPokemon.moves && partyPokemon.moves.length > 0) {
+                        const moveId = partyPokemon.moves[0].name.toLowerCase().replace(/[^a-z0-9]/g, '');
+                        this.move.name = moveId;
+                    }
+                } else {
+                    this.defenderSearch = partyPokemon.species;
+                    await this.loadForms('defender', pokemon.baseSpecies || pokemon.name);
+                }
+
+                // Save state after import
+                this.saveState();
+
+            } catch (e) {
+                console.error('Failed to import from party:', e);
+            }
         },
 
         // Get sprite URL for a Pokemon
@@ -166,6 +361,9 @@ function calculator() {
                 if (role === 'attacker') {
                     this.move.name = '';
                 }
+
+                // Save state after selection
+                this.saveState();
             } catch (e) {
                 console.error('Failed to load Pokemon:', e);
             }
@@ -225,6 +423,9 @@ function calculator() {
                 } else {
                     this.defenderSearch = pokemon.name;
                 }
+
+                // Save state after form change
+                this.saveState();
             } catch (e) {
                 console.error('Failed to load form:', e);
             }
@@ -423,6 +624,7 @@ function calculator() {
             } else {
                 this.showDefenderItemResults = false;
             }
+            this.saveState();
         },
 
         // Format move for display
@@ -448,6 +650,8 @@ function calculator() {
                 // Store display name for reference
                 this.selectedMoveName = move.name;
             }
+            // Save state after move selection
+            this.saveState();
         },
 
         // Set all IVs to a value

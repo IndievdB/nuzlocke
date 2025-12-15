@@ -22,6 +22,9 @@ function movesApp() {
         // Cached ability data
         abilityCache: {},
 
+        // Party data (from localStorage, shared with party page)
+        partyPokemon: [],
+
         // Initialize
         async init() {
             // Pre-load all moves for quick lookup
@@ -34,6 +37,93 @@ function movesApp() {
             } catch (e) {
                 console.error('Failed to load moves list:', e);
             }
+
+            // Load party data from shared localStorage
+            this.loadPartyData();
+
+            // Restore saved state
+            await this.loadState();
+        },
+
+        // Load party data from shared localStorage
+        loadPartyData() {
+            try {
+                const saved = localStorage.getItem('nuzlocke_party');
+                if (saved) {
+                    const state = JSON.parse(saved);
+                    this.partyPokemon = state.party || [];
+                }
+            } catch (e) {
+                console.error('Failed to load party data:', e);
+            }
+        },
+
+        // Save state to localStorage
+        saveState() {
+            try {
+                const state = {
+                    selectedPokemonId: this.selectedPokemon ? this.toID(this.selectedPokemon.name) : null,
+                    searchQuery: this.searchQuery,
+                    showLevelUp: this.showLevelUp,
+                    showTM: this.showTM,
+                    showEgg: this.showEgg,
+                    showTutor: this.showTutor
+                };
+                localStorage.setItem('moves_state', JSON.stringify(state));
+            } catch (e) {
+                console.error('Failed to save moves state:', e);
+            }
+        },
+
+        // Load state from localStorage
+        async loadState() {
+            try {
+                const saved = localStorage.getItem('moves_state');
+                if (!saved) return;
+
+                const state = JSON.parse(saved);
+
+                // Restore filters
+                if (state.showLevelUp !== undefined) this.showLevelUp = state.showLevelUp;
+                if (state.showTM !== undefined) this.showTM = state.showTM;
+                if (state.showEgg !== undefined) this.showEgg = state.showEgg;
+                if (state.showTutor !== undefined) this.showTutor = state.showTutor;
+
+                // Restore search query
+                if (state.searchQuery) this.searchQuery = state.searchQuery;
+
+                // Restore selected Pokemon
+                if (state.selectedPokemonId) {
+                    await this.selectPokemonById(state.selectedPokemonId);
+                }
+            } catch (e) {
+                console.error('Failed to load moves state:', e);
+            }
+        },
+
+        // Select Pokemon by ID (for state restoration)
+        async selectPokemonById(pokemonId) {
+            try {
+                const response = await fetch(`/api/pokemon/${pokemonId}/full`);
+                const data = await response.json();
+                this.selectedPokemon = data.pokemon;
+                this.learnset = data.learnset;
+                this.typeMatchups = data.typeMatchups;
+                this.searchQuery = data.pokemon.name;
+
+                // Pre-load move data
+                await this.loadMoveData();
+                await this.loadAbilityData();
+            } catch (e) {
+                console.error('Failed to load Pokemon:', e);
+            }
+        },
+
+        // Import Pokemon from party
+        async importFromParty(partyPokemon) {
+            const speciesId = partyPokemon.species.toLowerCase().replace(/[^a-z0-9]/g, '');
+            await this.selectPokemonById(speciesId);
+            this.saveState();
         },
 
         // Search Pokemon
@@ -70,6 +160,9 @@ function movesApp() {
 
                 // Load ability data
                 await this.loadAbilityData();
+
+                // Save state after selection
+                this.saveState();
             } catch (e) {
                 console.error('Failed to load Pokemon:', e);
             }

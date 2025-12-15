@@ -72,12 +72,71 @@ function catchApp() {
             }
         ],
 
-        init() {
+        async init() {
             // Bind ball multiplier functions to this (Alpine component) context
             this.balls = this.balls.map(ball => ({
                 ...ball,
                 getMultiplier: ball.getMultiplier.bind(this)
             }));
+
+            // Restore saved state
+            await this.loadState();
+        },
+
+        // Save state to localStorage
+        saveState() {
+            try {
+                const state = {
+                    selectedPokemonId: this.selectedPokemon ? this.selectedPokemon.name.toLowerCase().replace(/[^a-z0-9]/g, '') : null,
+                    searchQuery: this.searchQuery,
+                    hpPercent: this.hpPercent,
+                    status: this.status,
+                    level: this.level,
+                    turns: this.turns,
+                    alreadyCaught: this.alreadyCaught,
+                    inCaveOrNight: this.inCaveOrNight,
+                    underwater: this.underwater,
+                    throwCount: this.throwCount
+                };
+                localStorage.setItem('catch_state', JSON.stringify(state));
+            } catch (e) {
+                console.error('Failed to save catch state:', e);
+            }
+        },
+
+        // Load state from localStorage
+        async loadState() {
+            try {
+                const saved = localStorage.getItem('catch_state');
+                if (!saved) return;
+
+                const state = JSON.parse(saved);
+
+                // Restore parameters
+                if (state.hpPercent !== undefined) this.hpPercent = state.hpPercent;
+                if (state.status) this.status = state.status;
+                if (state.level !== undefined) this.level = state.level;
+                if (state.turns !== undefined) this.turns = state.turns;
+                if (state.alreadyCaught !== undefined) this.alreadyCaught = state.alreadyCaught;
+                if (state.inCaveOrNight !== undefined) this.inCaveOrNight = state.inCaveOrNight;
+                if (state.underwater !== undefined) this.underwater = state.underwater;
+                if (state.throwCount !== undefined) this.throwCount = state.throwCount;
+
+                // Restore search query
+                if (state.searchQuery) this.searchQuery = state.searchQuery;
+
+                // Restore selected Pokemon
+                if (state.selectedPokemonId) {
+                    try {
+                        const response = await fetch(`/api/pokemon/${state.selectedPokemonId}`);
+                        this.selectedPokemon = await response.json();
+                    } catch (e) {
+                        console.error('Failed to restore Pokemon:', e);
+                    }
+                }
+            } catch (e) {
+                console.error('Failed to load catch state:', e);
+            }
         },
 
         async searchPokemon() {
@@ -105,6 +164,7 @@ function catchApp() {
             try {
                 const response = await fetch(`/api/pokemon/${result.id}`);
                 this.selectedPokemon = await response.json();
+                this.saveState();
             } catch (e) {
                 console.error('Failed to load Pokemon:', e);
             }

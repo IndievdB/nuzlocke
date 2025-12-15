@@ -27,6 +27,8 @@ type PartyPokemon struct {
 	Moves       []string     `json:"moves"`
 	MoveNums    []int        `json:"moveNums"`
 	Stats       PokemonStats `json:"stats"`
+	IVs         PokemonStats `json:"ivs"`
+	EVs         PokemonStats `json:"evs"`
 	CurrentHP   int          `json:"currentHp"`
 	AbilitySlot int          `json:"abilitySlot"` // 0 = first ability, 1 = second ability
 }
@@ -776,6 +778,31 @@ func parsePokemon(data []byte) PartyPokemon {
 	ribbonData := binary.LittleEndian.Uint32(decryptedData[miscPos+8 : miscPos+12])
 	abilitySlot := int((ribbonData >> 29) & 3) // 2 bits for ability index (0, 1, or 2 for hidden)
 
+	// Get EVs from EV/Condition substructure (E = 2)
+	// Bytes 0-5: HP, Attack, Defense, Speed, SpAtk, SpDef (1 byte each)
+	evsPos := typeToPos[2] * 12
+	evs := PokemonStats{
+		HP:      int(decryptedData[evsPos]),
+		Attack:  int(decryptedData[evsPos+1]),
+		Defense: int(decryptedData[evsPos+2]),
+		Speed:   int(decryptedData[evsPos+3]),
+		SpAtk:   int(decryptedData[evsPos+4]),
+		SpDef:   int(decryptedData[evsPos+5]),
+	}
+
+	// Get IVs from Misc substructure bytes 4-7
+	// IVs are packed in a 32-bit value: 5 bits per stat
+	// bits 0-4: HP, 5-9: Attack, 10-14: Defense, 15-19: Speed, 20-24: SpAtk, 25-29: SpDef
+	ivData := binary.LittleEndian.Uint32(decryptedData[miscPos+4 : miscPos+8])
+	ivs := PokemonStats{
+		HP:      int(ivData & 0x1F),
+		Attack:  int((ivData >> 5) & 0x1F),
+		Defense: int((ivData >> 10) & 0x1F),
+		Speed:   int((ivData >> 15) & 0x1F),
+		SpAtk:   int((ivData >> 20) & 0x1F),
+		SpDef:   int((ivData >> 25) & 0x1F),
+	}
+
 	// Get stats from party data section (bytes 86-99)
 	// Party data: status(4), level(1), pokerus(1), currentHP(2), maxHP(2), atk(2), def(2), spe(2), spa(2), spd(2)
 	currentHP := int(binary.LittleEndian.Uint16(data[86:88]))
@@ -796,6 +823,8 @@ func parsePokemon(data []byte) PartyPokemon {
 		ItemNum:     itemNum,
 		MoveNums:    moveNums,
 		Stats:       stats,
+		IVs:         ivs,
+		EVs:         evs,
 		CurrentHP:   currentHP,
 		AbilitySlot: abilitySlot,
 	}

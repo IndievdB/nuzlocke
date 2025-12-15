@@ -65,7 +65,7 @@
                     <div class="hp-bar-visual">
                         <div class="hp-fill" :class="getHPBarClass()" :style="'width: ' + hpPercent + '%'"></div>
                     </div>
-                    <input type="range" x-model.number="hpPercent" min="1" max="100" class="hp-slider">
+                    <input type="range" x-model.number="hpPercent" min="1" max="100" class="hp-slider" @change="saveState()">
                     <div class="hp-labels">
                         <span class="hp-percent" x-text="hpPercent + '%'"></span>
                         <span class="hp-zone" :class="getHPBarClass()" x-text="getHPZoneText()"></span>
@@ -78,27 +78,27 @@
                 <h3>Status Condition</h3>
                 <div class="status-options">
                     <label class="status-option">
-                        <input type="radio" x-model="status" value="none">
+                        <input type="radio" x-model="status" value="none" @change="saveState()">
                         <span>None</span>
                     </label>
                     <label class="status-option">
-                        <input type="radio" x-model="status" value="sleep">
+                        <input type="radio" x-model="status" value="sleep" @change="saveState()">
                         <span>Sleep (2x)</span>
                     </label>
                     <label class="status-option">
-                        <input type="radio" x-model="status" value="freeze">
+                        <input type="radio" x-model="status" value="freeze" @change="saveState()">
                         <span>Freeze (2x)</span>
                     </label>
                     <label class="status-option">
-                        <input type="radio" x-model="status" value="paralysis">
+                        <input type="radio" x-model="status" value="paralysis" @change="saveState()">
                         <span>Paralysis (1.5x)</span>
                     </label>
                     <label class="status-option">
-                        <input type="radio" x-model="status" value="burn">
+                        <input type="radio" x-model="status" value="burn" @change="saveState()">
                         <span>Burn (1.5x)</span>
                     </label>
                     <label class="status-option">
-                        <input type="radio" x-model="status" value="poison">
+                        <input type="radio" x-model="status" value="poison" @change="saveState()">
                         <span>Poison (1.5x)</span>
                     </label>
                 </div>
@@ -109,18 +109,18 @@
                 <h3>Ball Conditions</h3>
                 <div class="form-row">
                     <label>Level:</label>
-                    <input type="number" x-model.number="level" min="1" max="100" placeholder="50">
+                    <input type="number" x-model.number="level" min="1" max="100" placeholder="50" @change="saveState()">
                     <span class="form-hint">(for Nest Ball)</span>
                 </div>
                 <div class="form-row">
                     <label>Turns:</label>
-                    <input type="number" x-model.number="turns" min="0" max="100" placeholder="0">
+                    <input type="number" x-model.number="turns" min="0" max="100" placeholder="0" @change="saveState()">
                     <span class="form-hint">(for Timer Ball)</span>
                 </div>
                 <div class="checkbox-group">
-                    <label><input type="checkbox" x-model="alreadyCaught"> Already caught (Repeat Ball 3x)</label>
-                    <label><input type="checkbox" x-model="inCaveOrNight"> In cave or at night (Dusk Ball 3.5x)</label>
-                    <label><input type="checkbox" x-model="underwater"> Underwater/surfing (Dive Ball 3.5x)</label>
+                    <label><input type="checkbox" x-model="alreadyCaught" @change="saveState()"> Already caught (Repeat Ball 3x)</label>
+                    <label><input type="checkbox" x-model="inCaveOrNight" @change="saveState()"> In cave or at night (Dusk Ball 3.5x)</label>
+                    <label><input type="checkbox" x-model="underwater" @change="saveState()"> Underwater/surfing (Dive Ball 3.5x)</label>
                 </div>
             </div>
 
@@ -129,7 +129,7 @@
                 <h3>Cumulative Probability</h3>
                 <div class="form-row">
                     <label>After throws:</label>
-                    <input type="number" x-model.number="throwCount" min="1" max="99" placeholder="10">
+                    <input type="number" x-model.number="throwCount" min="1" max="99" placeholder="10" @change="saveState()">
                 </div>
             </div>
         </section>

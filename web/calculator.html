@@ -33,6 +33,16 @@
         <section class="pokemon-panel">
             <h2>Attacker</h2>
 
+            <!-- Party Import -->
+            <div x-show="partyPokemon.length > 0" class="party-import">
+                <select @change="$event.target.value && importFromParty('attacker', partyPokemon[$event.target.value]); $event.target.value = ''">
+                    <option value="">Import from Party...</option>
+                    <template x-for="(p, i) in partyPokemon" :key="i">
+                        <option :value="i" x-text="(p.nickname && p.nickname.toLowerCase() !== p.species.toLowerCase() ? p.nickname + ' (' + p.species + ')' : p.species) + ' Lv.' + p.level"></option>
+                    </template>
+                </select>
+            </div>
+
             <!-- Pokemon Search with Sprite -->
             <div class="pokemon-search-row">
                 <div class="pokemon-sprite-small" x-show="attacker.speciesData">
@@ -69,28 +79,28 @@
                 <!-- Level -->
                 <div class="form-row">
                     <label>Level:</label>
-                    <input type="number" x-model.number="attacker.level" min="1" max="100">
+                    <input type="number" x-model.number="attacker.level" min="1" max="100" @change="saveState()">
                 </div>
 
                 <!-- Nature -->
                 <div class="form-row">
                     <label>Nature:</label>
-                    <select x-model="attacker.nature">
+                    <select x-model="attacker.nature" @change="saveState()">
                         <template x-for="nature in natures" :key="nature.id">
                             <option :value="nature.id" x-text="nature.name"></option>
                         </template>
                     </select>
                 </div>
                 <div class="nature-presets">
-                    <button type="button" class="nature-btn" @click="setNature('attacker', 'atk')" :class="{ active: attacker.nature === 'adamant' }">+Atk</button>
-                    <button type="button" class="nature-btn" @click="setNature('attacker', 'spa')" :class="{ active: attacker.nature === 'modest' }">+SpA</button>
-                    <button type="button" class="nature-btn" @click="setNature('attacker', 'spe')" :class="{ active: attacker.nature === 'jolly' }">+Spe</button>
+                    <button type="button" class="nature-btn" @click="setNature('attacker', 'atk'); saveState()" :class="{ active: attacker.nature === 'adamant' }">+Atk</button>
+                    <button type="button" class="nature-btn" @click="setNature('attacker', 'spa'); saveState()" :class="{ active: attacker.nature === 'modest' }">+SpA</button>
+                    <button type="button" class="nature-btn" @click="setNature('attacker', 'spe'); saveState()" :class="{ active: attacker.nature === 'jolly' }">+Spe</button>
                 </div>
 
                 <!-- Ability -->
                 <div class="form-row">
                     <label>Ability:</label>
-                    <select x-model="attacker.ability" @change="fetchAbility(attacker.ability)">
+                    <select x-model="attacker.ability" @change="fetchAbility(attacker.ability); saveState()">
                         <template x-for="ability in getAbilitiesList('attacker')" :key="ability.slot">
                             <option :value="ability.name" x-text="ability.name + (ability.hidden ? ' (H)' : '')"></option>
                         </template>
@@ -118,10 +128,10 @@
                     </ul>
                 </div>
                 <div class="item-presets">
-                    <button type="button" class="item-btn" @click="attacker.item = 'Choice Band'; showAttackerItemResults = false" :class="{ active: attacker.item === 'Choice Band' }">C.Band</button>
-                    <button type="button" class="item-btn" @click="attacker.item = 'Choice Specs'; showAttackerItemResults = false" :class="{ active: attacker.item === 'Choice Specs' }">C.Specs</button>
-                    <button type="button" class="item-btn" @click="attacker.item = 'Life Orb'; showAttackerItemResults = false" :class="{ active: attacker.item === 'Life Orb' }">Life Orb</button>
-                    <button type="button" class="item-btn" @click="attacker.item = ''; showAttackerItemResults = false" :class="{ active: !attacker.item }">None</button>
+                    <button type="button" class="item-btn" @click="attacker.item = 'Choice Band'; showAttackerItemResults = false; saveState()" :class="{ active: attacker.item === 'Choice Band' }">C.Band</button>
+                    <button type="button" class="item-btn" @click="attacker.item = 'Choice Specs'; showAttackerItemResults = false; saveState()" :class="{ active: attacker.item === 'Choice Specs' }">C.Specs</button>
+                    <button type="button" class="item-btn" @click="attacker.item = 'Life Orb'; showAttackerItemResults = false; saveState()" :class="{ active: attacker.item === 'Life Orb' }">Life Orb</button>
+                    <button type="button" class="item-btn" @click="attacker.item = ''; showAttackerItemResults = false; saveState()" :class="{ active: !attacker.item }">None</button>
                 </div>
                 <p class="field-description" x-show="attacker.item && !showAttackerItemResults" x-text="getItemDescription('attacker')"></p>
 
@@ -129,20 +139,20 @@
                 <div class="stat-group">
                     <h4>EVs
                         <span class="iv-buttons" x-show="!attacker.unknownEvs">
-                            <button type="button" class="iv-btn" @click="setAllEvs('attacker', 252)">252</button>
-                            <button type="button" class="iv-btn" @click="setAllEvs('attacker', 0)">0</button>
+                            <button type="button" class="iv-btn" @click="setAllEvs('attacker', 252); saveState()">252</button>
+                            <button type="button" class="iv-btn" @click="setAllEvs('attacker', 0); saveState()">0</button>
                         </span>
-                        <label class="unknown-toggle"><input type="checkbox" x-model="attacker.unknownEvs"> Unknown</label>
+                        <label class="unknown-toggle"><input type="checkbox" x-model="attacker.unknownEvs" @change="saveState()"> Unknown</label>
                     </h4>
                     <div class="stat-row" x-show="!attacker.unknownEvs">
-                        <label>HP:</label><input type="number" x-model.number="attacker.evs.hp" min="0" max="252">
-                        <label>Atk:</label><input type="number" x-model.number="attacker.evs.atk" min="0" max="252">
-                        <label>Def:</label><input type="number" x-model.number="attacker.evs.def" min="0" max="252">
+                        <label>HP:</label><input type="number" x-model.number="attacker.evs.hp" min="0" max="252" @change="saveState()">
+                        <label>Atk:</label><input type="number" x-model.number="attacker.evs.atk" min="0" max="252" @change="saveState()">
+                        <label>Def:</label><input type="number" x-model.number="attacker.evs.def" min="0" max="252" @change="saveState()">
                     </div>
                     <div class="stat-row" x-show="!attacker.unknownEvs">
-                        <label>SpA:</label><input type="number" x-model.number="attacker.evs.spa" min="0" max="252">
-                        <label>SpD:</label><input type="number" x-model.number="attacker.evs.spd" min="0" max="252">
-                        <label>Spe:</label><input type="number" x-model.number="attacker.evs.spe" min="0" max="252">
+                        <label>SpA:</label><input type="number" x-model.number="attacker.evs.spa" min="0" max="252" @change="saveState()">
+                        <label>SpD:</label><input type="number" x-model.number="attacker.evs.spd" min="0" max="252" @change="saveState()">
+                        <label>Spe:</label><input type="number" x-model.number="attacker.evs.spe" min="0" max="252" @change="saveState()">
                     </div>
                     <div class="unknown-hint" x-show="attacker.unknownEvs">Will calculate 0-252 EV range</div>
                 </div>
@@ -151,20 +161,20 @@
                 <div class="stat-group">
                     <h4>IVs
                         <span class="iv-buttons" x-show="!attacker.unknownIvs">
-                            <button type="button" class="iv-btn" @click="setAllIvs('attacker', 31)">31</button>
-                            <button type="button" class="iv-btn" @click="setAllIvs('attacker', 0)">0</button>
+                            <button type="button" class="iv-btn" @click="setAllIvs('attacker', 31); saveState()">31</button>
+                            <button type="button" class="iv-btn" @click="setAllIvs('attacker', 0); saveState()">0</button>
                         </span>
-                        <label class="unknown-toggle"><input type="checkbox" x-model="attacker.unknownIvs"> Unknown</label>
+                        <label class="unknown-toggle"><input type="checkbox" x-model="attacker.unknownIvs" @change="saveState()"> Unknown</label>
                     </h4>
                     <div class="stat-row" x-show="!attacker.unknownIvs">
-                        <label>HP:</label><input type="number" x-model.number="attacker.ivs.hp" min="0" max="31">
-                        <label>Atk:</label><input type="number" x-model.number="attacker.ivs.atk" min="0" max="31">
-                        <label>Def:</label><input type="number" x-model.number="attacker.ivs.def" min="0" max="31">
+                        <label>HP:</label><input type="number" x-model.number="attacker.ivs.hp" min="0" max="31" @change="saveState()">
+                        <label>Atk:</label><input type="number" x-model.number="attacker.ivs.atk" min="0" max="31" @change="saveState()">
+                        <label>Def:</label><input type="number" x-model.number="attacker.ivs.def" min="0" max="31" @change="saveState()">
                     </div>
                     <div class="stat-row" x-show="!attacker.unknownIvs">
-                        <label>SpA:</label><input type="number" x-model.number="attacker.ivs.spa" min="0" max="31">
-                        <label>SpD:</label><input type="number" x-model.number="attacker.ivs.spd" min="0" max="31">
-                        <label>Spe:</label><input type="number" x-model.number="attacker.ivs.spe" min="0" max="31">
+                        <label>SpA:</label><input type="number" x-model.number="attacker.ivs.spa" min="0" max="31" @change="saveState()">
+                        <label>SpD:</label><input type="number" x-model.number="attacker.ivs.spd" min="0" max="31" @change="saveState()">
+                        <label>Spe:</label><input type="number" x-model.number="attacker.ivs.spe" min="0" max="31" @change="saveState()">
                     </div>
                     <div class="unknown-hint" x-show="attacker.unknownIvs">Will calculate 0-31 IV range</div>
                 </div>
@@ -173,15 +183,15 @@
                 <div class="stat-group">
                     <h4>Boosts</h4>
                     <div class="stat-row">
-                        <label>Atk:</label><input type="number" x-model.number="attacker.boosts.atk" min="-6" max="6">
-                        <label>SpA:</label><input type="number" x-model.number="attacker.boosts.spa" min="-6" max="6">
+                        <label>Atk:</label><input type="number" x-model.number="attacker.boosts.atk" min="-6" max="6" @change="saveState()">
+                        <label>SpA:</label><input type="number" x-model.number="attacker.boosts.spa" min="-6" max="6" @change="saveState()">
                     </div>
                 </div>
 
                 <!-- Status -->
                 <div class="form-row">
                     <label>Status:</label>
-                    <select x-model="attacker.status">
+                    <select x-model="attacker.status" @change="saveState()">
                         <option value="">None</option>
                         <option value="brn">Burned</option>
                         <option value="par">Paralyzed</option>
@@ -253,7 +263,7 @@
                 <p class="move-description" x-text="getMoveDetails(move.name)?.shortDesc || getMoveDetails(move.name)?.desc || ''"></p>
                 <div class="form-row">
                     <label>
-                        <input type="checkbox" x-model="move.isCrit"> Critical Hit <span class="crit-chance" x-text="'(' + getCritChance() + ')'"></span>
+                        <input type="checkbox" x-model="move.isCrit" @change="saveState()"> Critical Hit <span class="crit-chance" x-text="'(' + getCritChance() + ')'"></span>
                     </label>
                 </div>
             </div>
@@ -262,7 +272,7 @@
             <h3>Field</h3>
             <div class="form-row">
                 <label>Weather:</label>
-                <select x-model="field.weather">
+                <select x-model="field.weather" @change="saveState()">
                     <option value="">None</option>
                     <option value="sun">Sun</option>
                     <option value="rain">Rain</option>
@@ -272,7 +282,7 @@
             </div>
             <div class="form-row">
                 <label>Terrain:</label>
-                <select x-model="field.terrain">
+                <select x-model="field.terrain" @change="saveState()">
                     <option value="">None</option>
                     <option value="electric">Electric</option>
                     <option value="grassy">Grassy</option>
@@ -281,9 +291,9 @@
                 </select>
             </div>
             <div class="checkbox-group">
-                <label><input type="checkbox" x-model="field.defenderSide.reflect"> Reflect</label>
-                <label><input type="checkbox" x-model="field.defenderSide.lightScreen"> Light Screen</label>
-                <label><input type="checkbox" x-model="field.attackerSide.helpingHand"> Helping Hand</label>
+                <label><input type="checkbox" x-model="field.defenderSide.reflect" @change="saveState()"> Reflect</label>
+                <label><input type="checkbox" x-model="field.defenderSide.lightScreen" @change="saveState()"> Light Screen</label>
+                <label><input type="checkbox" x-model="field.attackerSide.helpingHand" @change="saveState()"> Helping Hand</label>
             </div>
 
             <!-- Calculate Button -->
@@ -295,6 +305,16 @@
         <!-- Defender Panel -->
         <section class="pokemon-panel">
             <h2>Defender</h2>
+
+            <!-- Party Import -->
+            <div x-show="partyPokemon.length > 0" class="party-import">
+                <select @change="$event.target.value && importFromParty('defender', partyPokemon[$event.target.value]); $event.target.value = ''">
+                    <option value="">Import from Party...</option>
+                    <template x-for="(p, i) in partyPokemon" :key="i">
+                        <option :value="i" x-text="(p.nickname && p.nickname.toLowerCase() !== p.species.toLowerCase() ? p.nickname + ' (' + p.species + ')' : p.species) + ' Lv.' + p.level"></option>
+                    </template>
+                </select>
+            </div>
 
             <!-- Pokemon Search with Sprite -->
             <div class="pokemon-search-row">
@@ -332,28 +352,28 @@
                 <!-- Level -->
                 <div class="form-row">
                     <label>Level:</label>
-                    <input type="number" x-model.number="defender.level" min="1" max="100">
+                    <input type="number" x-model.number="defender.level" min="1" max="100" @change="saveState()">
                 </div>
 
                 <!-- Nature -->
                 <div class="form-row">
                     <label>Nature:</label>
-                    <select x-model="defender.nature">
+                    <select x-model="defender.nature" @change="saveState()">
                         <template x-for="nature in natures" :key="nature.id">
                             <option :value="nature.id" x-text="nature.name"></option>
                         </template>
                     </select>
                 </div>
                 <div class="nature-presets">
-                    <button type="button" class="nature-btn" @click="setNature('defender', 'def')" :class="{ active: defender.nature === 'bold' }">+Def</button>
-                    <button type="button" class="nature-btn" @click="setNature('defender', 'spd')" :class="{ active: defender.nature === 'calm' }">+SpD</button>
-                    <button type="button" class="nature-btn" @click="setNature('defender', 'spe')" :class="{ active: defender.nature === 'jolly' }">+Spe</button>
+                    <button type="button" class="nature-btn" @click="setNature('defender', 'def'); saveState()" :class="{ active: defender.nature === 'bold' }">+Def</button>
+                    <button type="button" class="nature-btn" @click="setNature('defender', 'spd'); saveState()" :class="{ active: defender.nature === 'calm' }">+SpD</button>
+                    <button type="button" class="nature-btn" @click="setNature('defender', 'spe'); saveState()" :class="{ active: defender.nature === 'jolly' }">+Spe</button>
                 </div>
 
                 <!-- Ability -->
                 <div class="form-row">
                     <label>Ability:</label>
-                    <select x-model="defender.ability" @change="fetchAbility(defender.ability)">
+                    <select x-model="defender.ability" @change="fetchAbility(defender.ability); saveState()">
                         <template x-for="ability in getAbilitiesList('defender')" :key="ability.slot">
                             <option :value="ability.name" x-text="ability.name + (ability.hidden ? ' (H)' : '')"></option>
                         </template>
@@ -381,9 +401,9 @@
                     </ul>
                 </div>
                 <div class="item-presets">
-                    <button type="button" class="item-btn" @click="defender.item = 'Assault Vest'; showDefenderItemResults = false" :class="{ active: defender.item === 'Assault Vest' }">A.Vest</button>
-                    <button type="button" class="item-btn" @click="defender.item = 'Eviolite'; showDefenderItemResults = false" :class="{ active: defender.item === 'Eviolite' }">Eviolite</button>
-                    <button type="button" class="item-btn" @click="defender.item = ''; showDefenderItemResults = false" :class="{ active: !defender.item }">None</button>
+                    <button type="button" class="item-btn" @click="defender.item = 'Assault Vest'; showDefenderItemResults = false; saveState()" :class="{ active: defender.item === 'Assault Vest' }">A.Vest</button>
+                    <button type="button" class="item-btn" @click="defender.item = 'Eviolite'; showDefenderItemResults = false; saveState()" :class="{ active: defender.item === 'Eviolite' }">Eviolite</button>
+                    <button type="button" class="item-btn" @click="defender.item = ''; showDefenderItemResults = false; saveState()" :class="{ active: !defender.item }">None</button>
                 </div>
                 <p class="field-description" x-show="defender.item && !showDefenderItemResults" x-text="getItemDescription('defender')"></p>
 
@@ -391,20 +411,20 @@
                 <div class="stat-group">
                     <h4>EVs
                         <span class="iv-buttons" x-show="!defender.unknownEvs">
-                            <button type="button" class="iv-btn" @click="setAllEvs('defender', 252)">252</button>
-                            <button type="button" class="iv-btn" @click="setAllEvs('defender', 0)">0</button>
+                            <button type="button" class="iv-btn" @click="setAllEvs('defender', 252); saveState()">252</button>
+                            <button type="button" class="iv-btn" @click="setAllEvs('defender', 0); saveState()">0</button>
                         </span>
-                        <label class="unknown-toggle"><input type="checkbox" x-model="defender.unknownEvs"> Unknown</label>
+                        <label class="unknown-toggle"><input type="checkbox" x-model="defender.unknownEvs" @change="saveState()"> Unknown</label>
                     </h4>
                     <div class="stat-row" x-show="!defender.unknownEvs">
-                        <label>HP:</label><input type="number" x-model.number="defender.evs.hp" min="0" max="252">
-                        <label>Atk:</label><input type="number" x-model.number="defender.evs.atk" min="0" max="252">
-                        <label>Def:</label><input type="number" x-model.number="defender.evs.def" min="0" max="252">
+                        <label>HP:</label><input type="number" x-model.number="defender.evs.hp" min="0" max="252" @change="saveState()">
+                        <label>Atk:</label><input type="number" x-model.number="defender.evs.atk" min="0" max="252" @change="saveState()">
+                        <label>Def:</label><input type="number" x-model.number="defender.evs.def" min="0" max="252" @change="saveState()">
                     </div>
                     <div class="stat-row" x-show="!defender.unknownEvs">
-                        <label>SpA:</label><input type="number" x-model.number="defender.evs.spa" min="0" max="252">
-                        <label>SpD:</label><input type="number" x-model.number="defender.evs.spd" min="0" max="252">
-                        <label>Spe:</label><input type="number" x-model.number="defender.evs.spe" min="0" max="252">
+                        <label>SpA:</label><input type="number" x-model.number="defender.evs.spa" min="0" max="252" @change="saveState()">
+                        <label>SpD:</label><input type="number" x-model.number="defender.evs.spd" min="0" max="252" @change="saveState()">
+                        <label>Spe:</label><input type="number" x-model.number="defender.evs.spe" min="0" max="252" @change="saveState()">
                     </div>
                     <div class="unknown-hint" x-show="defender.unknownEvs">Will calculate 0-252 EV range</div>
                 </div>
@@ -413,20 +433,20 @@
                 <div class="stat-group">
                     <h4>IVs
                         <span class="iv-buttons" x-show="!defender.unknownIvs">
-                            <button type="button" class="iv-btn" @click="setAllIvs('defender', 31)">31</button>
-                            <button type="button" class="iv-btn" @click="setAllIvs('defender', 0)">0</button>
+                            <button type="button" class="iv-btn" @click="setAllIvs('defender', 31); saveState()">31</button>
+                            <button type="button" class="iv-btn" @click="setAllIvs('defender', 0); saveState()">0</button>
                         </span>
-                        <label class="unknown-toggle"><input type="checkbox" x-model="defender.unknownIvs"> Unknown</label>
+                        <label class="unknown-toggle"><input type="checkbox" x-model="defender.unknownIvs" @change="saveState()"> Unknown</label>
                     </h4>
                     <div class="stat-row" x-show="!defender.unknownIvs">
-                        <label>HP:</label><input type="number" x-model.number="defender.ivs.hp" min="0" max="31">
-                        <label>Atk:</label><input type="number" x-model.number="defender.ivs.atk" min="0" max="31">
-                        <label>Def:</label><input type="number" x-model.number="defender.ivs.def" min="0" max="31">
+                        <label>HP:</label><input type="number" x-model.number="defender.ivs.hp" min="0" max="31" @change="saveState()">
+                        <label>Atk:</label><input type="number" x-model.number="defender.ivs.atk" min="0" max="31" @change="saveState()">
+                        <label>Def:</label><input type="number" x-model.number="defender.ivs.def" min="0" max="31" @change="saveState()">
                     </div>
                     <div class="stat-row" x-show="!defender.unknownIvs">
-                        <label>SpA:</label><input type="number" x-model.number="defender.ivs.spa" min="0" max="31">
-                        <label>SpD:</label><input type="number" x-model.number="defender.ivs.spd" min="0" max="31">
-                        <label>Spe:</label><input type="number" x-model.number="defender.ivs.spe" min="0" max="31">
+                        <label>SpA:</label><input type="number" x-model.number="defender.ivs.spa" min="0" max="31" @change="saveState()">
+                        <label>SpD:</label><input type="number" x-model.number="defender.ivs.spd" min="0" max="31" @change="saveState()">
+                        <label>Spe:</label><input type="number" x-model.number="defender.ivs.spe" min="0" max="31" @change="saveState()">
                     </div>
                     <div class="unknown-hint" x-show="defender.unknownIvs">Will calculate 0-31 IV range</div>
                 </div>
@@ -435,15 +455,15 @@
                 <div class="stat-group">
                     <h4>Boosts</h4>
                     <div class="stat-row">
-                        <label>Def:</label><input type="number" x-model.number="defender.boosts.def" min="-6" max="6">
-                        <label>SpD:</label><input type="number" x-model.number="defender.boosts.spd" min="-6" max="6">
+                        <label>Def:</label><input type="number" x-model.number="defender.boosts.def" min="-6" max="6" @change="saveState()">
+                        <label>SpD:</label><input type="number" x-model.number="defender.boosts.spd" min="-6" max="6" @change="saveState()">
                     </div>
                 </div>
 
                 <!-- Current HP -->
                 <div class="form-row">
                     <label>HP %:</label>
-                    <input type="number" x-model.number="defenderHPPercent" min="1" max="100" placeholder="100">
+                    <input type="number" x-model.number="defenderHPPercent" min="1" max="100" placeholder="100" @change="saveState()">
                 </div>
             </div>
         </section>

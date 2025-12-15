@@ -1667,3 +1667,62 @@ nav a:hover, nav a.active {
 .pokemon-search-row .search-container {
     flex-grow: 1;
 }
+
+/* Party Import Dropdown */
+.party-import {
+    margin-bottom: 0.5rem;
+}
+
+.party-import select {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px dashed #4a90d9;
+    border-radius: 4px;
+    background: #1a1a2e;
+    color: #4a90d9;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+.party-import select:hover {
+    background: #2a2a4e;
+}
+
+.party-import select option {
+    color: #fff;
+    border: none;
+}
+
+/* IVs/EVs Display */
+.ivs-evs-row {
+    display: flex;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+    color: #aaa;
+}
+
+.ivs-label,
+.evs-label {
+    font-weight: bold;
+    min-width: 2.5rem;
+}
+
+.ivs-values,
+.evs-values {
+    font-family: monospace;
+}
+
+/* Discard button */
+.discard-btn {
+    padding: 0.5rem 1rem;
+    background: #8b0000;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.discard-btn:hover {
+    background: #a00000;
+}
