@@ -1,0 +1,3477 @@
+{
+  "abilityshield": {
+    "id": "abilityshield",
+    "name": "Ability Shield",
+    "num": 746,
+    "flingBasePower": 30
+  },
+  "abomasite": {
+    "id": "abomasite",
+    "name": "Abomasite",
+    "num": 575
+  },
+  "absolite": {
+    "id": "absolite",
+    "name": "Absolite",
+    "num": 576
+  },
+  "absolitez": {
+    "id": "absolitez",
+    "name": "Absolite Z",
+    "num": 576
+  },
+  "absorbbulb": {
+    "id": "absorbbulb",
+    "name": "Absorb Bulb",
+    "num": 2,
+    "flingBasePower": 30
+  },
+  "adamantcrystal": {
+    "id": "adamantcrystal",
+    "name": "Adamant Crystal",
+    "num": 741,
+    "onBasePower": true
+  },
+  "adamantorb": {
+    "id": "adamantorb",
+    "name": "Adamant Orb",
+    "num": 4,
+    "flingBasePower": 60
+  },
+  "adrenalineorb": {
+    "id": "adrenalineorb",
+    "name": "Adrenaline Orb",
+    "num": 660,
+    "flingBasePower": 30
+  },
+  "aerodactylite": {
+    "id": "aerodactylite",
+    "name": "Aerodactylite",
+    "num": 577
+  },
+  "aggronite": {
+    "id": "aggronite",
+    "name": "Aggronite",
+    "num": 578
+  },
+  "aguavberry": {
+    "id": "aguavberry",
+    "name": "Aguav Berry",
+    "num": 5,
+    "naturalGift": {
+      "basePower": 80,
+      "type": "Dragon"
+    }
+  },
+  "airballoon": {
+    "id": "airballoon",
+    "name": "Air Balloon",
+    "num": 6,
+    "flingBasePower": 10
+  },
+  "alakazite": {
+    "id": "alakazite",
+    "name": "Alakazite",
+    "num": 579
+  },
+  "aloraichiumz": {
+    "id": "aloraichiumz",
+    "name": "Aloraichium Z",
+    "num": 655,
+    "gen": 7
+  },
+  "altarianite": {
+    "id": "altarianite",
+    "name": "Altarianite",
+    "num": 615
+  },
+  "ampharosite": {
+    "id": "ampharosite",
+    "name": "Ampharosite",
+    "num": 580
+  },
+  "apicotberry": {
+    "id": "apicotberry",
+    "name": "Apicot Berry",
+    "num": 10,
+    "naturalGift": {
+      "basePower": 100,
+      "type": "Ground"
+    }
+  },
+  "armorfossil": {
+    "id": "armorfossil",
+    "name": "Armor Fossil",
+    "num": 12,
+    "flingBasePower": 100
+  },
+  "aspearberry": {
+    "id": "aspearberry",
+    "name": "Aspear Berry",
+    "num": 13,
+    "naturalGift": {
+      "basePower": 80,
+      "type": "Ice"
+    }
+  },
+  "assaultvest": {
+    "id": "assaultvest",
+    "name": "Assault Vest",
+    "num": 581,
+    "flingBasePower": 80
+  },
+  "audinite": {
+    "id": "audinite",
+    "name": "Audinite",
+    "num": 617
+  },
+  "auspiciousarmor": {
+    "id": "auspiciousarmor",
+    "name": "Auspicious Armor",
+    "num": 753,
+    "flingBasePower": 30
+  },
+  "babiriberry": {
+    "id": "babiriberry",
+    "name": "Babiri Berry",
+    "num": 17,
+    "naturalGift": {
+      "basePower": 80,
+      "type": "Steel"
+    }
+  },
+  "banettite": {
+    "id": "banettite",
+    "name": "Banettite",
+    "num": 582
+  },
+  "barbaracite": {
+    "id": "barbaracite",
+    "name": "Barbaracite",
+    "num": 564
+  },
+  "baxcalibrite": {
+    "id": "baxcalibrite",
+    "name": "Baxcalibrite",
+    "num": 0
+  },
+  "beastball": {
+    "id": "beastball",
+    "name": "Beast Ball",
+    "num": 661,
+    "gen": 7
+  },
+  "beedrillite": {
+    "id": "beedrillite",
+    "name": "Beedrillite",
+    "num": 628
+  },
+  "belueberry": {
+    "id": "belueberry",
+    "name": "Belue Berry",
+    "num": 21,
+    "naturalGift": {
+      "basePower": 100,
+      "type": "Electric"
+    }
+  },
+  "berryjuice": {
+    "id": "berryjuice",
+    "name": "Berry Juice",
+    "num": 22,
+    "flingBasePower": 30
+  },
+  "berrysweet": {
+    "id": "berrysweet",
+    "name": "Berry Sweet",
+    "num": 706,
+    "flingBasePower": 10
+  },
+  "bignugget": {
+    "id": "bignugget",
+    "name": "Big Nugget",
+    "num": 27,
+    "flingBasePower": 130
+  },
+  "bigroot": {
+    "id": "bigroot",
+    "name": "Big Root",
+    "num": 29,
+    "flingBasePower": 10
+  },
+  "bindingband": {
+    "id": "bindingband",
+    "name": "Binding Band",
+    "num": 31,
+    "flingBasePower": 30
+  },
+  "blackbelt": {
+    "id": "blackbelt",
+    "name": "Black Belt",
+    "num": 32,
+    "flingBasePower": 30
+  },
+  "blackglasses": {
+    "id": "blackglasses",
+    "name": "Black Glasses",
+    "num": 35,
+    "flingBasePower": 30
+  },
+  "blacksludge": {
+    "id": "blacksludge",
+    "name": "Black Sludge",
+    "num": 34,
+    "flingBasePower": 30
+  },
+  "blastoisinite": {
+    "id": "blastoisinite",
+    "name": "Blastoisinite",
+    "num": 583
+  },
+  "blazikenite": {
+    "id": "blazikenite",
+    "name": "Blazikenite",
+    "num": 584
+  },
+  "blueorb": {
+    "id": "blueorb",
+    "name": "Blue Orb",
+    "num": 41
+  },
+  "blukberry": {
+    "id": "blukberry",
+    "name": "Bluk Berry",
+    "num": 44,
+    "naturalGift": {
+      "basePower": 90,
+      "type": "Fire"
+    }
+  },
+  "blunderpolicy": {
+    "id": "blunderpolicy",
+    "name": "Blunder Policy",
+    "num": 716,
+    "flingBasePower": 80
+  },
+  "boosterenergy": {
+    "id": "boosterenergy",
+    "name": "Booster Energy",
+    "num": 745,
+    "flingBasePower": 30
+  },
+  "bottlecap": {
+    "id": "bottlecap",
+    "name": "Bottle Cap",
+    "num": 696,
+    "flingBasePower": 30
+  },
+  "brightpowder": {
+    "id": "brightpowder",
+    "name": "Bright Powder",
+    "num": 51,
+    "flingBasePower": 10
+  },
+  "buggem": {
+    "id": "buggem",
+    "name": "Bug Gem",
+    "num": 53
+  },
+  "buginiumz": {
+    "id": "buginiumz",
+    "name": "Buginium Z",
+    "num": 642,
+    "gen": 7
+  },
+  "bugmemory": {
+    "id": "bugmemory",
+    "name": "Bug Memory",
+    "num": 673
+  },
+  "burndrive": {
+    "id": "burndrive",
+    "name": "Burn Drive",
+    "num": 54
+  },
+  "cameruptite": {
+    "id": "cameruptite",
+    "name": "Cameruptite",
+    "num": 625
+  },
+  "cellbattery": {
+    "id": "cellbattery",
+    "name": "Cell Battery",
+    "num": 60,
+    "flingBasePower": 30
+  },
+  "chandelurite": {
+    "id": "chandelurite",
+    "name": "Chandelurite",
+    "num": 557
+  },
+  "charcoal": {
+    "id": "charcoal",
+    "name": "Charcoal",
+    "num": 61,
+    "flingBasePower": 30
+  },
+  "charizarditex": {
+    "id": "charizarditex",
+    "name": "Charizardite X",
+    "num": 585
+  },
+  "charizarditey": {
+    "id": "charizarditey",
+    "name": "Charizardite Y",
+    "num": 586
+  },
+  "chartiberry": {
+    "id": "chartiberry",
+    "name": "Charti Berry",
+    "num": 62,
+    "naturalGift": {
+      "basePower": 80,
+      "type": "Rock"
+    }
+  },
+  "cheriberry": {
+    "id": "cheriberry",
+    "name": "Cheri Berry",
+    "num": 63,
+    "naturalGift": {
+      "basePower": 80,
+      "type": "Fire"
+    }
+  },
+  "cherishball": {
+    "id": "cherishball",
+    "name": "Cherish Ball",
+    "num": 64,
+    "gen": 4
+  },
+  "chesnaughtite": {
+    "id": "chesnaughtite",
+    "name": "Chesnaughtite",
+    "num": 558
+  },
+  "chestoberry": {
+    "id": "chestoberry",
+    "name": "Chesto Berry",
+    "num": 65,
+    "naturalGift": {
+      "basePower": 80,
+      "type": "Water"
+    }
+  },
+  "chilanberry": {
+    "id": "chilanberry",
+    "name": "Chilan Berry",
+    "num": 66,
+    "naturalGift": {
+      "basePower": 80,
+      "type": "Normal"
+    }
+  },
+  "chilldrive": {
+    "id": "chilldrive",
+    "name": "Chill Drive",
+    "num": 67
+  },
+  "chimechite": {
+    "id": "chimechite",
+    "name": "Chimechite",
+    "num": 0
+  },
+  "chippedpot": {
+    "id": "chippedpot",
+    "name": "Chipped Pot",
+    "num": 720,
+    "flingBasePower": 80
+  },
+  "choiceband": {
+    "id": "choiceband",
+    "name": "Choice Band",
+    "num": 68,
+    "flingBasePower": 10
+  },
+  "choicescarf": {
+    "id": "choicescarf",
+    "name": "Choice Scarf",
+    "num": 69,
+    "flingBasePower": 10
+  },
+  "choicespecs": {
+    "id": "choicespecs",
+    "name": "Choice Specs",
+    "num": 70,
+    "flingBasePower": 10
+  },
+  "chopleberry": {
+    "id": "chopleberry",
+    "name": "Chople Berry",
+    "num": 71,
+    "naturalGift": {
+      "basePower": 80,
+      "type": "Fighting"
+    }
+  },
+  "clawfossil": {
+    "id": "clawfossil",
+    "name": "Claw Fossil",
+    "num": 72,
+    "flingBasePower": 100
+  },
+  "clearamulet": {
+    "id": "clearamulet",
+    "name": "Clear Amulet",
+    "num": 747,
+    "flingBasePower": 30
+  },
+  "clefablite": {
+    "id": "clefablite",
+    "name": "Clefablite",
+    "num": 544
+  },
+  "cloversweet": {
+    "id": "cloversweet",
+    "name": "Clover Sweet",
+    "num": 707,
+    "flingBasePower": 10
+  },
+  "cobaberry": {
+    "id": "cobaberry",
+    "name": "Coba Berry",
+    "num": 76,
+    "naturalGift": {
+      "basePower": 80,
+      "type": "Flying"
+    }
+  },
+  "colburberry": {
+    "id": "colburberry",
+    "name": "Colbur Berry",
+    "num": 78,
+    "naturalGift": {
+      "basePower": 80,
+      "type": "Dark"
+    }
+  },
+  "cornerstonemask": {
+    "id": "cornerstonemask",
+    "name": "Cornerstone Mask",
+    "num": 758,
+    "flingBasePower": 60
+  },
+  "cornnberry": {
+    "id": "cornnberry",
+    "name": "Cornn Berry",
+    "num": 81,
+    "naturalGift": {
+      "basePower": 90,
+      "type": "Bug"
+    }
+  },
+  "coverfossil": {
+    "id": "coverfossil",
+    "name": "Cover Fossil",
+    "num": 85,
+    "flingBasePower": 100
+  },
+  "covertcloak": {
+    "id": "covertcloak",
+    "name": "Covert Cloak",
+    "num": 750,
+    "flingBasePower": 30
+  },
+  "crabominite": {
+    "id": "crabominite",
+    "name": "Crabominite",
+    "num": 0
+  },
+  "crackedpot": {
+    "id": "crackedpot",
+    "name": "Cracked Pot",
+    "num": 719,
+    "flingBasePower": 80
+  },
+  "custapberry": {
+    "id": "custapberry",
+    "name": "Custap Berry",
+    "num": 86,
+    "naturalGift": {
+      "basePower": 100,
+      "type": "Ghost"
+    }
+  },
+  "damprock": {
+    "id": "damprock",
+    "name": "Damp Rock",
+    "num": 88,
+    "flingBasePower": 60
+  },
+  "darkgem": {
+    "id": "darkgem",
+    "name": "Dark Gem",
+    "num": 89
+  },
+  "darkiniumz": {
+    "id": "darkiniumz",
+    "name": "Darkinium Z",
+    "num": 646,
+    "gen": 7
+  },
+  "darkmemory": {
+    "id": "darkmemory",
+    "name": "Dark Memory",
+    "num": 683
+  },
+  "darkranite": {
+    "id": "darkranite",
+    "name": "Darkranite",
+    "num": 0
+  },
+  "dawnstone": {
+    "id": "dawnstone",
+    "name": "Dawn Stone",
+    "num": 92,
+    "flingBasePower": 80
+  },
+  "decidiumz": {
+    "id": "decidiumz",
+    "name": "Decidium Z",
+    "num": 650,
+    "gen": 7
+  },
+  "deepseascale": {
+    "id": "deepseascale",
+    "name": "Deep Sea Scale",
+    "num": 93,
+    "flingBasePower": 30
+  },
+  "deepseatooth": {
+    "id": "deepseatooth",
+    "name": "Deep Sea Tooth",
+    "num": 94,
+    "flingBasePower": 90
+  },
+  "delphoxite": {
+    "id": "delphoxite",
+    "name": "Delphoxite",
+    "num": 559
+  },
+  "destinyknot": {
+    "id": "destinyknot",
+    "name": "Destiny Knot",
+    "num": 95,
+    "flingBasePower": 10
+  },
+  "diancite": {
+    "id": "diancite",
+    "name": "Diancite",
+    "num": 624
+  },
+  "diveball": {
+    "id": "diveball",
+    "name": "Dive Ball",
+    "num": 101,
+    "gen": 3
+  },
+  "domefossil": {
+    "id": "domefossil",
+    "name": "Dome Fossil",
+    "num": 102,
+    "flingBasePower": 100
+  },
+  "dousedrive": {
+    "id": "dousedrive",
+    "name": "Douse Drive",
+    "num": 103
+  },
+  "dracoplate": {
+    "id": "dracoplate",
+    "name": "Draco Plate",
+    "num": 105,
+    "onBasePower": true
+  },
+  "dragalgite": {
+    "id": "dragalgite",
+    "name": "Dragalgite",
+    "num": 565
+  },
+  "dragonfang": {
+    "id": "dragonfang",
+    "name": "Dragon Fang",
+    "num": 106,
+    "flingBasePower": 70
+  },
+  "dragongem": {
+    "id": "dragongem",
+    "name": "Dragon Gem",
+    "num": 107
+  },
+  "dragoninite": {
+    "id": "dragoninite",
+    "name": "Dragoninite",
+    "num": 547
+  },
+  "dragoniumz": {
+    "id": "dragoniumz",
+    "name": "Dragonium Z",
+    "num": 645,
+    "gen": 7
+  },
+  "dragonmemory": {
+    "id": "dragonmemory",
+    "name": "Dragon Memory",
+    "num": 682
+  },
+  "dragonscale": {
+    "id": "dragonscale",
+    "name": "Dragon Scale",
+    "num": 108,
+    "flingBasePower": 30
+  },
+  "drampanite": {
+    "id": "drampanite",
+    "name": "Drampanite",
+    "num": 569
+  },
+  "dreadplate": {
+    "id": "dreadplate",
+    "name": "Dread Plate",
+    "num": 110,
+    "onBasePower": true
+  },
+  "dreamball": {
+    "id": "dreamball",
+    "name": "Dream Ball",
+    "num": 111,
+    "gen": 5
+  },
+  "dubiousdisc": {
+    "id": "dubiousdisc",
+    "name": "Dubious Disc",
+    "num": 113,
+    "flingBasePower": 50
+  },
+  "durinberry": {
+    "id": "durinberry",
+    "name": "Durin Berry",
+    "num": 114,
+    "naturalGift": {
+      "basePower": 100,
+      "type": "Water"
+    }
+  },
+  "duskball": {
+    "id": "duskball",
+    "name": "Dusk Ball",
+    "num": 115,
+    "gen": 4
+  },
+  "duskstone": {
+    "id": "duskstone",
+    "name": "Dusk Stone",
+    "num": 116,
+    "flingBasePower": 80
+  },
+  "earthplate": {
+    "id": "earthplate",
+    "name": "Earth Plate",
+    "num": 117,
+    "onBasePower": true
+  },
+  "eelektrossite": {
+    "id": "eelektrossite",
+    "name": "Eelektrossite",
+    "num": 556
+  },
+  "eeviumz": {
+    "id": "eeviumz",
+    "name": "Eevium Z",
+    "num": 657,
+    "gen": 7
+  },
+  "ejectbutton": {
+    "id": "ejectbutton",
+    "name": "Eject Button",
+    "num": 118,
+    "flingBasePower": 30
+  },
+  "ejectpack": {
+    "id": "ejectpack",
+    "name": "Eject Pack",
+    "num": 714,
+    "flingBasePower": 50
+  },
+  "electirizer": {
+    "id": "electirizer",
+    "name": "Electirizer",
+    "num": 119,
+    "flingBasePower": 80
+  },
+  "electricgem": {
+    "id": "electricgem",
+    "name": "Electric Gem",
+    "num": 120
+  },
+  "electricmemory": {
+    "id": "electricmemory",
+    "name": "Electric Memory",
+    "num": 679
+  },
+  "electricseed": {
+    "id": "electricseed",
+    "name": "Electric Seed",
+    "num": 664,
+    "flingBasePower": 10
+  },
+  "electriumz": {
+    "id": "electriumz",
+    "name": "Electrium Z",
+    "num": 634,
+    "gen": 7
+  },
+  "emboarite": {
+    "id": "emboarite",
+    "name": "Emboarite",
+    "num": 552
+  },
+  "enigmaberry": {
+    "id": "enigmaberry",
+    "name": "Enigma Berry",
+    "num": 124,
+    "naturalGift": {
+      "basePower": 100,
+      "type": "Bug"
+    }
+  },
+  "eviolite": {
+    "id": "eviolite",
+    "name": "Eviolite",
+    "num": 130,
+    "flingBasePower": 40
+  },
+  "excadrite": {
+    "id": "excadrite",
+    "name": "Excadrite",
+    "num": 553
+  },
+  "expertbelt": {
+    "id": "expertbelt",
+    "name": "Expert Belt",
+    "num": 132,
+    "flingBasePower": 10
+  },
+  "fairiumz": {
+    "id": "fairiumz",
+    "name": "Fairium Z",
+    "num": 648,
+    "gen": 7
+  },
+  "fairyfeather": {
+    "id": "fairyfeather",
+    "name": "Fairy Feather",
+    "num": 754,
+    "flingBasePower": 10
+  },
+  "fairygem": {
+    "id": "fairygem",
+    "name": "Fairy Gem",
+    "num": 611
+  },
+  "fairymemory": {
+    "id": "fairymemory",
+    "name": "Fairy Memory",
+    "num": 684
+  },
+  "falinksite": {
+    "id": "falinksite",
+    "name": "Falinksite",
+    "num": 570
+  },
+  "fastball": {
+    "id": "fastball",
+    "name": "Fast Ball",
+    "num": 137,
+    "gen": 2
+  },
+  "feraligite": {
+    "id": "feraligite",
+    "name": "Feraligite",
+    "num": 549
+  },
+  "fightinggem": {
+    "id": "fightinggem",
+    "name": "Fighting Gem",
+    "num": 139
+  },
+  "fightingmemory": {
+    "id": "fightingmemory",
+    "name": "Fighting Memory",
+    "num": 668
+  },
+  "fightiniumz": {
+    "id": "fightiniumz",
+    "name": "Fightinium Z",
+    "num": 637,
+    "gen": 7
+  },
+  "figyberry": {
+    "id": "figyberry",
+    "name": "Figy Berry",
+    "num": 140,
+    "naturalGift": {
+      "basePower": 80,
+      "type": "Bug"
+    }
+  },
+  "firegem": {
+    "id": "firegem",
+    "name": "Fire Gem",
+    "num": 141
+  },
+  "firememory": {
+    "id": "firememory",
+    "name": "Fire Memory",
+    "num": 676
+  },
+  "firestone": {
+    "id": "firestone",
+    "name": "Fire Stone",
+    "num": 142,
+    "flingBasePower": 30
+  },
+  "firiumz": {
+    "id": "firiumz",
+    "name": "Firium Z",
+    "num": 632,
+    "gen": 7
+  },
+  "fistplate": {
+    "id": "fistplate",
+    "name": "Fist Plate",
+    "num": 143,
+    "onBasePower": true
+  },
+  "flameorb": {
+    "id": "flameorb",
+    "name": "Flame Orb",
+    "num": 145,
+    "flingBasePower": 30
+  },
+  "flameplate": {
+    "id": "flameplate",
+    "name": "Flame Plate",
+    "num": 146,
+    "onBasePower": true
+  },
+  "floatstone": {
+    "id": "floatstone",
+    "name": "Float Stone",
+    "num": 147,
+    "flingBasePower": 30
+  },
+  "floettite": {
+    "id": "floettite",
+    "name": "Floettite",
+    "num": 562
+  },
+  "flowersweet": {
+    "id": "flowersweet",
+    "name": "Flower Sweet",
+    "num": 708,
+    "flingBasePower": 0
+  },
+  "flyinggem": {
+    "id": "flyinggem",
+    "name": "Flying Gem",
+    "num": 149
+  },
+  "flyingmemory": {
+    "id": "flyingmemory",
+    "name": "Flying Memory",
+    "num": 669
+  },
+  "flyiniumz": {
+    "id": "flyiniumz",
+    "name": "Flyinium Z",
+    "num": 640,
+    "gen": 7
+  },
+  "focusband": {
+    "id": "focusband",
+    "name": "Focus Band",
+    "num": 150,
+    "flingBasePower": 10
+  },
+  "focussash": {
+    "id": "focussash",
+    "name": "Focus Sash",
+    "num": 151,
+    "flingBasePower": 10
+  },
+  "fossilizedbird": {
+    "id": "fossilizedbird",
+    "name": "Fossilized Bird",
+    "num": 700,
+    "flingBasePower": 100
+  },
+  "fossilizeddino": {
+    "id": "fossilizeddino",
+    "name": "Fossilized Dino",
+    "num": 703,
+    "flingBasePower": 100
+  },
+  "fossilizeddrake": {
+    "id": "fossilizeddrake",
+    "name": "Fossilized Drake",
+    "num": 702,
+    "flingBasePower": 100
+  },
+  "fossilizedfish": {
+    "id": "fossilizedfish",
+    "name": "Fossilized Fish",
+    "num": 701,
+    "flingBasePower": 100
+  },
+  "friendball": {
+    "id": "friendball",
+    "name": "Friend Ball",
+    "num": 153,
+    "gen": 2
+  },
+  "froslassite": {
+    "id": "froslassite",
+    "name": "Froslassite",
+    "num": 551
+  },
+  "fullincense": {
+    "id": "fullincense",
+    "name": "Full Incense",
+    "num": 155,
+    "flingBasePower": 10
+  },
+  "galaricacuff": {
+    "id": "galaricacuff",
+    "name": "Galarica Cuff",
+    "num": 739,
+    "flingBasePower": 30
+  },
+  "galaricawreath": {
+    "id": "galaricawreath",
+    "name": "Galarica Wreath",
+    "num": 740,
+    "flingBasePower": 30
+  },
+  "galladite": {
+    "id": "galladite",
+    "name": "Galladite",
+    "num": 616
+  },
+  "ganlonberry": {
+    "id": "ganlonberry",
+    "name": "Ganlon Berry",
+    "num": 158,
+    "naturalGift": {
+      "basePower": 100,
+      "type": "Ice"
+    }
+  },
+  "garchompite": {
+    "id": "garchompite",
+    "name": "Garchompite",
+    "num": 573
+  },
+  "garchompitez": {
+    "id": "garchompitez",
+    "name": "Garchompite Z",
+    "num": 573
+  },
+  "gardevoirite": {
+    "id": "gardevoirite",
+    "name": "Gardevoirite",
+    "num": 587
+  },
+  "gengarite": {
+    "id": "gengarite",
+    "name": "Gengarite",
+    "num": 588
+  },
+  "ghostgem": {
+    "id": "ghostgem",
+    "name": "Ghost Gem",
+    "num": 161
+  },
+  "ghostiumz": {
+    "id": "ghostiumz",
+    "name": "Ghostium Z",
+    "num": 644,
+    "gen": 7
+  },
+  "ghostmemory": {
+    "id": "ghostmemory",
+    "name": "Ghost Memory",
+    "num": 674
+  },
+  "glalitite": {
+    "id": "glalitite",
+    "name": "Glalitite",
+    "num": 623
+  },
+  "glimmoranite": {
+    "id": "glimmoranite",
+    "name": "Glimmoranite",
+    "num": 0
+  },
+  "goldbottlecap": {
+    "id": "goldbottlecap",
+    "name": "Gold Bottle Cap",
+    "num": 697,
+    "flingBasePower": 30
+  },
+  "golisopite": {
+    "id": "golisopite",
+    "name": "Golisopite",
+    "num": 0
+  },
+  "golurkite": {
+    "id": "golurkite",
+    "name": "Golurkite",
+    "num": 0
+  },
+  "grassgem": {
+    "id": "grassgem",
+    "name": "Grass Gem",
+    "num": 172
+  },
+  "grassiumz": {
+    "id": "grassiumz",
+    "name": "Grassium Z",
+    "num": 635,
+    "gen": 7
+  },
+  "grassmemory": {
+    "id": "grassmemory",
+    "name": "Grass Memory",
+    "num": 678
+  },
+  "grassyseed": {
+    "id": "grassyseed",
+    "name": "Grassy Seed",
+    "num": 667,
+    "flingBasePower": 10
+  },
+  "greatball": {
+    "id": "greatball",
+    "name": "Great Ball",
+    "num": 174,
+    "gen": 1
+  },
+  "greninjite": {
+    "id": "greninjite",
+    "name": "Greninjite",
+    "num": 560
+  },
+  "grepaberry": {
+    "id": "grepaberry",
+    "name": "Grepa Berry",
+    "num": 178,
+    "naturalGift": {
+      "basePower": 90,
+      "type": "Flying"
+    }
+  },
+  "gripclaw": {
+    "id": "gripclaw",
+    "name": "Grip Claw",
+    "num": 179,
+    "flingBasePower": 90
+  },
+  "griseouscore": {
+    "id": "griseouscore",
+    "name": "Griseous Core",
+    "num": 743,
+    "onBasePower": true
+  },
+  "griseousorb": {
+    "id": "griseousorb",
+    "name": "Griseous Orb",
+    "num": 180,
+    "flingBasePower": 60
+  },
+  "groundgem": {
+    "id": "groundgem",
+    "name": "Ground Gem",
+    "num": 182
+  },
+  "groundiumz": {
+    "id": "groundiumz",
+    "name": "Groundium Z",
+    "num": 639,
+    "gen": 7
+  },
+  "groundmemory": {
+    "id": "groundmemory",
+    "name": "Ground Memory",
+    "num": 671
+  },
+  "gyaradosite": {
+    "id": "gyaradosite",
+    "name": "Gyaradosite",
+    "num": 589
+  },
+  "habanberry": {
+    "id": "habanberry",
+    "name": "Haban Berry",
+    "num": 185,
+    "naturalGift": {
+      "basePower": 80,
+      "type": "Dragon"
+    }
+  },
+  "hardstone": {
+    "id": "hardstone",
+    "name": "Hard Stone",
+    "num": 187,
+    "flingBasePower": 100
+  },
+  "hawluchanite": {
+    "id": "hawluchanite",
+    "name": "Hawluchanite",
+    "num": 566
+  },
+  "healball": {
+    "id": "healball",
+    "name": "Heal Ball",
+    "num": 188,
+    "gen": 4
+  },
+  "hearthflamemask": {
+    "id": "hearthflamemask",
+    "name": "Hearthflame Mask",
+    "num": 760,
+    "flingBasePower": 60
+  },
+  "heatranite": {
+    "id": "heatranite",
+    "name": "Heatranite",
+    "num": 0
+  },
+  "heatrock": {
+    "id": "heatrock",
+    "name": "Heat Rock",
+    "num": 193,
+    "flingBasePower": 60
+  },
+  "heavyball": {
+    "id": "heavyball",
+    "name": "Heavy Ball",
+    "num": 194,
+    "gen": 2
+  },
+  "heavydutyboots": {
+    "id": "heavydutyboots",
+    "name": "Heavy-Duty Boots",
+    "num": 715,
+    "flingBasePower": 80
+  },
+  "helixfossil": {
+    "id": "helixfossil",
+    "name": "Helix Fossil",
+    "num": 195,
+    "flingBasePower": 100
+  },
+  "heracronite": {
+    "id": "heracronite",
+    "name": "Heracronite",
+    "num": 590
+  },
+  "hondewberry": {
+    "id": "hondewberry",
+    "name": "Hondew Berry",
+    "num": 213,
+    "naturalGift": {
+      "basePower": 90,
+      "type": "Ground"
+    }
+  },
+  "houndoominite": {
+    "id": "houndoominite",
+    "name": "Houndoominite",
+    "num": 591
+  },
+  "iapapaberry": {
+    "id": "iapapaberry",
+    "name": "Iapapa Berry",
+    "num": 217,
+    "naturalGift": {
+      "basePower": 80,
+      "type": "Dark"
+    }
+  },
+  "icegem": {
+    "id": "icegem",
+    "name": "Ice Gem",
+    "num": 218
+  },
+  "icememory": {
+    "id": "icememory",
+    "name": "Ice Memory",
+    "num": 681
+  },
+  "icestone": {
+    "id": "icestone",
+    "name": "Ice Stone",
+    "num": 693,
+    "flingBasePower": 30
+  },
+  "icicleplate": {
+    "id": "icicleplate",
+    "name": "Icicle Plate",
+    "num": 220,
+    "onBasePower": true
+  },
+  "iciumz": {
+    "id": "iciumz",
+    "name": "Icium Z",
+    "num": 636,
+    "gen": 7
+  },
+  "icyrock": {
+    "id": "icyrock",
+    "name": "Icy Rock",
+    "num": 221,
+    "flingBasePower": 40
+  },
+  "inciniumz": {
+    "id": "inciniumz",
+    "name": "Incinium Z",
+    "num": 651,
+    "gen": 7
+  },
+  "insectplate": {
+    "id": "insectplate",
+    "name": "Insect Plate",
+    "num": 223,
+    "onBasePower": true
+  },
+  "ironball": {
+    "id": "ironball",
+    "name": "Iron Ball",
+    "num": 224,
+    "flingBasePower": 130
+  },
+  "ironplate": {
+    "id": "ironplate",
+    "name": "Iron Plate",
+    "num": 225,
+    "onBasePower": true
+  },
+  "jabocaberry": {
+    "id": "jabocaberry",
+    "name": "Jaboca Berry",
+    "num": 230,
+    "naturalGift": {
+      "basePower": 100,
+      "type": "Dragon"
+    }
+  },
+  "jawfossil": {
+    "id": "jawfossil",
+    "name": "Jaw Fossil",
+    "num": 694,
+    "flingBasePower": 100
+  },
+  "kangaskhanite": {
+    "id": "kangaskhanite",
+    "name": "Kangaskhanite",
+    "num": 592
+  },
+  "kasibberry": {
+    "id": "kasibberry",
+    "name": "Kasib Berry",
+    "num": 233,
+    "naturalGift": {
+      "basePower": 80,
+      "type": "Ghost"
+    }
+  },
+  "kebiaberry": {
+    "id": "kebiaberry",
+    "name": "Kebia Berry",
+    "num": 234,
+    "naturalGift": {
+      "basePower": 80,
+      "type": "Poison"
+    }
+  },
+  "keeberry": {
+    "id": "keeberry",
+    "name": "Kee Berry",
+    "num": 593,
+    "naturalGift": {
+      "basePower": 100,
+      "type": "Fairy"
+    }
+  },
+  "kelpsyberry": {
+    "id": "kelpsyberry",
+    "name": "Kelpsy Berry",
+    "num": 235,
+    "naturalGift": {
+      "basePower": 90,
+      "type": "Fighting"
+    }
+  },
+  "kingsrock": {
+    "id": "kingsrock",
+    "name": "King",
+    "num": 236,
+    "flingBasePower": 30
+  },
+  "kommoniumz": {
+    "id": "kommoniumz",
+    "name": "Kommonium Z",
+    "num": 690,
+    "gen": 7
+  },
+  "laggingtail": {
+    "id": "laggingtail",
+    "name": "Lagging Tail",
+    "num": 237,
+    "flingBasePower": 10
+  },
+  "lansatberry": {
+    "id": "lansatberry",
+    "name": "Lansat Berry",
+    "num": 238,
+    "naturalGift": {
+      "basePower": 100,
+      "type": "Flying"
+    }
+  },
+  "latiasite": {
+    "id": "latiasite",
+    "name": "Latiasite",
+    "num": 629
+  },
+  "latiosite": {
+    "id": "latiosite",
+    "name": "Latiosite",
+    "num": 630
+  },
+  "laxincense": {
+    "id": "laxincense",
+    "name": "Lax Incense",
+    "num": 240,
+    "flingBasePower": 10
+  },
+  "leafstone": {
+    "id": "leafstone",
+    "name": "Leaf Stone",
+    "num": 241,
+    "flingBasePower": 30
+  },
+  "leek": {
+    "id": "leek",
+    "name": "Leek",
+    "flingBasePower": 60
+  },
+  "leftovers": {
+    "id": "leftovers",
+    "name": "Leftovers",
+    "num": 242,
+    "flingBasePower": 10
+  },
+  "leppaberry": {
+    "id": "leppaberry",
+    "name": "Leppa Berry",
+    "num": 244,
+    "naturalGift": {
+      "basePower": 80,
+      "type": "Fighting"
+    }
+  },
+  "levelball": {
+    "id": "levelball",
+    "name": "Level Ball",
+    "num": 246,
+    "gen": 2
+  },
+  "liechiberry": {
+    "id": "liechiberry",
+    "name": "Liechi Berry",
+    "num": 248,
+    "naturalGift": {
+      "basePower": 100,
+      "type": "Grass"
+    }
+  },
+  "lifeorb": {
+    "id": "lifeorb",
+    "name": "Life Orb",
+    "num": 249,
+    "flingBasePower": 30
+  },
+  "lightball": {
+    "id": "lightball",
+    "name": "Light Ball",
+    "num": 251,
+    "flingBasePower": 30
+  },
+  "lightclay": {
+    "id": "lightclay",
+    "name": "Light Clay",
+    "num": 252,
+    "flingBasePower": 30
+  },
+  "loadeddice": {
+    "id": "loadeddice",
+    "name": "Loaded Dice",
+    "num": 751,
+    "flingBasePower": 30
+  },
+  "lopunnite": {
+    "id": "lopunnite",
+    "name": "Lopunnite",
+    "num": 626
+  },
+  "loveball": {
+    "id": "loveball",
+    "name": "Love Ball",
+    "num": 258,
+    "gen": 2
+  },
+  "lovesweet": {
+    "id": "lovesweet",
+    "name": "Love Sweet",
+    "num": 705,
+    "flingBasePower": 10
+  },
+  "lucarionite": {
+    "id": "lucarionite",
+    "name": "Lucarionite",
+    "num": 594
+  },
+  "lucarionitez": {
+    "id": "lucarionitez",
+    "name": "Lucarionite Z",
+    "num": 594
+  },
+  "luckypunch": {
+    "id": "luckypunch",
+    "name": "Lucky Punch",
+    "num": 261,
+    "flingBasePower": 40
+  },
+  "lumberry": {
+    "id": "lumberry",
+    "name": "Lum Berry",
+    "num": 262,
+    "naturalGift": {
+      "basePower": 80,
+      "type": "Flying"
+    }
+  },
+  "luminousmoss": {
+    "id": "luminousmoss",
+    "name": "Luminous Moss",
+    "num": 595,
+    "flingBasePower": 30
+  },
+  "lunaliumz": {
+    "id": "lunaliumz",
+    "name": "Lunalium Z",
+    "num": 686,
+    "gen": 7
+  },
+  "lureball": {
+    "id": "lureball",
+    "name": "Lure Ball",
+    "num": 264,
+    "gen": 2
+  },
+  "lustrousglobe": {
+    "id": "lustrousglobe",
+    "name": "Lustrous Globe",
+    "num": 742,
+    "onBasePower": true
+  },
+  "lustrousorb": {
+    "id": "lustrousorb",
+    "name": "Lustrous Orb",
+    "num": 265,
+    "flingBasePower": 60
+  },
+  "luxuryball": {
+    "id": "luxuryball",
+    "name": "Luxury Ball",
+    "num": 266,
+    "gen": 3
+  },
+  "lycaniumz": {
+    "id": "lycaniumz",
+    "name": "Lycanium Z",
+    "num": 689,
+    "gen": 7
+  },
+  "machobrace": {
+    "id": "machobrace",
+    "name": "Macho Brace",
+    "num": 269,
+    "flingBasePower": 60
+  },
+  "magearnite": {
+    "id": "magearnite",
+    "name": "Magearnite",
+    "num": 0
+  },
+  "magmarizer": {
+    "id": "magmarizer",
+    "name": "Magmarizer",
+    "num": 272,
+    "flingBasePower": 80
+  },
+  "magnet": {
+    "id": "magnet",
+    "name": "Magnet",
+    "num": 273,
+    "flingBasePower": 30
+  },
+  "magoberry": {
+    "id": "magoberry",
+    "name": "Mago Berry",
+    "num": 274,
+    "naturalGift": {
+      "basePower": 80,
+      "type": "Ghost"
+    }
+  },
+  "magostberry": {
+    "id": "magostberry",
+    "name": "Magost Berry",
+    "num": 275,
+    "naturalGift": {
+      "basePower": 90,
+      "type": "Rock"
+    }
+  },
+  "mail": {
+    "id": "mail",
+    "name": "Mail",
+    "num": 403
+  },
+  "malamarite": {
+    "id": "malamarite",
+    "name": "Malamarite",
+    "num": 563
+  },
+  "maliciousarmor": {
+    "id": "maliciousarmor",
+    "name": "Malicious Armor",
+    "num": 744,
+    "flingBasePower": 30
+  },
+  "manectite": {
+    "id": "manectite",
+    "name": "Manectite",
+    "num": 596
+  },
+  "marangaberry": {
+    "id": "marangaberry",
+    "name": "Maranga Berry",
+    "num": 597,
+    "naturalGift": {
+      "basePower": 100,
+      "type": "Dark"
+    }
+  },
+  "marshadiumz": {
+    "id": "marshadiumz",
+    "name": "Marshadium Z",
+    "num": 654,
+    "gen": 7
+  },
+  "masterball": {
+    "id": "masterball",
+    "name": "Master Ball",
+    "num": 276,
+    "gen": 1
+  },
+  "masterpieceteacup": {
+    "id": "masterpieceteacup",
+    "name": "Masterpiece Teacup",
+    "num": 757,
+    "flingBasePower": 80
+  },
+  "mawilite": {
+    "id": "mawilite",
+    "name": "Mawilite",
+    "num": 598
+  },
+  "meadowplate": {
+    "id": "meadowplate",
+    "name": "Meadow Plate",
+    "num": 282,
+    "onBasePower": true
+  },
+  "medichamite": {
+    "id": "medichamite",
+    "name": "Medichamite",
+    "num": 599
+  },
+  "meganiumite": {
+    "id": "meganiumite",
+    "name": "Meganiumite",
+    "num": 548
+  },
+  "mentalherb": {
+    "id": "mentalherb",
+    "name": "Mental Herb",
+    "num": 285,
+    "flingBasePower": 10
+  },
+  "meowsticite": {
+    "id": "meowsticite",
+    "name": "Meowsticite",
+    "num": 0
+  },
+  "metagrossite": {
+    "id": "metagrossite",
+    "name": "Metagrossite",
+    "num": 618
+  },
+  "metalalloy": {
+    "id": "metalalloy",
+    "name": "Metal Alloy",
+    "num": 761,
+    "gen": 9
+  },
+  "metalcoat": {
+    "id": "metalcoat",
+    "name": "Metal Coat",
+    "num": 286,
+    "flingBasePower": 30
+  },
+  "metalpowder": {
+    "id": "metalpowder",
+    "name": "Metal Powder",
+    "flingBasePower": 10
+  },
+  "metronome": {
+    "id": "metronome",
+    "name": "Metronome",
+    "num": 289,
+    "flingBasePower": 30
+  },
+  "mewniumz": {
+    "id": "mewniumz",
+    "name": "Mewnium Z",
+    "num": 658,
+    "gen": 7
+  },
+  "mewtwonitex": {
+    "id": "mewtwonitex",
+    "name": "Mewtwonite X",
+    "num": 600
+  },
+  "mewtwonitey": {
+    "id": "mewtwonitey",
+    "name": "Mewtwonite Y",
+    "num": 601
+  },
+  "micleberry": {
+    "id": "micleberry",
+    "name": "Micle Berry",
+    "num": 290,
+    "naturalGift": {
+      "basePower": 100,
+      "type": "Rock"
+    }
+  },
+  "mimikiumz": {
+    "id": "mimikiumz",
+    "name": "Mimikium Z",
+    "num": 688,
+    "gen": 7
+  },
+  "mindplate": {
+    "id": "mindplate",
+    "name": "Mind Plate",
+    "num": 291,
+    "onBasePower": true
+  },
+  "miracleseed": {
+    "id": "miracleseed",
+    "name": "Miracle Seed",
+    "flingBasePower": 30
+  },
+  "mirrorherb": {
+    "id": "mirrorherb",
+    "name": "Mirror Herb",
+    "num": 748,
+    "flingBasePower": 30
+  },
+  "mistyseed": {
+    "id": "mistyseed",
+    "name": "Misty Seed",
+    "num": 666,
+    "flingBasePower": 10
+  },
+  "moonball": {
+    "id": "moonball",
+    "name": "Moon Ball",
+    "num": 294,
+    "gen": 2
+  },
+  "moonstone": {
+    "id": "moonstone",
+    "name": "Moon Stone",
+    "num": 295,
+    "flingBasePower": 30
+  },
+  "muscleband": {
+    "id": "muscleband",
+    "name": "Muscle Band",
+    "num": 297,
+    "flingBasePower": 10
+  },
+  "mysticwater": {
+    "id": "mysticwater",
+    "name": "Mystic Water",
+    "num": 300,
+    "flingBasePower": 30
+  },
+  "nanabberry": {
+    "id": "nanabberry",
+    "name": "Nanab Berry",
+    "num": 302,
+    "naturalGift": {
+      "basePower": 90,
+      "type": "Water"
+    }
+  },
+  "nestball": {
+    "id": "nestball",
+    "name": "Nest Ball",
+    "num": 303,
+    "gen": 3
+  },
+  "netball": {
+    "id": "netball",
+    "name": "Net Ball",
+    "num": 304,
+    "gen": 3
+  },
+  "nevermeltice": {
+    "id": "nevermeltice",
+    "name": "Never-Melt Ice",
+    "num": 305,
+    "flingBasePower": 30
+  },
+  "nomelberry": {
+    "id": "nomelberry",
+    "name": "Nomel Berry",
+    "num": 306,
+    "naturalGift": {
+      "basePower": 90,
+      "type": "Dragon"
+    }
+  },
+  "normalgem": {
+    "id": "normalgem",
+    "name": "Normal Gem",
+    "num": 307
+  },
+  "normaliumz": {
+    "id": "normaliumz",
+    "name": "Normalium Z",
+    "num": 631,
+    "gen": 7
+  },
+  "occaberry": {
+    "id": "occaberry",
+    "name": "Occa Berry",
+    "num": 311,
+    "naturalGift": {
+      "basePower": 80,
+      "type": "Fire"
+    }
+  },
+  "oddincense": {
+    "id": "oddincense",
+    "name": "Odd Incense",
+    "num": 312,
+    "flingBasePower": 10
+  },
+  "oldamber": {
+    "id": "oldamber",
+    "name": "Old Amber",
+    "num": 314,
+    "flingBasePower": 100
+  },
+  "oranberry": {
+    "id": "oranberry",
+    "name": "Oran Berry",
+    "num": 319,
+    "naturalGift": {
+      "basePower": 80,
+      "type": "Poison"
+    }
+  },
+  "ovalstone": {
+    "id": "ovalstone",
+    "name": "Oval Stone",
+    "num": 321,
+    "flingBasePower": 80
+  },
+  "pamtreberry": {
+    "id": "pamtreberry",
+    "name": "Pamtre Berry",
+    "num": 323,
+    "naturalGift": {
+      "basePower": 90,
+      "type": "Steel"
+    }
+  },
+  "parkball": {
+    "id": "parkball",
+    "name": "Park Ball",
+    "num": 325,
+    "gen": 4
+  },
+  "passhoberry": {
+    "id": "passhoberry",
+    "name": "Passho Berry",
+    "num": 329,
+    "naturalGift": {
+      "basePower": 80,
+      "type": "Water"
+    }
+  },
+  "payapaberry": {
+    "id": "payapaberry",
+    "name": "Payapa Berry",
+    "num": 330,
+    "naturalGift": {
+      "basePower": 80,
+      "type": "Psychic"
+    }
+  },
+  "pechaberry": {
+    "id": "pechaberry",
+    "name": "Pecha Berry",
+    "num": 333,
+    "naturalGift": {
+      "basePower": 80,
+      "type": "Electric"
+    }
+  },
+  "persimberry": {
+    "id": "persimberry",
+    "name": "Persim Berry",
+    "num": 334,
+    "naturalGift": {
+      "basePower": 80,
+      "type": "Ground"
+    }
+  },
+  "petayaberry": {
+    "id": "petayaberry",
+    "name": "Petaya Berry",
+    "num": 335,
+    "naturalGift": {
+      "basePower": 100,
+      "type": "Poison"
+    }
+  },
+  "pidgeotite": {
+    "id": "pidgeotite",
+    "name": "Pidgeotite",
+    "num": 622
+  },
+  "pikaniumz": {
+    "id": "pikaniumz",
+    "name": "Pikanium Z",
+    "num": 649,
+    "gen": 7
+  },
+  "pikashuniumz": {
+    "id": "pikashuniumz",
+    "name": "Pikashunium Z",
+    "num": 659,
+    "gen": 7
+  },
+  "pinapberry": {
+    "id": "pinapberry",
+    "name": "Pinap Berry",
+    "num": 337,
+    "naturalGift": {
+      "basePower": 90,
+      "type": "Grass"
+    }
+  },
+  "pinsirite": {
+    "id": "pinsirite",
+    "name": "Pinsirite",
+    "num": 602
+  },
+  "pixieplate": {
+    "id": "pixieplate",
+    "name": "Pixie Plate",
+    "num": 610,
+    "onBasePower": true
+  },
+  "plumefossil": {
+    "id": "plumefossil",
+    "name": "Plume Fossil",
+    "num": 339,
+    "flingBasePower": 100
+  },
+  "poisonbarb": {
+    "id": "poisonbarb",
+    "name": "Poison Barb",
+    "num": 343,
+    "flingBasePower": 70
+  },
+  "poisongem": {
+    "id": "poisongem",
+    "name": "Poison Gem",
+    "num": 344
+  },
+  "poisoniumz": {
+    "id": "poisoniumz",
+    "name": "Poisonium Z",
+    "num": 638,
+    "gen": 7
+  },
+  "poisonmemory": {
+    "id": "poisonmemory",
+    "name": "Poison Memory",
+    "num": 670
+  },
+  "pokeball": {
+    "id": "pokeball",
+    "name": "Poke Ball",
+    "num": 345,
+    "gen": 1
+  },
+  "pomegberry": {
+    "id": "pomegberry",
+    "name": "Pomeg Berry",
+    "num": 351,
+    "naturalGift": {
+      "basePower": 90,
+      "type": "Ice"
+    }
+  },
+  "poweranklet": {
+    "id": "poweranklet",
+    "name": "Power Anklet",
+    "num": 354,
+    "flingBasePower": 70
+  },
+  "powerband": {
+    "id": "powerband",
+    "name": "Power Band",
+    "num": 355,
+    "flingBasePower": 70
+  },
+  "powerbelt": {
+    "id": "powerbelt",
+    "name": "Power Belt",
+    "num": 356,
+    "flingBasePower": 70
+  },
+  "powerbracer": {
+    "id": "powerbracer",
+    "name": "Power Bracer",
+    "num": 357,
+    "flingBasePower": 70
+  },
+  "powerlens": {
+    "id": "powerlens",
+    "name": "Power Lens",
+    "num": 359,
+    "flingBasePower": 70
+  },
+  "powerweight": {
+    "id": "powerweight",
+    "name": "Power Weight",
+    "num": 360,
+    "flingBasePower": 70
+  },
+  "premierball": {
+    "id": "premierball",
+    "name": "Premier Ball",
+    "num": 363,
+    "gen": 3
+  },
+  "prettyfeather": {
+    "id": "prettyfeather",
+    "name": "Pretty Feather",
+    "num": 1,
+    "flingBasePower": 20
+  },
+  "primariumz": {
+    "id": "primariumz",
+    "name": "Primarium Z",
+    "num": 652,
+    "gen": 7
+  },
+  "prismscale": {
+    "id": "prismscale",
+    "name": "Prism Scale",
+    "num": 365,
+    "flingBasePower": 30
+  },
+  "protectivepads": {
+    "id": "protectivepads",
+    "name": "Protective Pads",
+    "num": 663,
+    "flingBasePower": 30
+  },
+  "protector": {
+    "id": "protector",
+    "name": "Protector",
+    "num": 367,
+    "flingBasePower": 80
+  },
+  "psychicgem": {
+    "id": "psychicgem",
+    "name": "Psychic Gem",
+    "num": 369
+  },
+  "psychicmemory": {
+    "id": "psychicmemory",
+    "name": "Psychic Memory",
+    "num": 680
+  },
+  "psychicseed": {
+    "id": "psychicseed",
+    "name": "Psychic Seed",
+    "num": 665,
+    "flingBasePower": 10
+  },
+  "psychiumz": {
+    "id": "psychiumz",
+    "name": "Psychium Z",
+    "num": 641,
+    "gen": 7
+  },
+  "punchingglove": {
+    "id": "punchingglove",
+    "name": "Punching Glove",
+    "num": 749,
+    "flingBasePower": 30
+  },
+  "pyroarite": {
+    "id": "pyroarite",
+    "name": "Pyroarite",
+    "num": 561
+  },
+  "qualotberry": {
+    "id": "qualotberry",
+    "name": "Qualot Berry",
+    "num": 371,
+    "naturalGift": {
+      "basePower": 90,
+      "type": "Poison"
+    }
+  },
+  "quickball": {
+    "id": "quickball",
+    "name": "Quick Ball",
+    "num": 372,
+    "gen": 4
+  },
+  "quickpowder": {
+    "id": "quickpowder",
+    "name": "Quick Powder",
+    "num": 374,
+    "flingBasePower": 10
+  },
+  "rabutaberry": {
+    "id": "rabutaberry",
+    "name": "Rabuta Berry",
+    "num": 375,
+    "naturalGift": {
+      "basePower": 90,
+      "type": "Ghost"
+    }
+  },
+  "raichunitex": {
+    "id": "raichunitex",
+    "name": "Raichunite X",
+    "num": 0
+  },
+  "raichunitey": {
+    "id": "raichunitey",
+    "name": "Raichunite Y",
+    "num": 0
+  },
+  "rarebone": {
+    "id": "rarebone",
+    "name": "Rare Bone",
+    "num": 379,
+    "flingBasePower": 100
+  },
+  "rawstberry": {
+    "id": "rawstberry",
+    "name": "Rawst Berry",
+    "num": 381,
+    "naturalGift": {
+      "basePower": 80,
+      "type": "Grass"
+    }
+  },
+  "razorclaw": {
+    "id": "razorclaw",
+    "name": "Razor Claw",
+    "num": 382,
+    "flingBasePower": 80
+  },
+  "razorfang": {
+    "id": "razorfang",
+    "name": "Razor Fang",
+    "num": 383,
+    "flingBasePower": 30
+  },
+  "razzberry": {
+    "id": "razzberry",
+    "name": "Razz Berry",
+    "num": 384,
+    "naturalGift": {
+      "basePower": 80,
+      "type": "Steel"
+    }
+  },
+  "reapercloth": {
+    "id": "reapercloth",
+    "name": "Reaper Cloth",
+    "num": 385,
+    "flingBasePower": 10
+  },
+  "redcard": {
+    "id": "redcard",
+    "name": "Red Card",
+    "num": 387,
+    "flingBasePower": 10
+  },
+  "redorb": {
+    "id": "redorb",
+    "name": "Red Orb",
+    "num": 390
+  },
+  "repeatball": {
+    "id": "repeatball",
+    "name": "Repeat Ball",
+    "num": 401,
+    "gen": 3
+  },
+  "ribbonsweet": {
+    "id": "ribbonsweet",
+    "name": "Ribbon Sweet",
+    "num": 710,
+    "flingBasePower": 10
+  },
+  "rindoberry": {
+    "id": "rindoberry",
+    "name": "Rindo Berry",
+    "num": 409,
+    "naturalGift": {
+      "basePower": 80,
+      "type": "Grass"
+    }
+  },
+  "ringtarget": {
+    "id": "ringtarget",
+    "name": "Ring Target",
+    "num": 410,
+    "flingBasePower": 10
+  },
+  "rockgem": {
+    "id": "rockgem",
+    "name": "Rock Gem",
+    "num": 415
+  },
+  "rockincense": {
+    "id": "rockincense",
+    "name": "Rock Incense",
+    "num": 416,
+    "flingBasePower": 10
+  },
+  "rockiumz": {
+    "id": "rockiumz",
+    "name": "Rockium Z",
+    "num": 643,
+    "gen": 7
+  },
+  "rockmemory": {
+    "id": "rockmemory",
+    "name": "Rock Memory",
+    "num": 672
+  },
+  "rockyhelmet": {
+    "id": "rockyhelmet",
+    "name": "Rocky Helmet",
+    "num": 417,
+    "flingBasePower": 60
+  },
+  "roomservice": {
+    "id": "roomservice",
+    "name": "Room Service",
+    "num": 717,
+    "flingBasePower": 100
+  },
+  "rootfossil": {
+    "id": "rootfossil",
+    "name": "Root Fossil",
+    "num": 418,
+    "flingBasePower": 100
+  },
+  "roseincense": {
+    "id": "roseincense",
+    "name": "Rose Incense",
+    "num": 419,
+    "flingBasePower": 10
+  },
+  "roseliberry": {
+    "id": "roseliberry",
+    "name": "Roseli Berry",
+    "num": 603,
+    "naturalGift": {
+      "basePower": 80,
+      "type": "Fairy"
+    }
+  },
+  "rowapberry": {
+    "id": "rowapberry",
+    "name": "Rowap Berry",
+    "num": 420,
+    "naturalGift": {
+      "basePower": 100,
+      "type": "Dark"
+    }
+  },
+  "rustedshield": {
+    "id": "rustedshield",
+    "name": "Rusted Shield",
+    "num": 699
+  },
+  "rustedsword": {
+    "id": "rustedsword",
+    "name": "Rusted Sword",
+    "num": 698
+  },
+  "sablenite": {
+    "id": "sablenite",
+    "name": "Sablenite",
+    "num": 614
+  },
+  "sachet": {
+    "id": "sachet",
+    "name": "Sachet",
+    "num": 691,
+    "flingBasePower": 80
+  },
+  "safariball": {
+    "id": "safariball",
+    "name": "Safari Ball",
+    "num": 425,
+    "gen": 1
+  },
+  "safetygoggles": {
+    "id": "safetygoggles",
+    "name": "Safety Goggles",
+    "num": 604,
+    "flingBasePower": 80
+  },
+  "sailfossil": {
+    "id": "sailfossil",
+    "name": "Sail Fossil",
+    "num": 695,
+    "flingBasePower": 100
+  },
+  "salacberry": {
+    "id": "salacberry",
+    "name": "Salac Berry",
+    "num": 426,
+    "naturalGift": {
+      "basePower": 100,
+      "type": "Fighting"
+    }
+  },
+  "salamencite": {
+    "id": "salamencite",
+    "name": "Salamencite",
+    "num": 627
+  },
+  "sceptilite": {
+    "id": "sceptilite",
+    "name": "Sceptilite",
+    "num": 613
+  },
+  "scizorite": {
+    "id": "scizorite",
+    "name": "Scizorite",
+    "num": 605
+  },
+  "scolipite": {
+    "id": "scolipite",
+    "name": "Scolipite",
+    "num": 554
+  },
+  "scopelens": {
+    "id": "scopelens",
+    "name": "Scope Lens",
+    "num": 429,
+    "flingBasePower": 30
+  },
+  "scovillainite": {
+    "id": "scovillainite",
+    "name": "Scovillainite",
+    "num": 0
+  },
+  "scraftinite": {
+    "id": "scraftinite",
+    "name": "Scraftinite",
+    "num": 555
+  },
+  "seaincense": {
+    "id": "seaincense",
+    "name": "Sea Incense",
+    "num": 430,
+    "flingBasePower": 10
+  },
+  "sharpbeak": {
+    "id": "sharpbeak",
+    "name": "Sharp Beak",
+    "num": 436,
+    "flingBasePower": 50
+  },
+  "sharpedonite": {
+    "id": "sharpedonite",
+    "name": "Sharpedonite",
+    "num": 619
+  },
+  "shedshell": {
+    "id": "shedshell",
+    "name": "Shed Shell",
+    "num": 437,
+    "flingBasePower": 10
+  },
+  "shellbell": {
+    "id": "shellbell",
+    "name": "Shell Bell",
+    "num": 438,
+    "flingBasePower": 30
+  },
+  "shinystone": {
+    "id": "shinystone",
+    "name": "Shiny Stone",
+    "num": 439,
+    "flingBasePower": 80
+  },
+  "shockdrive": {
+    "id": "shockdrive",
+    "name": "Shock Drive",
+    "num": 442
+  },
+  "shucaberry": {
+    "id": "shucaberry",
+    "name": "Shuca Berry",
+    "num": 443,
+    "naturalGift": {
+      "basePower": 80,
+      "type": "Ground"
+    }
+  },
+  "silkscarf": {
+    "id": "silkscarf",
+    "name": "Silk Scarf",
+    "num": 444,
+    "flingBasePower": 10
+  },
+  "silverpowder": {
+    "id": "silverpowder",
+    "name": "Silver Powder",
+    "num": 447,
+    "flingBasePower": 10
+  },
+  "sitrusberry": {
+    "id": "sitrusberry",
+    "name": "Sitrus Berry",
+    "num": 448,
+    "naturalGift": {
+      "basePower": 80,
+      "type": "Psychic"
+    }
+  },
+  "skarmorite": {
+    "id": "skarmorite",
+    "name": "Skarmorite",
+    "num": 550
+  },
+  "skullfossil": {
+    "id": "skullfossil",
+    "name": "Skull Fossil",
+    "num": 449,
+    "flingBasePower": 100
+  },
+  "skyplate": {
+    "id": "skyplate",
+    "name": "Sky Plate",
+    "num": 450,
+    "onBasePower": true
+  },
+  "slowbronite": {
+    "id": "slowbronite",
+    "name": "Slowbronite",
+    "num": 620
+  },
+  "smoothrock": {
+    "id": "smoothrock",
+    "name": "Smooth Rock",
+    "num": 453,
+    "flingBasePower": 10
+  },
+  "snorliumz": {
+    "id": "snorliumz",
+    "name": "Snorlium Z",
+    "num": 656,
+    "gen": 7
+  },
+  "snowball": {
+    "id": "snowball",
+    "name": "Snowball",
+    "num": 606,
+    "flingBasePower": 30
+  },
+  "softsand": {
+    "id": "softsand",
+    "name": "Soft Sand",
+    "num": 456,
+    "flingBasePower": 10
+  },
+  "solganiumz": {
+    "id": "solganiumz",
+    "name": "Solganium Z",
+    "num": 685,
+    "gen": 7
+  },
+  "souldew": {
+    "id": "souldew",
+    "name": "Soul Dew",
+    "num": 459,
+    "flingBasePower": 30
+  },
+  "spelltag": {
+    "id": "spelltag",
+    "name": "Spell Tag",
+    "num": 461,
+    "flingBasePower": 30
+  },
+  "spelonberry": {
+    "id": "spelonberry",
+    "name": "Spelon Berry",
+    "num": 462,
+    "naturalGift": {
+      "basePower": 90,
+      "type": "Dark"
+    }
+  },
+  "splashplate": {
+    "id": "splashplate",
+    "name": "Splash Plate",
+    "num": 463,
+    "onBasePower": true
+  },
+  "spookyplate": {
+    "id": "spookyplate",
+    "name": "Spooky Plate",
+    "num": 464,
+    "onBasePower": true
+  },
+  "sportball": {
+    "id": "sportball",
+    "name": "Sport Ball",
+    "num": 465,
+    "gen": 2
+  },
+  "staraptite": {
+    "id": "staraptite",
+    "name": "Staraptite",
+    "num": 0
+  },
+  "starfberry": {
+    "id": "starfberry",
+    "name": "Starf Berry",
+    "num": 472,
+    "naturalGift": {
+      "basePower": 100,
+      "type": "Psychic"
+    }
+  },
+  "starminite": {
+    "id": "starminite",
+    "name": "Starminite",
+    "num": 546
+  },
+  "starsweet": {
+    "id": "starsweet",
+    "name": "Star Sweet",
+    "num": 709,
+    "flingBasePower": 10
+  },
+  "steelgem": {
+    "id": "steelgem",
+    "name": "Steel Gem",
+    "num": 473
+  },
+  "steeliumz": {
+    "id": "steeliumz",
+    "name": "Steelium Z",
+    "num": 647,
+    "gen": 7
+  },
+  "steelixite": {
+    "id": "steelixite",
+    "name": "Steelixite",
+    "num": 621
+  },
+  "steelmemory": {
+    "id": "steelmemory",
+    "name": "Steel Memory",
+    "num": 675
+  },
+  "stick": {
+    "id": "stick",
+    "name": "Stick",
+    "flingBasePower": 60
+  },
+  "stickybarb": {
+    "id": "stickybarb",
+    "name": "Sticky Barb",
+    "num": 476,
+    "flingBasePower": 80
+  },
+  "stoneplate": {
+    "id": "stoneplate",
+    "name": "Stone Plate",
+    "num": 477,
+    "onBasePower": true
+  },
+  "strangeball": {
+    "id": "strangeball",
+    "name": "Strange Ball",
+    "num": 308,
+    "gen": 8
+  },
+  "strawberrysweet": {
+    "id": "strawberrysweet",
+    "name": "Strawberry Sweet",
+    "num": 704,
+    "flingBasePower": 10
+  },
+  "sunstone": {
+    "id": "sunstone",
+    "name": "Sun Stone",
+    "num": 480,
+    "flingBasePower": 30
+  },
+  "swampertite": {
+    "id": "swampertite",
+    "name": "Swampertite",
+    "num": 612
+  },
+  "sweetapple": {
+    "id": "sweetapple",
+    "name": "Sweet Apple",
+    "num": 711,
+    "flingBasePower": 30
+  },
+  "syrupyapple": {
+    "id": "syrupyapple",
+    "name": "Syrupy Apple",
+    "num": 755,
+    "flingBasePower": 30
+  },
+  "tamatoberry": {
+    "id": "tamatoberry",
+    "name": "Tamato Berry",
+    "num": 486,
+    "naturalGift": {
+      "basePower": 90,
+      "type": "Psychic"
+    }
+  },
+  "tangaberry": {
+    "id": "tangaberry",
+    "name": "Tanga Berry",
+    "num": 487,
+    "naturalGift": {
+      "basePower": 80,
+      "type": "Bug"
+    }
+  },
+  "tapuniumz": {
+    "id": "tapuniumz",
+    "name": "Tapunium Z",
+    "num": 653,
+    "gen": 7
+  },
+  "tartapple": {
+    "id": "tartapple",
+    "name": "Tart Apple",
+    "num": 712,
+    "flingBasePower": 30
+  },
+  "tatsugirinite": {
+    "id": "tatsugirinite",
+    "name": "Tatsugirinite",
+    "num": 0
+  },
+  "terrainextender": {
+    "id": "terrainextender",
+    "name": "Terrain Extender",
+    "num": 662,
+    "flingBasePower": 60
+  },
+  "thickclub": {
+    "id": "thickclub",
+    "name": "Thick Club",
+    "num": 491,
+    "flingBasePower": 90
+  },
+  "throatspray": {
+    "id": "throatspray",
+    "name": "Throat Spray",
+    "num": 713,
+    "flingBasePower": 30
+  },
+  "thunderstone": {
+    "id": "thunderstone",
+    "name": "Thunder Stone",
+    "num": 492,
+    "flingBasePower": 30
+  },
+  "timerball": {
+    "id": "timerball",
+    "name": "Timer Ball",
+    "num": 494,
+    "gen": 3
+  },
+  "toxicorb": {
+    "id": "toxicorb",
+    "name": "Toxic Orb",
+    "num": 515,
+    "flingBasePower": 30
+  },
+  "toxicplate": {
+    "id": "toxicplate",
+    "name": "Toxic Plate",
+    "num": 516,
+    "onBasePower": true
+  },
+  "tr00": {
+    "id": "tr00",
+    "name": "TR00",
+    "flingBasePower": 10
+  },
+  "tr01": {
+    "id": "tr01",
+    "name": "TR01",
+    "flingBasePower": 85
+  },
+  "tr02": {
+    "id": "tr02",
+    "name": "TR02",
+    "flingBasePower": 90
+  },
+  "tr03": {
+    "id": "tr03",
+    "name": "TR03",
+    "flingBasePower": 110
+  },
+  "tr04": {
+    "id": "tr04",
+    "name": "TR04",
+    "flingBasePower": 90
+  },
+  "tr05": {
+    "id": "tr05",
+    "name": "TR05",
+    "flingBasePower": 90
+  },
+  "tr06": {
+    "id": "tr06",
+    "name": "TR06",
+    "flingBasePower": 110
+  },
+  "tr07": {
+    "id": "tr07",
+    "name": "TR07",
+    "flingBasePower": 10
+  },
+  "tr08": {
+    "id": "tr08",
+    "name": "TR08",
+    "flingBasePower": 90
+  },
+  "tr09": {
+    "id": "tr09",
+    "name": "TR09",
+    "flingBasePower": 110
+  },
+  "tr10": {
+    "id": "tr10",
+    "name": "TR10",
+    "flingBasePower": 100
+  },
+  "tr11": {
+    "id": "tr11",
+    "name": "TR11",
+    "flingBasePower": 90
+  },
+  "tr12": {
+    "id": "tr12",
+    "name": "TR12",
+    "flingBasePower": 10
+  },
+  "tr13": {
+    "id": "tr13",
+    "name": "TR13",
+    "flingBasePower": 10
+  },
+  "tr14": {
+    "id": "tr14",
+    "name": "TR14",
+    "flingBasePower": 10
+  },
+  "tr15": {
+    "id": "tr15",
+    "name": "TR15",
+    "flingBasePower": 110
+  },
+  "tr16": {
+    "id": "tr16",
+    "name": "TR16",
+    "flingBasePower": 80
+  },
+  "tr17": {
+    "id": "tr17",
+    "name": "TR17",
+    "flingBasePower": 10
+  },
+  "tr18": {
+    "id": "tr18",
+    "name": "TR18",
+    "flingBasePower": 80
+  },
+  "tr19": {
+    "id": "tr19",
+    "name": "TR19",
+    "flingBasePower": 80
+  },
+  "tr20": {
+    "id": "tr20",
+    "name": "TR20",
+    "flingBasePower": 10
+  },
+  "tr21": {
+    "id": "tr21",
+    "name": "TR21",
+    "flingBasePower": 10
+  },
+  "tr22": {
+    "id": "tr22",
+    "name": "TR22",
+    "flingBasePower": 90
+  },
+  "tr23": {
+    "id": "tr23",
+    "name": "TR23",
+    "flingBasePower": 10
+  },
+  "tr24": {
+    "id": "tr24",
+    "name": "TR24",
+    "flingBasePower": 120
+  },
+  "tr25": {
+    "id": "tr25",
+    "name": "TR25",
+    "flingBasePower": 80
+  },
+  "tr26": {
+    "id": "tr26",
+    "name": "TR26",
+    "flingBasePower": 10
+  },
+  "tr27": {
+    "id": "tr27",
+    "name": "TR27",
+    "flingBasePower": 10
+  },
+  "tr28": {
+    "id": "tr28",
+    "name": "TR28",
+    "flingBasePower": 120
+  },
+  "tr29": {
+    "id": "tr29",
+    "name": "TR29",
+    "flingBasePower": 10
+  },
+  "tr30": {
+    "id": "tr30",
+    "name": "TR30",
+    "flingBasePower": 10
+  },
+  "tr31": {
+    "id": "tr31",
+    "name": "TR31",
+    "flingBasePower": 100
+  },
+  "tr32": {
+    "id": "tr32",
+    "name": "TR32",
+    "flingBasePower": 80
+  },
+  "tr33": {
+    "id": "tr33",
+    "name": "TR33",
+    "flingBasePower": 80
+  },
+  "tr34": {
+    "id": "tr34",
+    "name": "TR34",
+    "flingBasePower": 120
+  },
+  "tr35": {
+    "id": "tr35",
+    "name": "TR35",
+    "flingBasePower": 90
+  },
+  "tr36": {
+    "id": "tr36",
+    "name": "TR36",
+    "flingBasePower": 95
+  },
+  "tr37": {
+    "id": "tr37",
+    "name": "TR37",
+    "flingBasePower": 10
+  },
+  "tr38": {
+    "id": "tr38",
+    "name": "TR38",
+    "flingBasePower": 10
+  },
+  "tr39": {
+    "id": "tr39",
+    "name": "TR39",
+    "flingBasePower": 120
+  },
+  "tr40": {
+    "id": "tr40",
+    "name": "TR40",
+    "flingBasePower": 10
+  },
+  "tr41": {
+    "id": "tr41",
+    "name": "TR41",
+    "flingBasePower": 85
+  },
+  "tr42": {
+    "id": "tr42",
+    "name": "TR42",
+    "flingBasePower": 90
+  },
+  "tr43": {
+    "id": "tr43",
+    "name": "TR43",
+    "flingBasePower": 130
+  },
+  "tr44": {
+    "id": "tr44",
+    "name": "TR44",
+    "flingBasePower": 10
+  },
+  "tr45": {
+    "id": "tr45",
+    "name": "TR45",
+    "flingBasePower": 90
+  },
+  "tr46": {
+    "id": "tr46",
+    "name": "TR46",
+    "flingBasePower": 10
+  },
+  "tr47": {
+    "id": "tr47",
+    "name": "TR47",
+    "flingBasePower": 80
+  },
+  "tr48": {
+    "id": "tr48",
+    "name": "TR48",
+    "flingBasePower": 10
+  },
+  "tr49": {
+    "id": "tr49",
+    "name": "TR49",
+    "flingBasePower": 10
+  },
+  "tr50": {
+    "id": "tr50",
+    "name": "TR50",
+    "flingBasePower": 90
+  },
+  "tr51": {
+    "id": "tr51",
+    "name": "TR51",
+    "flingBasePower": 10
+  },
+  "tr52": {
+    "id": "tr52",
+    "name": "TR52",
+    "flingBasePower": 10
+  },
+  "tr53": {
+    "id": "tr53",
+    "name": "TR53",
+    "flingBasePower": 120
+  },
+  "tr54": {
+    "id": "tr54",
+    "name": "TR54",
+    "flingBasePower": 10
+  },
+  "tr55": {
+    "id": "tr55",
+    "name": "TR55",
+    "flingBasePower": 120
+  },
+  "tr56": {
+    "id": "tr56",
+    "name": "TR56",
+    "flingBasePower": 80
+  },
+  "tr57": {
+    "id": "tr57",
+    "name": "TR57",
+    "flingBasePower": 80
+  },
+  "tr58": {
+    "id": "tr58",
+    "name": "TR58",
+    "flingBasePower": 80
+  },
+  "tr59": {
+    "id": "tr59",
+    "name": "TR59",
+    "flingBasePower": 80
+  },
+  "tr60": {
+    "id": "tr60",
+    "name": "TR60",
+    "flingBasePower": 80
+  },
+  "tr61": {
+    "id": "tr61",
+    "name": "TR61",
+    "flingBasePower": 90
+  },
+  "tr62": {
+    "id": "tr62",
+    "name": "TR62",
+    "flingBasePower": 85
+  },
+  "tr63": {
+    "id": "tr63",
+    "name": "TR63",
+    "flingBasePower": 80
+  },
+  "tr64": {
+    "id": "tr64",
+    "name": "TR64",
+    "flingBasePower": 120
+  },
+  "tr65": {
+    "id": "tr65",
+    "name": "TR65",
+    "flingBasePower": 90
+  },
+  "tr66": {
+    "id": "tr66",
+    "name": "TR66",
+    "flingBasePower": 120
+  },
+  "tr67": {
+    "id": "tr67",
+    "name": "TR67",
+    "flingBasePower": 90
+  },
+  "tr68": {
+    "id": "tr68",
+    "name": "TR68",
+    "flingBasePower": 10
+  },
+  "tr69": {
+    "id": "tr69",
+    "name": "TR69",
+    "flingBasePower": 80
+  },
+  "tr70": {
+    "id": "tr70",
+    "name": "TR70",
+    "flingBasePower": 80
+  },
+  "tr71": {
+    "id": "tr71",
+    "name": "TR71",
+    "flingBasePower": 130
+  },
+  "tr72": {
+    "id": "tr72",
+    "name": "TR72",
+    "flingBasePower": 120
+  },
+  "tr73": {
+    "id": "tr73",
+    "name": "TR73",
+    "flingBasePower": 120
+  },
+  "tr74": {
+    "id": "tr74",
+    "name": "TR74",
+    "flingBasePower": 80
+  },
+  "tr75": {
+    "id": "tr75",
+    "name": "TR75",
+    "flingBasePower": 100
+  },
+  "tr76": {
+    "id": "tr76",
+    "name": "TR76",
+    "flingBasePower": 10
+  },
+  "tr77": {
+    "id": "tr77",
+    "name": "TR77",
+    "flingBasePower": 10
+  },
+  "tr78": {
+    "id": "tr78",
+    "name": "TR78",
+    "flingBasePower": 95
+  },
+  "tr79": {
+    "id": "tr79",
+    "name": "TR79",
+    "flingBasePower": 10
+  },
+  "tr80": {
+    "id": "tr80",
+    "name": "TR80",
+    "flingBasePower": 10
+  },
+  "tr81": {
+    "id": "tr81",
+    "name": "TR81",
+    "flingBasePower": 95
+  },
+  "tr82": {
+    "id": "tr82",
+    "name": "TR82",
+    "flingBasePower": 20
+  },
+  "tr83": {
+    "id": "tr83",
+    "name": "TR83",
+    "flingBasePower": 10
+  },
+  "tr84": {
+    "id": "tr84",
+    "name": "TR84",
+    "flingBasePower": 80
+  },
+  "tr85": {
+    "id": "tr85",
+    "name": "TR85",
+    "flingBasePower": 10
+  },
+  "tr86": {
+    "id": "tr86",
+    "name": "TR86",
+    "flingBasePower": 90
+  },
+  "tr87": {
+    "id": "tr87",
+    "name": "TR87",
+    "flingBasePower": 80
+  },
+  "tr88": {
+    "id": "tr88",
+    "name": "TR88",
+    "flingBasePower": 10
+  },
+  "tr89": {
+    "id": "tr89",
+    "name": "TR89",
+    "flingBasePower": 110
+  },
+  "tr90": {
+    "id": "tr90",
+    "name": "TR90",
+    "flingBasePower": 90
+  },
+  "tr91": {
+    "id": "tr91",
+    "name": "TR91",
+    "flingBasePower": 10
+  },
+  "tr92": {
+    "id": "tr92",
+    "name": "TR92",
+    "flingBasePower": 80
+  },
+  "tr93": {
+    "id": "tr93",
+    "name": "TR93",
+    "flingBasePower": 85
+  },
+  "tr94": {
+    "id": "tr94",
+    "name": "TR94",
+    "flingBasePower": 95
+  },
+  "tr95": {
+    "id": "tr95",
+    "name": "TR95",
+    "flingBasePower": 80
+  },
+  "tr96": {
+    "id": "tr96",
+    "name": "TR96",
+    "flingBasePower": 90
+  },
+  "tr97": {
+    "id": "tr97",
+    "name": "TR97",
+    "flingBasePower": 85
+  },
+  "tr98": {
+    "id": "tr98",
+    "name": "TR98",
+    "flingBasePower": 85
+  },
+  "tr99": {
+    "id": "tr99",
+    "name": "TR99",
+    "flingBasePower": 80
+  },
+  "twistedspoon": {
+    "id": "twistedspoon",
+    "name": "Twisted Spoon",
+    "num": 520,
+    "flingBasePower": 30
+  },
+  "tyranitarite": {
+    "id": "tyranitarite",
+    "name": "Tyranitarite",
+    "num": 607
+  },
+  "ultraball": {
+    "id": "ultraball",
+    "name": "Ultra Ball",
+    "num": 521,
+    "gen": 1
+  },
+  "ultranecroziumz": {
+    "id": "ultranecroziumz",
+    "name": "Ultranecrozium Z",
+    "num": 687,
+    "gen": 7
+  },
+  "unremarkableteacup": {
+    "id": "unremarkableteacup",
+    "name": "Unremarkable Teacup",
+    "num": 756,
+    "flingBasePower": 80
+  },
+  "upgrade": {
+    "id": "upgrade",
+    "name": "Up-Grade",
+    "num": 523,
+    "flingBasePower": 30
+  },
+  "utilityumbrella": {
+    "id": "utilityumbrella",
+    "name": "Utility Umbrella",
+    "num": 718,
+    "flingBasePower": 60
+  },
+  "venusaurite": {
+    "id": "venusaurite",
+    "name": "Venusaurite",
+    "num": 608
+  },
+  "victreebelite": {
+    "id": "victreebelite",
+    "name": "Victreebelite",
+    "num": 545
+  },
+  "wacanberry": {
+    "id": "wacanberry",
+    "name": "Wacan Berry",
+    "num": 526,
+    "naturalGift": {
+      "basePower": 80,
+      "type": "Electric"
+    }
+  },
+  "watergem": {
+    "id": "watergem",
+    "name": "Water Gem",
+    "num": 528
+  },
+  "wateriumz": {
+    "id": "wateriumz",
+    "name": "Waterium Z",
+    "num": 633,
+    "gen": 7
+  },
+  "watermemory": {
+    "id": "watermemory",
+    "name": "Water Memory",
+    "num": 677
+  },
+  "waterstone": {
+    "id": "waterstone",
+    "name": "Water Stone",
+    "num": 529,
+    "flingBasePower": 30
+  },
+  "watmelberry": {
+    "id": "watmelberry",
+    "name": "Watmel Berry",
+    "num": 530,
+    "naturalGift": {
+      "basePower": 100,
+      "type": "Fire"
+    }
+  },
+  "waveincense": {
+    "id": "waveincense",
+    "name": "Wave Incense",
+    "num": 531,
+    "flingBasePower": 10
+  },
+  "weaknesspolicy": {
+    "id": "weaknesspolicy",
+    "name": "Weakness Policy",
+    "num": 609,
+    "flingBasePower": 80
+  },
+  "wellspringmask": {
+    "id": "wellspringmask",
+    "name": "Wellspring Mask",
+    "num": 759,
+    "flingBasePower": 60
+  },
+  "wepearberry": {
+    "id": "wepearberry",
+    "name": "Wepear Berry",
+    "num": 533,
+    "naturalGift": {
+      "basePower": 90,
+      "type": "Electric"
+    }
+  },
+  "whippeddream": {
+    "id": "whippeddream",
+    "name": "Whipped Dream",
+    "num": 692,
+    "flingBasePower": 80
+  },
+  "whiteherb": {
+    "id": "whiteherb",
+    "name": "White Herb",
+    "num": 535,
+    "flingBasePower": 10
+  },
+  "widelens": {
+    "id": "widelens",
+    "name": "Wide Lens",
+    "num": 537,
+    "flingBasePower": 10
+  },
+  "wikiberry": {
+    "id": "wikiberry",
+    "name": "Wiki Berry",
+    "num": 538,
+    "naturalGift": {
+      "basePower": 80,
+      "type": "Rock"
+    }
+  },
+  "wiseglasses": {
+    "id": "wiseglasses",
+    "name": "Wise Glasses",
+    "num": 539,
+    "flingBasePower": 10
+  },
+  "yacheberry": {
+    "id": "yacheberry",
+    "name": "Yache Berry",
+    "num": 567,
+    "naturalGift": {
+      "basePower": 80,
+      "type": "Ice"
+    }
+  },
+  "zapplate": {
+    "id": "zapplate",
+    "name": "Zap Plate",
+    "num": 572,
+    "onBasePower": true
+  },
+  "zeraorite": {
+    "id": "zeraorite",
+    "name": "Zeraorite",
+    "num": 0
+  },
+  "zoomlens": {
+    "id": "zoomlens",
+    "name": "Zoom Lens",
+    "num": 574,
+    "flingBasePower": 10
+  },
+  "zygardite": {
+    "id": "zygardite",
+    "name": "Zygardite",
+    "num": 568
+  },
+  "berry": {
+    "id": "berry",
+    "name": "Berry",
+    "num": 319,
+    "naturalGift": {
+      "basePower": 80,
+      "type": "Poison"
+    }
+  },
+  "berserkgene": {
+    "id": "berserkgene",
+    "name": "Berserk Gene",
+    "num": 388
+  },
+  "bitterberry": {
+    "id": "bitterberry",
+    "name": "Bitter Berry",
+    "num": 334,
+    "naturalGift": {
+      "basePower": 80,
+      "type": "Ground"
+    }
+  },
+  "burntberry": {
+    "id": "burntberry",
+    "name": "Burnt Berry",
+    "num": 13,
+    "naturalGift": {
+      "basePower": 80,
+      "type": "Ice"
+    }
+  },
+  "goldberry": {
+    "id": "goldberry",
+    "name": "Gold Berry",
+    "num": 448,
+    "naturalGift": {
+      "basePower": 80,
+      "type": "Psychic"
+    }
+  },
+  "iceberry": {
+    "id": "iceberry",
+    "name": "Ice Berry",
+    "num": 381,
+    "naturalGift": {
+      "basePower": 80,
+      "type": "Grass"
+    }
+  },
+  "mintberry": {
+    "id": "mintberry",
+    "name": "Mint Berry",
+    "num": 65,
+    "naturalGift": {
+      "basePower": 80,
+      "type": "Water"
+    }
+  },
+  "miracleberry": {
+    "id": "miracleberry",
+    "name": "Miracle Berry",
+    "num": 262,
+    "naturalGift": {
+      "basePower": 80,
+      "type": "Flying"
+    }
+  },
+  "mysteryberry": {
+    "id": "mysteryberry",
+    "name": "Mystery Berry",
+    "num": 244,
+    "naturalGift": {
+      "basePower": 80,
+      "type": "Fighting"
+    }
+  },
+  "pinkbow": {
+    "id": "pinkbow",
+    "name": "Pink Bow",
+    "num": 444,
+    "onBasePower": true
+  },
+  "polkadotbow": {
+    "id": "polkadotbow",
+    "name": "Polkadot Bow",
+    "num": 444,
+    "onBasePower": true
+  },
+  "przcureberry": {
+    "id": "przcureberry",
+    "name": "PRZ Cure Berry",
+    "num": 63,
+    "naturalGift": {
+      "basePower": 80,
+      "type": "Fire"
+    }
+  },
+  "psncureberry": {
+    "id": "psncureberry",
+    "name": "PSN Cure Berry",
+    "num": 333,
+    "naturalGift": {
+      "basePower": 80,
+      "type": "Electric"
+    }
+  },
+  "crucibellite": {
+    "id": "crucibellite",
+    "name": "Crucibellite",
+    "num": 577
+  },
+  "vilevial": {
+    "id": "vilevial",
+    "name": "Vile Vial",
+    "num": 752,
+    "flingBasePower": 60
+  }
+}

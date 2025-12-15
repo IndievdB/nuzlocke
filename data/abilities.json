@@ -1,0 +1,2168 @@
+{
+  "noability": {
+    "id": "noability",
+    "name": "No Ability",
+    "num": 0,
+    "rating": 0.1
+  },
+  "adaptability": {
+    "id": "adaptability",
+    "name": "Adaptability",
+    "num": 91,
+    "rating": 4,
+    "onModifySTAB": true
+  },
+  "aerilate": {
+    "id": "aerilate",
+    "name": "Aerilate",
+    "num": 184,
+    "rating": 4,
+    "onBasePower": true,
+    "onModifyType": true,
+    "modifiers": [
+      {
+        "numerator": 4915,
+        "denominator": 4096
+      }
+    ]
+  },
+  "aftermath": {
+    "id": "aftermath",
+    "name": "Aftermath",
+    "num": 106,
+    "rating": 2
+  },
+  "airlock": {
+    "id": "airlock",
+    "name": "Air Lock",
+    "num": 76,
+    "rating": 1.5,
+    "suppressWeather": true
+  },
+  "analytic": {
+    "id": "analytic",
+    "name": "Analytic",
+    "num": 148,
+    "rating": 2.5,
+    "onBasePower": true,
+    "modifiers": [
+      {
+        "numerator": 5325,
+        "denominator": 4096
+      }
+    ]
+  },
+  "angerpoint": {
+    "id": "angerpoint",
+    "name": "Anger Point",
+    "num": 83,
+    "rating": 1
+  },
+  "angershell": {
+    "id": "angershell",
+    "name": "Anger Shell",
+    "num": 271,
+    "rating": 3
+  },
+  "anticipation": {
+    "id": "anticipation",
+    "name": "Anticipation",
+    "num": 107,
+    "rating": 0.5
+  },
+  "arenatrap": {
+    "id": "arenatrap",
+    "name": "Arena Trap",
+    "num": 71,
+    "rating": 5
+  },
+  "armortail": {
+    "id": "armortail",
+    "name": "Armor Tail",
+    "num": 296,
+    "rating": 2.5
+  },
+  "aromaveil": {
+    "id": "aromaveil",
+    "name": "Aroma Veil",
+    "num": 165,
+    "rating": 2
+  },
+  "asoneglastrier": {
+    "id": "asoneglastrier",
+    "name": "As One (Glastrier)",
+    "num": 266,
+    "rating": 3.5
+  },
+  "asonespectrier": {
+    "id": "asonespectrier",
+    "name": "As One (Spectrier)",
+    "num": 267,
+    "rating": 3.5
+  },
+  "aurabreak": {
+    "id": "aurabreak",
+    "name": "Aura Break",
+    "num": 188,
+    "rating": 1
+  },
+  "baddreams": {
+    "id": "baddreams",
+    "name": "Bad Dreams",
+    "num": 123,
+    "rating": 1.5
+  },
+  "ballfetch": {
+    "id": "ballfetch",
+    "name": "Ball Fetch",
+    "num": 237,
+    "rating": 0
+  },
+  "battery": {
+    "id": "battery",
+    "name": "Battery",
+    "num": 217,
+    "rating": 0,
+    "modifiers": [
+      {
+        "numerator": 5325,
+        "denominator": 4096
+      }
+    ]
+  },
+  "battlearmor": {
+    "id": "battlearmor",
+    "name": "Battle Armor",
+    "num": 4,
+    "rating": 1
+  },
+  "battlebond": {
+    "id": "battlebond",
+    "name": "Battle Bond",
+    "num": 210,
+    "rating": 3.5
+  },
+  "beadsofruin": {
+    "id": "beadsofruin",
+    "name": "Beads of Ruin",
+    "num": 284,
+    "rating": 4.5
+  },
+  "beastboost": {
+    "id": "beastboost",
+    "name": "Beast Boost",
+    "num": 224,
+    "rating": 3.5
+  },
+  "berserk": {
+    "id": "berserk",
+    "name": "Berserk",
+    "num": 201,
+    "rating": 2
+  },
+  "bigpecks": {
+    "id": "bigpecks",
+    "name": "Big Pecks",
+    "num": 145,
+    "rating": 0.5
+  },
+  "blaze": {
+    "id": "blaze",
+    "name": "Blaze",
+    "num": 66,
+    "rating": 2,
+    "onModifyAtk": true,
+    "onModifySpA": true
+  },
+  "bulletproof": {
+    "id": "bulletproof",
+    "name": "Bulletproof",
+    "num": 171,
+    "rating": 3
+  },
+  "cheekpouch": {
+    "id": "cheekpouch",
+    "name": "Cheek Pouch",
+    "num": 167,
+    "rating": 2
+  },
+  "chillingneigh": {
+    "id": "chillingneigh",
+    "name": "Chilling Neigh",
+    "num": 264,
+    "rating": 3
+  },
+  "chlorophyll": {
+    "id": "chlorophyll",
+    "name": "Chlorophyll",
+    "num": 34,
+    "rating": 3,
+    "onModifySpe": true
+  },
+  "clearbody": {
+    "id": "clearbody",
+    "name": "Clear Body",
+    "num": 29,
+    "rating": 2
+  },
+  "cloudnine": {
+    "id": "cloudnine",
+    "name": "Cloud Nine",
+    "num": 13,
+    "rating": 1.5,
+    "suppressWeather": true
+  },
+  "colorchange": {
+    "id": "colorchange",
+    "name": "Color Change",
+    "num": 16,
+    "rating": 0
+  },
+  "comatose": {
+    "id": "comatose",
+    "name": "Comatose",
+    "num": 213,
+    "rating": 4
+  },
+  "commander": {
+    "id": "commander",
+    "name": "Commander",
+    "num": 279,
+    "rating": 0
+  },
+  "competitive": {
+    "id": "competitive",
+    "name": "Competitive",
+    "num": 172,
+    "rating": 2.5
+  },
+  "compoundeyes": {
+    "id": "compoundeyes",
+    "name": "Compound Eyes",
+    "num": 14,
+    "rating": 3,
+    "modifiers": [
+      {
+        "numerator": 5325,
+        "denominator": 4096
+      }
+    ]
+  },
+  "contrary": {
+    "id": "contrary",
+    "name": "Contrary",
+    "num": 126,
+    "rating": 4.5
+  },
+  "corrosion": {
+    "id": "corrosion",
+    "name": "Corrosion",
+    "num": 212,
+    "rating": 2.5
+  },
+  "costar": {
+    "id": "costar",
+    "name": "Costar",
+    "num": 294,
+    "rating": 0
+  },
+  "cottondown": {
+    "id": "cottondown",
+    "name": "Cotton Down",
+    "num": 238,
+    "rating": 2
+  },
+  "cudchew": {
+    "id": "cudchew",
+    "name": "Cud Chew",
+    "num": 291,
+    "rating": 2
+  },
+  "curiousmedicine": {
+    "id": "curiousmedicine",
+    "name": "Curious Medicine",
+    "num": 261,
+    "rating": 0
+  },
+  "cursedbody": {
+    "id": "cursedbody",
+    "name": "Cursed Body",
+    "num": 130,
+    "rating": 2
+  },
+  "cutecharm": {
+    "id": "cutecharm",
+    "name": "Cute Charm",
+    "num": 56,
+    "rating": 0.5
+  },
+  "damp": {
+    "id": "damp",
+    "name": "Damp",
+    "num": 6,
+    "rating": 0.5
+  },
+  "dancer": {
+    "id": "dancer",
+    "name": "Dancer",
+    "num": 216,
+    "rating": 1.5
+  },
+  "darkaura": {
+    "id": "darkaura",
+    "name": "Dark Aura",
+    "num": 186,
+    "rating": 3
+  },
+  "dauntlessshield": {
+    "id": "dauntlessshield",
+    "name": "Dauntless Shield",
+    "num": 235,
+    "rating": 3.5
+  },
+  "dazzling": {
+    "id": "dazzling",
+    "name": "Dazzling",
+    "num": 219,
+    "rating": 2.5
+  },
+  "defeatist": {
+    "id": "defeatist",
+    "name": "Defeatist",
+    "num": 129,
+    "rating": -1,
+    "onModifyAtk": true,
+    "onModifySpA": true
+  },
+  "defiant": {
+    "id": "defiant",
+    "name": "Defiant",
+    "num": 128,
+    "rating": 3
+  },
+  "deltastream": {
+    "id": "deltastream",
+    "name": "Delta Stream",
+    "num": 191,
+    "rating": 4
+  },
+  "desolateland": {
+    "id": "desolateland",
+    "name": "Desolate Land",
+    "num": 190,
+    "rating": 4.5
+  },
+  "disguise": {
+    "id": "disguise",
+    "name": "Disguise",
+    "num": 209,
+    "rating": 3.5
+  },
+  "download": {
+    "id": "download",
+    "name": "Download",
+    "num": 88,
+    "rating": 3.5
+  },
+  "dragonsmaw": {
+    "id": "dragonsmaw",
+    "name": "Dragon",
+    "num": 263,
+    "rating": 3.5,
+    "onModifyAtk": true,
+    "onModifySpA": true
+  },
+  "drizzle": {
+    "id": "drizzle",
+    "name": "Drizzle",
+    "num": 2,
+    "rating": 4
+  },
+  "drought": {
+    "id": "drought",
+    "name": "Drought",
+    "num": 70,
+    "rating": 4
+  },
+  "dryskin": {
+    "id": "dryskin",
+    "name": "Dry Skin",
+    "num": 87,
+    "rating": 3,
+    "onSourceBasePower": true
+  },
+  "earlybird": {
+    "id": "earlybird",
+    "name": "Early Bird",
+    "num": 48,
+    "rating": 1.5
+  },
+  "eartheater": {
+    "id": "eartheater",
+    "name": "Earth Eater",
+    "num": 297,
+    "rating": 3.5
+  },
+  "effectspore": {
+    "id": "effectspore",
+    "name": "Effect Spore",
+    "num": 27,
+    "rating": 2
+  },
+  "electricsurge": {
+    "id": "electricsurge",
+    "name": "Electric Surge",
+    "num": 226,
+    "rating": 4
+  },
+  "electromorphosis": {
+    "id": "electromorphosis",
+    "name": "Electromorphosis",
+    "num": 280,
+    "rating": 3
+  },
+  "embodyaspectcornerstone": {
+    "id": "embodyaspectcornerstone",
+    "name": "Embody Aspect (Cornerstone)",
+    "num": 304,
+    "rating": 3.5
+  },
+  "embodyaspecthearthflame": {
+    "id": "embodyaspecthearthflame",
+    "name": "Embody Aspect (Hearthflame)",
+    "num": 303,
+    "rating": 3.5
+  },
+  "embodyaspectteal": {
+    "id": "embodyaspectteal",
+    "name": "Embody Aspect (Teal)",
+    "num": 301,
+    "rating": 3.5
+  },
+  "embodyaspectwellspring": {
+    "id": "embodyaspectwellspring",
+    "name": "Embody Aspect (Wellspring)",
+    "num": 302,
+    "rating": 3.5
+  },
+  "emergencyexit": {
+    "id": "emergencyexit",
+    "name": "Emergency Exit",
+    "num": 194,
+    "rating": 1
+  },
+  "fairyaura": {
+    "id": "fairyaura",
+    "name": "Fairy Aura",
+    "num": 187,
+    "rating": 3
+  },
+  "filter": {
+    "id": "filter",
+    "name": "Filter",
+    "num": 111,
+    "rating": 3,
+    "onSourceModifyDamage": true
+  },
+  "flamebody": {
+    "id": "flamebody",
+    "name": "Flame Body",
+    "num": 49,
+    "rating": 2
+  },
+  "flareboost": {
+    "id": "flareboost",
+    "name": "Flare Boost",
+    "num": 138,
+    "rating": 2,
+    "onBasePower": true
+  },
+  "flashfire": {
+    "id": "flashfire",
+    "name": "Flash Fire",
+    "num": 18,
+    "rating": 3.5,
+    "onModifyAtk": true,
+    "onModifySpA": true
+  },
+  "flowergift": {
+    "id": "flowergift",
+    "name": "Flower Gift",
+    "num": 122,
+    "rating": 1
+  },
+  "flowerveil": {
+    "id": "flowerveil",
+    "name": "Flower Veil",
+    "num": 166,
+    "rating": 0
+  },
+  "fluffy": {
+    "id": "fluffy",
+    "name": "Fluffy",
+    "num": 218,
+    "rating": 3.5,
+    "onSourceModifyDamage": true
+  },
+  "forecast": {
+    "id": "forecast",
+    "name": "Forecast",
+    "num": 59,
+    "rating": 2
+  },
+  "forewarn": {
+    "id": "forewarn",
+    "name": "Forewarn",
+    "num": 108,
+    "rating": 0.5
+  },
+  "friendguard": {
+    "id": "friendguard",
+    "name": "Friend Guard",
+    "num": 132,
+    "rating": 0
+  },
+  "frisk": {
+    "id": "frisk",
+    "name": "Frisk",
+    "num": 119,
+    "rating": 1.5
+  },
+  "fullmetalbody": {
+    "id": "fullmetalbody",
+    "name": "Full Metal Body",
+    "num": 230,
+    "rating": 2
+  },
+  "furcoat": {
+    "id": "furcoat",
+    "name": "Fur Coat",
+    "num": 169,
+    "rating": 4,
+    "onModifyDef": true
+  },
+  "galewings": {
+    "id": "galewings",
+    "name": "Gale Wings",
+    "num": 177,
+    "rating": 1.5
+  },
+  "galvanize": {
+    "id": "galvanize",
+    "name": "Galvanize",
+    "num": 206,
+    "rating": 4,
+    "onBasePower": true,
+    "onModifyType": true,
+    "modifiers": [
+      {
+        "numerator": 4915,
+        "denominator": 4096
+      }
+    ]
+  },
+  "gluttony": {
+    "id": "gluttony",
+    "name": "Gluttony",
+    "num": 82,
+    "rating": 1.5
+  },
+  "goodasgold": {
+    "id": "goodasgold",
+    "name": "Good as Gold",
+    "num": 283,
+    "rating": 5
+  },
+  "gooey": {
+    "id": "gooey",
+    "name": "Gooey",
+    "num": 183,
+    "rating": 2
+  },
+  "gorillatactics": {
+    "id": "gorillatactics",
+    "name": "Gorilla Tactics",
+    "num": 255,
+    "rating": 4.5,
+    "onModifyAtk": true
+  },
+  "grasspelt": {
+    "id": "grasspelt",
+    "name": "Grass Pelt",
+    "num": 179,
+    "rating": 0.5,
+    "onModifyDef": true
+  },
+  "grassysurge": {
+    "id": "grassysurge",
+    "name": "Grassy Surge",
+    "num": 229,
+    "rating": 4
+  },
+  "grimneigh": {
+    "id": "grimneigh",
+    "name": "Grim Neigh",
+    "num": 265,
+    "rating": 3
+  },
+  "guarddog": {
+    "id": "guarddog",
+    "name": "Guard Dog",
+    "num": 275,
+    "rating": 2
+  },
+  "gulpmissile": {
+    "id": "gulpmissile",
+    "name": "Gulp Missile",
+    "num": 241,
+    "rating": 2.5
+  },
+  "guts": {
+    "id": "guts",
+    "name": "Guts",
+    "num": 62,
+    "rating": 3.5,
+    "onModifyAtk": true
+  },
+  "hadronengine": {
+    "id": "hadronengine",
+    "name": "Hadron Engine",
+    "num": 289,
+    "rating": 4.5,
+    "onModifySpA": true,
+    "modifiers": [
+      {
+        "numerator": 5461,
+        "denominator": 4096
+      }
+    ]
+  },
+  "harvest": {
+    "id": "harvest",
+    "name": "Harvest",
+    "num": 139,
+    "rating": 2.5
+  },
+  "healer": {
+    "id": "healer",
+    "name": "Healer",
+    "num": 131,
+    "rating": 0
+  },
+  "heatproof": {
+    "id": "heatproof",
+    "name": "Heatproof",
+    "num": 85,
+    "rating": 2
+  },
+  "heavymetal": {
+    "id": "heavymetal",
+    "name": "Heavy Metal",
+    "num": 134,
+    "rating": 0
+  },
+  "honeygather": {
+    "id": "honeygather",
+    "name": "Honey Gather",
+    "num": 118,
+    "rating": 0
+  },
+  "hospitality": {
+    "id": "hospitality",
+    "name": "Hospitality",
+    "num": 299,
+    "rating": 0
+  },
+  "hugepower": {
+    "id": "hugepower",
+    "name": "Huge Power",
+    "num": 37,
+    "rating": 5,
+    "onModifyAtk": true
+  },
+  "hungerswitch": {
+    "id": "hungerswitch",
+    "name": "Hunger Switch",
+    "num": 258,
+    "rating": 1
+  },
+  "hustle": {
+    "id": "hustle",
+    "name": "Hustle",
+    "num": 55,
+    "rating": 3.5,
+    "onModifyAtk": true,
+    "modifiers": [
+      {
+        "numerator": 3277,
+        "denominator": 4096
+      }
+    ]
+  },
+  "hydration": {
+    "id": "hydration",
+    "name": "Hydration",
+    "num": 93,
+    "rating": 1.5
+  },
+  "hypercutter": {
+    "id": "hypercutter",
+    "name": "Hyper Cutter",
+    "num": 52,
+    "rating": 1.5
+  },
+  "icebody": {
+    "id": "icebody",
+    "name": "Ice Body",
+    "num": 115,
+    "rating": 1,
+    "onImmunity": true
+  },
+  "iceface": {
+    "id": "iceface",
+    "name": "Ice Face",
+    "num": 248,
+    "rating": 3,
+    "suppressWeather": true
+  },
+  "icescales": {
+    "id": "icescales",
+    "name": "Ice Scales",
+    "num": 246,
+    "rating": 4,
+    "onSourceModifyDamage": true
+  },
+  "illuminate": {
+    "id": "illuminate",
+    "name": "Illuminate",
+    "num": 35,
+    "rating": 0.5
+  },
+  "illusion": {
+    "id": "illusion",
+    "name": "Illusion",
+    "num": 149,
+    "rating": 4.5
+  },
+  "immunity": {
+    "id": "immunity",
+    "name": "Immunity",
+    "num": 17,
+    "rating": 2
+  },
+  "imposter": {
+    "id": "imposter",
+    "name": "Imposter",
+    "num": 150,
+    "rating": 5
+  },
+  "infiltrator": {
+    "id": "infiltrator",
+    "name": "Infiltrator",
+    "num": 151,
+    "rating": 2.5
+  },
+  "innardsout": {
+    "id": "innardsout",
+    "name": "Innards Out",
+    "num": 215,
+    "rating": 4
+  },
+  "innerfocus": {
+    "id": "innerfocus",
+    "name": "Inner Focus",
+    "num": 39,
+    "rating": 1
+  },
+  "insomnia": {
+    "id": "insomnia",
+    "name": "Insomnia",
+    "num": 15,
+    "rating": 1.5
+  },
+  "intimidate": {
+    "id": "intimidate",
+    "name": "Intimidate",
+    "num": 22,
+    "rating": 3.5
+  },
+  "intrepidsword": {
+    "id": "intrepidsword",
+    "name": "Intrepid Sword",
+    "num": 234,
+    "rating": 4
+  },
+  "ironbarbs": {
+    "id": "ironbarbs",
+    "name": "Iron Barbs",
+    "num": 160,
+    "rating": 2.5
+  },
+  "ironfist": {
+    "id": "ironfist",
+    "name": "Iron Fist",
+    "num": 89,
+    "rating": 3,
+    "onBasePower": true,
+    "modifiers": [
+      {
+        "numerator": 4915,
+        "denominator": 4096
+      }
+    ]
+  },
+  "justified": {
+    "id": "justified",
+    "name": "Justified",
+    "num": 154,
+    "rating": 2.5
+  },
+  "keeneye": {
+    "id": "keeneye",
+    "name": "Keen Eye",
+    "num": 51,
+    "rating": 0.5
+  },
+  "klutz": {
+    "id": "klutz",
+    "name": "Klutz",
+    "num": 103,
+    "rating": -1
+  },
+  "leafguard": {
+    "id": "leafguard",
+    "name": "Leaf Guard",
+    "num": 102,
+    "rating": 0.5
+  },
+  "levitate": {
+    "id": "levitate",
+    "name": "Levitate",
+    "num": 26,
+    "rating": 3.5
+  },
+  "libero": {
+    "id": "libero",
+    "name": "Libero",
+    "num": 236,
+    "rating": 4
+  },
+  "lightmetal": {
+    "id": "lightmetal",
+    "name": "Light Metal",
+    "num": 135,
+    "rating": 1
+  },
+  "lightningrod": {
+    "id": "lightningrod",
+    "name": "Lightning Rod",
+    "num": 31,
+    "rating": 3
+  },
+  "limber": {
+    "id": "limber",
+    "name": "Limber",
+    "num": 7,
+    "rating": 2
+  },
+  "lingeringaroma": {
+    "id": "lingeringaroma",
+    "name": "Lingering Aroma",
+    "num": 268,
+    "rating": 2
+  },
+  "liquidooze": {
+    "id": "liquidooze",
+    "name": "Liquid Ooze",
+    "num": 64,
+    "rating": 2.5
+  },
+  "liquidvoice": {
+    "id": "liquidvoice",
+    "name": "Liquid Voice",
+    "num": 204,
+    "rating": 1.5,
+    "onModifyType": true
+  },
+  "longreach": {
+    "id": "longreach",
+    "name": "Long Reach",
+    "num": 203,
+    "rating": 1
+  },
+  "magicbounce": {
+    "id": "magicbounce",
+    "name": "Magic Bounce",
+    "num": 156,
+    "rating": 4
+  },
+  "magicguard": {
+    "id": "magicguard",
+    "name": "Magic Guard",
+    "num": 98,
+    "rating": 4
+  },
+  "magician": {
+    "id": "magician",
+    "name": "Magician",
+    "num": 170,
+    "rating": 1
+  },
+  "magmaarmor": {
+    "id": "magmaarmor",
+    "name": "Magma Armor",
+    "num": 40,
+    "rating": 0.5,
+    "onImmunity": true
+  },
+  "magnetpull": {
+    "id": "magnetpull",
+    "name": "Magnet Pull",
+    "num": 42,
+    "rating": 4
+  },
+  "marvelscale": {
+    "id": "marvelscale",
+    "name": "Marvel Scale",
+    "num": 63,
+    "rating": 2.5,
+    "onModifyDef": true
+  },
+  "megalauncher": {
+    "id": "megalauncher",
+    "name": "Mega Launcher",
+    "num": 178,
+    "rating": 3,
+    "onBasePower": true
+  },
+  "merciless": {
+    "id": "merciless",
+    "name": "Merciless",
+    "num": 196,
+    "rating": 1.5
+  },
+  "mimicry": {
+    "id": "mimicry",
+    "name": "Mimicry",
+    "num": 250,
+    "rating": 0
+  },
+  "mindseye": {
+    "id": "mindseye",
+    "name": "Mind",
+    "num": 300,
+    "rating": 0
+  },
+  "minus": {
+    "id": "minus",
+    "name": "Minus",
+    "num": 58,
+    "rating": 0,
+    "onModifySpA": true
+  },
+  "mirrorarmor": {
+    "id": "mirrorarmor",
+    "name": "Mirror Armor",
+    "num": 240,
+    "rating": 2
+  },
+  "mistysurge": {
+    "id": "mistysurge",
+    "name": "Misty Surge",
+    "num": 228,
+    "rating": 3.5
+  },
+  "moldbreaker": {
+    "id": "moldbreaker",
+    "name": "Mold Breaker",
+    "num": 104,
+    "rating": 3
+  },
+  "moody": {
+    "id": "moody",
+    "name": "Moody",
+    "num": 141,
+    "rating": 5
+  },
+  "motordrive": {
+    "id": "motordrive",
+    "name": "Motor Drive",
+    "num": 78,
+    "rating": 3
+  },
+  "moxie": {
+    "id": "moxie",
+    "name": "Moxie",
+    "num": 153,
+    "rating": 3
+  },
+  "multiscale": {
+    "id": "multiscale",
+    "name": "Multiscale",
+    "num": 136,
+    "rating": 3.5,
+    "onSourceModifyDamage": true
+  },
+  "multitype": {
+    "id": "multitype",
+    "name": "Multitype",
+    "num": 121,
+    "rating": 4
+  },
+  "mummy": {
+    "id": "mummy",
+    "name": "Mummy",
+    "num": 152,
+    "rating": 2
+  },
+  "myceliummight": {
+    "id": "myceliummight",
+    "name": "Mycelium Might",
+    "num": 298,
+    "rating": 2
+  },
+  "naturalcure": {
+    "id": "naturalcure",
+    "name": "Natural Cure",
+    "num": 30,
+    "rating": 2.5
+  },
+  "neuroforce": {
+    "id": "neuroforce",
+    "name": "Neuroforce",
+    "num": 233,
+    "rating": 2.5,
+    "onModifyDamage": true,
+    "modifiers": [
+      {
+        "numerator": 5120,
+        "denominator": 4096
+      }
+    ]
+  },
+  "neutralizinggas": {
+    "id": "neutralizinggas",
+    "name": "Neutralizing Gas",
+    "num": 256,
+    "rating": 3.5
+  },
+  "noguard": {
+    "id": "noguard",
+    "name": "No Guard",
+    "num": 99,
+    "rating": 4
+  },
+  "normalize": {
+    "id": "normalize",
+    "name": "Normalize",
+    "num": 96,
+    "rating": 0,
+    "onBasePower": true,
+    "onModifyType": true,
+    "modifiers": [
+      {
+        "numerator": 4915,
+        "denominator": 4096
+      }
+    ]
+  },
+  "oblivious": {
+    "id": "oblivious",
+    "name": "Oblivious",
+    "num": 12,
+    "rating": 1.5,
+    "onImmunity": true
+  },
+  "opportunist": {
+    "id": "opportunist",
+    "name": "Opportunist",
+    "num": 290,
+    "rating": 3
+  },
+  "orichalcumpulse": {
+    "id": "orichalcumpulse",
+    "name": "Orichalcum Pulse",
+    "num": 288,
+    "rating": 4.5,
+    "onModifyAtk": true,
+    "modifiers": [
+      {
+        "numerator": 5461,
+        "denominator": 4096
+      }
+    ]
+  },
+  "overcoat": {
+    "id": "overcoat",
+    "name": "Overcoat",
+    "num": 142,
+    "rating": 2,
+    "onImmunity": true
+  },
+  "overgrow": {
+    "id": "overgrow",
+    "name": "Overgrow",
+    "num": 65,
+    "rating": 2,
+    "onModifyAtk": true,
+    "onModifySpA": true
+  },
+  "owntempo": {
+    "id": "owntempo",
+    "name": "Own Tempo",
+    "num": 20,
+    "rating": 1.5
+  },
+  "parentalbond": {
+    "id": "parentalbond",
+    "name": "Parental Bond",
+    "num": 185,
+    "rating": 4.5
+  },
+  "pastelveil": {
+    "id": "pastelveil",
+    "name": "Pastel Veil",
+    "num": 257,
+    "rating": 2
+  },
+  "perishbody": {
+    "id": "perishbody",
+    "name": "Perish Body",
+    "num": 253,
+    "rating": 1
+  },
+  "pickpocket": {
+    "id": "pickpocket",
+    "name": "Pickpocket",
+    "num": 124,
+    "rating": 1
+  },
+  "pickup": {
+    "id": "pickup",
+    "name": "Pickup",
+    "num": 53,
+    "rating": 0.5
+  },
+  "pixilate": {
+    "id": "pixilate",
+    "name": "Pixilate",
+    "num": 182,
+    "rating": 4,
+    "onBasePower": true,
+    "onModifyType": true,
+    "modifiers": [
+      {
+        "numerator": 4915,
+        "denominator": 4096
+      }
+    ]
+  },
+  "plus": {
+    "id": "plus",
+    "name": "Plus",
+    "num": 57,
+    "rating": 0,
+    "onModifySpA": true
+  },
+  "poisonheal": {
+    "id": "poisonheal",
+    "name": "Poison Heal",
+    "num": 90,
+    "rating": 4
+  },
+  "poisonpoint": {
+    "id": "poisonpoint",
+    "name": "Poison Point",
+    "num": 38,
+    "rating": 1.5
+  },
+  "poisonpuppeteer": {
+    "id": "poisonpuppeteer",
+    "name": "Poison Puppeteer",
+    "num": 310,
+    "rating": 3
+  },
+  "poisontouch": {
+    "id": "poisontouch",
+    "name": "Poison Touch",
+    "num": 143,
+    "rating": 2
+  },
+  "powerconstruct": {
+    "id": "powerconstruct",
+    "name": "Power Construct",
+    "num": 211,
+    "rating": 5
+  },
+  "powerofalchemy": {
+    "id": "powerofalchemy",
+    "name": "Power of Alchemy",
+    "num": 223,
+    "rating": 0
+  },
+  "powerspot": {
+    "id": "powerspot",
+    "name": "Power Spot",
+    "num": 249,
+    "rating": 0,
+    "modifiers": [
+      {
+        "numerator": 5325,
+        "denominator": 4096
+      }
+    ]
+  },
+  "prankster": {
+    "id": "prankster",
+    "name": "Prankster",
+    "num": 158,
+    "rating": 4
+  },
+  "pressure": {
+    "id": "pressure",
+    "name": "Pressure",
+    "num": 46,
+    "rating": 2.5
+  },
+  "primordialsea": {
+    "id": "primordialsea",
+    "name": "Primordial Sea",
+    "num": 189,
+    "rating": 4.5
+  },
+  "prismarmor": {
+    "id": "prismarmor",
+    "name": "Prism Armor",
+    "num": 232,
+    "rating": 3,
+    "onSourceModifyDamage": true
+  },
+  "propellertail": {
+    "id": "propellertail",
+    "name": "Propeller Tail",
+    "num": 239,
+    "rating": 0
+  },
+  "protean": {
+    "id": "protean",
+    "name": "Protean",
+    "num": 168,
+    "rating": 4
+  },
+  "protosynthesis": {
+    "id": "protosynthesis",
+    "name": "Protosynthesis",
+    "num": 281,
+    "rating": 3,
+    "onModifyAtk": true,
+    "onModifyDef": true,
+    "onModifySpA": true,
+    "onModifySpD": true,
+    "onModifySpe": true,
+    "modifiers": [
+      {
+        "numerator": 5325,
+        "denominator": 4096
+      },
+      {
+        "numerator": 5325,
+        "denominator": 4096
+      },
+      {
+        "numerator": 5325,
+        "denominator": 4096
+      },
+      {
+        "numerator": 5325,
+        "denominator": 4096
+      }
+    ]
+  },
+  "psychicsurge": {
+    "id": "psychicsurge",
+    "name": "Psychic Surge",
+    "num": 227,
+    "rating": 4
+  },
+  "punkrock": {
+    "id": "punkrock",
+    "name": "Punk Rock",
+    "num": 244,
+    "rating": 3.5,
+    "onBasePower": true,
+    "onSourceModifyDamage": true,
+    "modifiers": [
+      {
+        "numerator": 5325,
+        "denominator": 4096
+      }
+    ]
+  },
+  "purepower": {
+    "id": "purepower",
+    "name": "Pure Power",
+    "num": 74,
+    "rating": 5,
+    "onModifyAtk": true
+  },
+  "purifyingsalt": {
+    "id": "purifyingsalt",
+    "name": "Purifying Salt",
+    "num": 272,
+    "rating": 4
+  },
+  "quarkdrive": {
+    "id": "quarkdrive",
+    "name": "Quark Drive",
+    "num": 282,
+    "rating": 3,
+    "onModifyAtk": true,
+    "onModifyDef": true,
+    "onModifySpA": true,
+    "onModifySpD": true,
+    "onModifySpe": true,
+    "modifiers": [
+      {
+        "numerator": 5325,
+        "denominator": 4096
+      },
+      {
+        "numerator": 5325,
+        "denominator": 4096
+      },
+      {
+        "numerator": 5325,
+        "denominator": 4096
+      },
+      {
+        "numerator": 5325,
+        "denominator": 4096
+      }
+    ]
+  },
+  "queenlymajesty": {
+    "id": "queenlymajesty",
+    "name": "Queenly Majesty",
+    "num": 214,
+    "rating": 2.5
+  },
+  "quickdraw": {
+    "id": "quickdraw",
+    "name": "Quick Draw",
+    "num": 259,
+    "rating": 2.5
+  },
+  "quickfeet": {
+    "id": "quickfeet",
+    "name": "Quick Feet",
+    "num": 95,
+    "rating": 2.5,
+    "onModifySpe": true
+  },
+  "raindish": {
+    "id": "raindish",
+    "name": "Rain Dish",
+    "num": 44,
+    "rating": 1.5
+  },
+  "rattled": {
+    "id": "rattled",
+    "name": "Rattled",
+    "num": 155,
+    "rating": 1
+  },
+  "receiver": {
+    "id": "receiver",
+    "name": "Receiver",
+    "num": 222,
+    "rating": 0
+  },
+  "reckless": {
+    "id": "reckless",
+    "name": "Reckless",
+    "num": 120,
+    "rating": 3,
+    "onBasePower": true,
+    "modifiers": [
+      {
+        "numerator": 4915,
+        "denominator": 4096
+      }
+    ]
+  },
+  "refrigerate": {
+    "id": "refrigerate",
+    "name": "Refrigerate",
+    "num": 174,
+    "rating": 4,
+    "onBasePower": true,
+    "onModifyType": true,
+    "modifiers": [
+      {
+        "numerator": 4915,
+        "denominator": 4096
+      }
+    ]
+  },
+  "regenerator": {
+    "id": "regenerator",
+    "name": "Regenerator",
+    "num": 144,
+    "rating": 4.5
+  },
+  "ripen": {
+    "id": "ripen",
+    "name": "Ripen",
+    "num": 247,
+    "rating": 2,
+    "onSourceModifyDamage": true
+  },
+  "rivalry": {
+    "id": "rivalry",
+    "name": "Rivalry",
+    "num": 79,
+    "rating": 0,
+    "onBasePower": true
+  },
+  "rkssystem": {
+    "id": "rkssystem",
+    "name": "RKS System",
+    "num": 225,
+    "rating": 4
+  },
+  "rockhead": {
+    "id": "rockhead",
+    "name": "Rock Head",
+    "num": 69,
+    "rating": 3
+  },
+  "rockypayload": {
+    "id": "rockypayload",
+    "name": "Rocky Payload",
+    "num": 276,
+    "rating": 3.5,
+    "onModifyAtk": true,
+    "onModifySpA": true
+  },
+  "roughskin": {
+    "id": "roughskin",
+    "name": "Rough Skin",
+    "num": 24,
+    "rating": 2.5
+  },
+  "runaway": {
+    "id": "runaway",
+    "name": "Run Away",
+    "num": 50,
+    "rating": 0
+  },
+  "sandforce": {
+    "id": "sandforce",
+    "name": "Sand Force",
+    "num": 159,
+    "rating": 2,
+    "onBasePower": true,
+    "onImmunity": true,
+    "modifiers": [
+      {
+        "numerator": 5325,
+        "denominator": 4096
+      }
+    ]
+  },
+  "sandrush": {
+    "id": "sandrush",
+    "name": "Sand Rush",
+    "num": 146,
+    "rating": 3,
+    "onModifySpe": true,
+    "onImmunity": true
+  },
+  "sandspit": {
+    "id": "sandspit",
+    "name": "Sand Spit",
+    "num": 245,
+    "rating": 1
+  },
+  "sandstream": {
+    "id": "sandstream",
+    "name": "Sand Stream",
+    "num": 45,
+    "rating": 4
+  },
+  "sandveil": {
+    "id": "sandveil",
+    "name": "Sand Veil",
+    "num": 8,
+    "rating": 1.5,
+    "onImmunity": true,
+    "modifiers": [
+      {
+        "numerator": 3277,
+        "denominator": 4096
+      }
+    ]
+  },
+  "sapsipper": {
+    "id": "sapsipper",
+    "name": "Sap Sipper",
+    "num": 157,
+    "rating": 3
+  },
+  "schooling": {
+    "id": "schooling",
+    "name": "Schooling",
+    "num": 208,
+    "rating": 3
+  },
+  "scrappy": {
+    "id": "scrappy",
+    "name": "Scrappy",
+    "num": 113,
+    "rating": 3
+  },
+  "screencleaner": {
+    "id": "screencleaner",
+    "name": "Screen Cleaner",
+    "num": 251,
+    "rating": 2
+  },
+  "seedsower": {
+    "id": "seedsower",
+    "name": "Seed Sower",
+    "num": 269,
+    "rating": 2.5
+  },
+  "serenegrace": {
+    "id": "serenegrace",
+    "name": "Serene Grace",
+    "num": 32,
+    "rating": 3.5
+  },
+  "shadowshield": {
+    "id": "shadowshield",
+    "name": "Shadow Shield",
+    "num": 231,
+    "rating": 3.5,
+    "onSourceModifyDamage": true
+  },
+  "shadowtag": {
+    "id": "shadowtag",
+    "name": "Shadow Tag",
+    "num": 23,
+    "rating": 5
+  },
+  "sharpness": {
+    "id": "sharpness",
+    "name": "Sharpness",
+    "num": 292,
+    "rating": 3.5,
+    "onBasePower": true
+  },
+  "shedskin": {
+    "id": "shedskin",
+    "name": "Shed Skin",
+    "num": 61,
+    "rating": 3
+  },
+  "sheerforce": {
+    "id": "sheerforce",
+    "name": "Sheer Force",
+    "num": 125,
+    "rating": 3.5,
+    "onBasePower": true,
+    "modifiers": [
+      {
+        "numerator": 5325,
+        "denominator": 4096
+      }
+    ]
+  },
+  "shellarmor": {
+    "id": "shellarmor",
+    "name": "Shell Armor",
+    "num": 75,
+    "rating": 1
+  },
+  "shielddust": {
+    "id": "shielddust",
+    "name": "Shield Dust",
+    "num": 19,
+    "rating": 2
+  },
+  "shieldsdown": {
+    "id": "shieldsdown",
+    "name": "Shields Down",
+    "num": 197,
+    "rating": 3
+  },
+  "simple": {
+    "id": "simple",
+    "name": "Simple",
+    "num": 86,
+    "rating": 4
+  },
+  "skilllink": {
+    "id": "skilllink",
+    "name": "Skill Link",
+    "num": 92,
+    "rating": 3
+  },
+  "slowstart": {
+    "id": "slowstart",
+    "name": "Slow Start",
+    "num": 112,
+    "rating": -1,
+    "onModifyAtk": true,
+    "onModifySpe": true
+  },
+  "slushrush": {
+    "id": "slushrush",
+    "name": "Slush Rush",
+    "num": 202,
+    "rating": 3,
+    "onModifySpe": true
+  },
+  "sniper": {
+    "id": "sniper",
+    "name": "Sniper",
+    "num": 97,
+    "rating": 2,
+    "onModifyDamage": true
+  },
+  "snowcloak": {
+    "id": "snowcloak",
+    "name": "Snow Cloak",
+    "num": 81,
+    "rating": 1.5,
+    "onImmunity": true,
+    "modifiers": [
+      {
+        "numerator": 3277,
+        "denominator": 4096
+      }
+    ]
+  },
+  "snowwarning": {
+    "id": "snowwarning",
+    "name": "Snow Warning",
+    "num": 117,
+    "rating": 4
+  },
+  "solarpower": {
+    "id": "solarpower",
+    "name": "Solar Power",
+    "num": 94,
+    "rating": 2,
+    "onModifySpA": true
+  },
+  "solidrock": {
+    "id": "solidrock",
+    "name": "Solid Rock",
+    "num": 116,
+    "rating": 3,
+    "onSourceModifyDamage": true
+  },
+  "soulheart": {
+    "id": "soulheart",
+    "name": "Soul-Heart",
+    "num": 220,
+    "rating": 3.5
+  },
+  "soundproof": {
+    "id": "soundproof",
+    "name": "Soundproof",
+    "num": 43,
+    "rating": 2
+  },
+  "speedboost": {
+    "id": "speedboost",
+    "name": "Speed Boost",
+    "num": 3,
+    "rating": 4.5
+  },
+  "stakeout": {
+    "id": "stakeout",
+    "name": "Stakeout",
+    "num": 198,
+    "rating": 4.5,
+    "onModifyAtk": true,
+    "onModifySpA": true
+  },
+  "stall": {
+    "id": "stall",
+    "name": "Stall",
+    "num": 100,
+    "rating": -1
+  },
+  "stalwart": {
+    "id": "stalwart",
+    "name": "Stalwart",
+    "num": 242,
+    "rating": 0
+  },
+  "stamina": {
+    "id": "stamina",
+    "name": "Stamina",
+    "num": 192,
+    "rating": 4
+  },
+  "stancechange": {
+    "id": "stancechange",
+    "name": "Stance Change",
+    "num": 176,
+    "rating": 4
+  },
+  "static": {
+    "id": "static",
+    "name": "Static",
+    "num": 9,
+    "rating": 2
+  },
+  "steadfast": {
+    "id": "steadfast",
+    "name": "Steadfast",
+    "num": 80,
+    "rating": 1
+  },
+  "steamengine": {
+    "id": "steamengine",
+    "name": "Steam Engine",
+    "num": 243,
+    "rating": 2
+  },
+  "steelworker": {
+    "id": "steelworker",
+    "name": "Steelworker",
+    "num": 200,
+    "rating": 3.5,
+    "onModifyAtk": true,
+    "onModifySpA": true
+  },
+  "steelyspirit": {
+    "id": "steelyspirit",
+    "name": "Steely Spirit",
+    "num": 252,
+    "rating": 3.5
+  },
+  "stench": {
+    "id": "stench",
+    "name": "Stench",
+    "num": 1,
+    "rating": 0.5
+  },
+  "stickyhold": {
+    "id": "stickyhold",
+    "name": "Sticky Hold",
+    "num": 60,
+    "rating": 1.5
+  },
+  "stormdrain": {
+    "id": "stormdrain",
+    "name": "Storm Drain",
+    "num": 114,
+    "rating": 3
+  },
+  "strongjaw": {
+    "id": "strongjaw",
+    "name": "Strong Jaw",
+    "num": 173,
+    "rating": 3.5,
+    "onBasePower": true
+  },
+  "sturdy": {
+    "id": "sturdy",
+    "name": "Sturdy",
+    "num": 5,
+    "rating": 3
+  },
+  "suctioncups": {
+    "id": "suctioncups",
+    "name": "Suction Cups",
+    "num": 21,
+    "rating": 1
+  },
+  "superluck": {
+    "id": "superluck",
+    "name": "Super Luck",
+    "num": 105,
+    "rating": 1.5
+  },
+  "supersweetsyrup": {
+    "id": "supersweetsyrup",
+    "name": "Supersweet Syrup",
+    "num": 306,
+    "rating": 1.5
+  },
+  "supremeoverlord": {
+    "id": "supremeoverlord",
+    "name": "Supreme Overlord",
+    "num": 293,
+    "rating": 4,
+    "onBasePower": true
+  },
+  "surgesurfer": {
+    "id": "surgesurfer",
+    "name": "Surge Surfer",
+    "num": 207,
+    "rating": 3,
+    "onModifySpe": true
+  },
+  "swarm": {
+    "id": "swarm",
+    "name": "Swarm",
+    "num": 68,
+    "rating": 2,
+    "onModifyAtk": true,
+    "onModifySpA": true
+  },
+  "sweetveil": {
+    "id": "sweetveil",
+    "name": "Sweet Veil",
+    "num": 175,
+    "rating": 2
+  },
+  "swiftswim": {
+    "id": "swiftswim",
+    "name": "Swift Swim",
+    "num": 33,
+    "rating": 3,
+    "onModifySpe": true
+  },
+  "swordofruin": {
+    "id": "swordofruin",
+    "name": "Sword of Ruin",
+    "num": 285,
+    "rating": 4.5
+  },
+  "symbiosis": {
+    "id": "symbiosis",
+    "name": "Symbiosis",
+    "num": 180,
+    "rating": 0
+  },
+  "synchronize": {
+    "id": "synchronize",
+    "name": "Synchronize",
+    "num": 28,
+    "rating": 2
+  },
+  "tabletsofruin": {
+    "id": "tabletsofruin",
+    "name": "Tablets of Ruin",
+    "num": 284,
+    "rating": 4.5
+  },
+  "tangledfeet": {
+    "id": "tangledfeet",
+    "name": "Tangled Feet",
+    "num": 77,
+    "rating": 1
+  },
+  "tanglinghair": {
+    "id": "tanglinghair",
+    "name": "Tangling Hair",
+    "num": 221,
+    "rating": 2
+  },
+  "technician": {
+    "id": "technician",
+    "name": "Technician",
+    "num": 101,
+    "rating": 3.5,
+    "onBasePower": true
+  },
+  "telepathy": {
+    "id": "telepathy",
+    "name": "Telepathy",
+    "num": 140,
+    "rating": 0
+  },
+  "teraformzero": {
+    "id": "teraformzero",
+    "name": "Teraform Zero",
+    "num": 309,
+    "rating": 3
+  },
+  "terashell": {
+    "id": "terashell",
+    "name": "Tera Shell",
+    "num": 308,
+    "rating": 3.5
+  },
+  "terashift": {
+    "id": "terashift",
+    "name": "Tera Shift",
+    "num": 307,
+    "rating": 3
+  },
+  "teravolt": {
+    "id": "teravolt",
+    "name": "Teravolt",
+    "num": 164,
+    "rating": 3
+  },
+  "thermalexchange": {
+    "id": "thermalexchange",
+    "name": "Thermal Exchange",
+    "num": 270,
+    "rating": 2.5
+  },
+  "thickfat": {
+    "id": "thickfat",
+    "name": "Thick Fat",
+    "num": 47,
+    "rating": 3.5
+  },
+  "tintedlens": {
+    "id": "tintedlens",
+    "name": "Tinted Lens",
+    "num": 110,
+    "rating": 4,
+    "onModifyDamage": true
+  },
+  "torrent": {
+    "id": "torrent",
+    "name": "Torrent",
+    "num": 67,
+    "rating": 2,
+    "onModifyAtk": true,
+    "onModifySpA": true
+  },
+  "toughclaws": {
+    "id": "toughclaws",
+    "name": "Tough Claws",
+    "num": 181,
+    "rating": 3.5,
+    "onBasePower": true,
+    "modifiers": [
+      {
+        "numerator": 5325,
+        "denominator": 4096
+      }
+    ]
+  },
+  "toxicboost": {
+    "id": "toxicboost",
+    "name": "Toxic Boost",
+    "num": 137,
+    "rating": 3,
+    "onBasePower": true
+  },
+  "toxicchain": {
+    "id": "toxicchain",
+    "name": "Toxic Chain",
+    "num": 305,
+    "rating": 4.5
+  },
+  "toxicdebris": {
+    "id": "toxicdebris",
+    "name": "Toxic Debris",
+    "num": 295,
+    "rating": 3.5
+  },
+  "trace": {
+    "id": "trace",
+    "name": "Trace",
+    "num": 36,
+    "rating": 2.5
+  },
+  "transistor": {
+    "id": "transistor",
+    "name": "Transistor",
+    "num": 262,
+    "rating": 3.5,
+    "onModifyAtk": true,
+    "onModifySpA": true,
+    "modifiers": [
+      {
+        "numerator": 5325,
+        "denominator": 4096
+      },
+      {
+        "numerator": 5325,
+        "denominator": 4096
+      }
+    ]
+  },
+  "triage": {
+    "id": "triage",
+    "name": "Triage",
+    "num": 205,
+    "rating": 3.5
+  },
+  "truant": {
+    "id": "truant",
+    "name": "Truant",
+    "num": 54,
+    "rating": -1
+  },
+  "turboblaze": {
+    "id": "turboblaze",
+    "name": "Turboblaze",
+    "num": 163,
+    "rating": 3
+  },
+  "unaware": {
+    "id": "unaware",
+    "name": "Unaware",
+    "num": 109,
+    "rating": 4
+  },
+  "unburden": {
+    "id": "unburden",
+    "name": "Unburden",
+    "num": 84,
+    "rating": 3.5,
+    "onModifySpe": true
+  },
+  "unnerve": {
+    "id": "unnerve",
+    "name": "Unnerve",
+    "num": 127,
+    "rating": 1
+  },
+  "unseenfist": {
+    "id": "unseenfist",
+    "name": "Unseen Fist",
+    "num": 260,
+    "rating": 2
+  },
+  "vesselofruin": {
+    "id": "vesselofruin",
+    "name": "Vessel of Ruin",
+    "num": 284,
+    "rating": 4.5
+  },
+  "victorystar": {
+    "id": "victorystar",
+    "name": "Victory Star",
+    "num": 162,
+    "rating": 2,
+    "modifiers": [
+      {
+        "numerator": 4506,
+        "denominator": 4096
+      }
+    ]
+  },
+  "vitalspirit": {
+    "id": "vitalspirit",
+    "name": "Vital Spirit",
+    "num": 72,
+    "rating": 1.5
+  },
+  "voltabsorb": {
+    "id": "voltabsorb",
+    "name": "Volt Absorb",
+    "num": 10,
+    "rating": 3.5
+  },
+  "wanderingspirit": {
+    "id": "wanderingspirit",
+    "name": "Wandering Spirit",
+    "num": 254,
+    "rating": 2.5
+  },
+  "waterabsorb": {
+    "id": "waterabsorb",
+    "name": "Water Absorb",
+    "num": 11,
+    "rating": 3.5
+  },
+  "waterbubble": {
+    "id": "waterbubble",
+    "name": "Water Bubble",
+    "num": 199,
+    "rating": 4.5,
+    "onModifyAtk": true,
+    "onModifySpA": true
+  },
+  "watercompaction": {
+    "id": "watercompaction",
+    "name": "Water Compaction",
+    "num": 195,
+    "rating": 1.5
+  },
+  "waterveil": {
+    "id": "waterveil",
+    "name": "Water Veil",
+    "num": 41,
+    "rating": 2
+  },
+  "weakarmor": {
+    "id": "weakarmor",
+    "name": "Weak Armor",
+    "num": 133,
+    "rating": 1
+  },
+  "wellbakedbody": {
+    "id": "wellbakedbody",
+    "name": "Well-Baked Body",
+    "num": 273,
+    "rating": 3.5
+  },
+  "whitesmoke": {
+    "id": "whitesmoke",
+    "name": "White Smoke",
+    "num": 73,
+    "rating": 2
+  },
+  "wimpout": {
+    "id": "wimpout",
+    "name": "Wimp Out",
+    "num": 193,
+    "rating": 1
+  },
+  "windpower": {
+    "id": "windpower",
+    "name": "Wind Power",
+    "num": 277,
+    "rating": 1
+  },
+  "windrider": {
+    "id": "windrider",
+    "name": "Wind Rider",
+    "num": 274,
+    "rating": 3.5
+  },
+  "wonderguard": {
+    "id": "wonderguard",
+    "name": "Wonder Guard",
+    "num": 25,
+    "rating": 5
+  },
+  "wonderskin": {
+    "id": "wonderskin",
+    "name": "Wonder Skin",
+    "num": 147,
+    "rating": 2
+  },
+  "zenmode": {
+    "id": "zenmode",
+    "name": "Zen Mode",
+    "num": 161,
+    "rating": 0
+  },
+  "zerotohero": {
+    "id": "zerotohero",
+    "name": "Zero to Hero",
+    "num": 278,
+    "rating": 5
+  },
+  "mountaineer": {
+    "id": "mountaineer",
+    "name": "Mountaineer",
+    "rating": 3
+  },
+  "rebound": {
+    "id": "rebound",
+    "name": "Rebound",
+    "rating": 3
+  },
+  "persistent": {
+    "id": "persistent",
+    "name": "Persistent",
+    "rating": 3
+  }
+}

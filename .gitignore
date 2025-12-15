@@ -1,0 +1,19 @@
+# Air live reload
+tmp/
+build-errors.log
+
+# Binary
+nuzlocke
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
