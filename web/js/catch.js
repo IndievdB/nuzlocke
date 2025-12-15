@@ -26,7 +26,7 @@ function catchApp() {
             'poison': 1.5
         },
 
-        // Ball definitions
+        // Ball definitions (getMultiplier functions are bound in init())
         balls: [
             { id: 'pokeball', name: 'Poke Ball', getMultiplier: () => 1.0 },
             { id: 'greatball', name: 'Great Ball', getMultiplier: () => 1.5 },
@@ -37,12 +37,12 @@ function catchApp() {
             {
                 id: 'repeatball',
                 name: 'Repeat Ball',
-                getMultiplier: function() { return this.alreadyCaught ? 3.0 : 1.0; }.bind(this)
+                getMultiplier: function() { return this.alreadyCaught ? 3.0 : 1.0; }
             },
             {
                 id: 'timerball',
                 name: 'Timer Ball',
-                getMultiplier: function() { return Math.min(4.0, (this.turns + 10) / 10); }.bind(this)
+                getMultiplier: function() { return Math.min(4.0, (this.turns + 10) / 10); }
             },
             {
                 id: 'netball',
@@ -51,29 +51,29 @@ function catchApp() {
                     if (!this.selectedPokemon) return 1.0;
                     const types = this.selectedPokemon.types || [];
                     return types.includes('Water') || types.includes('Bug') ? 3.0 : 1.0;
-                }.bind(this)
+                }
             },
             {
                 id: 'nestball',
                 name: 'Nest Ball',
                 getMultiplier: function() {
                     return Math.max(1.0, Math.min(4.0, (41 - this.level) / 10));
-                }.bind(this)
+                }
             },
             {
                 id: 'diveball',
                 name: 'Dive Ball',
-                getMultiplier: function() { return this.underwater ? 3.5 : 1.0; }.bind(this)
+                getMultiplier: function() { return this.underwater ? 3.5 : 1.0; }
             },
             {
                 id: 'duskball',
                 name: 'Dusk Ball',
-                getMultiplier: function() { return this.inCaveOrNight ? 3.5 : 1.0; }.bind(this)
+                getMultiplier: function() { return this.inCaveOrNight ? 3.5 : 1.0; }
             }
         ],
 
         init() {
-            // Bind ball multiplier functions to this context
+            // Bind ball multiplier functions to this (Alpine component) context
             this.balls = this.balls.map(ball => ({
                 ...ball,
                 getMultiplier: ball.getMultiplier.bind(this)
