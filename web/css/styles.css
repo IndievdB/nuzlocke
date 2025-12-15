@@ -26,6 +26,7 @@ header h1 {
     display: flex;
     justify-content: center;
     gap: 1rem;
+    margin-top: 0.75rem;
 }
 
 .generation-toggle label {
@@ -185,6 +186,11 @@ header h1 {
     gap: 0.25rem;
 }
 
+.crit-chance {
+    color: #888;
+    font-size: 0.8rem;
+}
+
 .calculate-btn {
     width: 100%;
     padding: 0.75rem;
@@ -229,6 +235,7 @@ header h1 {
     height: 24px;
     overflow: hidden;
     margin-bottom: 0.5rem;
+    display: flex;
 }
 
 .damage-bar {
@@ -236,10 +243,60 @@ header h1 {
     transition: width 0.3s ease;
 }
 
-.ko-text {
+.damage-bar-min {
+    background: #27ae60;
+}
+
+.damage-bar-range {
+    background: #f39c12;
+}
+
+/* Damage Range Display */
+.damage-range {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.damage-range .damage-bar-container {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+.damage-min, .damage-max {
+    font-size: 0.8rem;
+    color: #aaa;
+    white-space: nowrap;
+}
+
+.damage-min {
+    color: #27ae60;
+}
+
+.damage-max {
+    color: #e74c3c;
+}
+
+/* KO Information */
+.ko-info {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 0.75rem;
+}
+
+.ko-info p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.ko-label {
+    color: #888;
+}
+
+.ko-value {
     font-weight: bold;
     color: #4a90d9;
-    margin-bottom: 0.5rem;
 }
 
 .recoil-info, .recovery-info {

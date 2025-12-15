@@ -200,24 +200,59 @@ function calculator() {
             }
         },
 
-        // Get damage bar style
-        getDamageBarStyle() {
-            if (!this.result) return {};
-
-            const avg = (this.result.minPercent + this.result.maxPercent) / 2;
-            const width = Math.min(avg, 100);
-
-            let color = '#27ae60'; // Green
-            if (avg >= 100) {
-                color = '#e74c3c'; // Red
-            } else if (avg >= 50) {
-                color = '#f39c12'; // Orange
+        // Get critical hit chance based on generation
+        getCritChance() {
+            // Gen 6+: 1/24 (4.17%), Gen 2-5: 1/16 (6.25%), Gen 1: varies
+            if (this.generation === '3') {
+                return '6.25%';
             }
+            return '4.17%';
+        },
 
-            return {
-                width: width + '%',
-                backgroundColor: color
-            };
+        // Get min damage bar style (green portion)
+        getMinBarStyle() {
+            if (!this.result) return {};
+            const width = Math.min(this.result.minPercent, 100);
+            return { width: width + '%' };
+        },
+
+        // Get range bar style (yellow portion between min and max)
+        getRangeBarStyle() {
+            if (!this.result) return {};
+            const rangeWidth = Math.min(this.result.maxPercent, 100) - Math.min(this.result.minPercent, 100);
+            return { width: Math.max(rangeWidth, 0) + '%' };
+        },
+
+        // Get defender's current HP based on percentage and max HP
+        getDefenderCurrentHP() {
+            if (!this.result || !this.result.maxDamage) return 0;
+
+            // Calculate max HP from the damage percentage info
+            // maxDamage / maxPercent * 100 = maxHP
+            const maxHP = Math.round(this.result.maxDamage / this.result.maxPercent * 100);
+            return Math.floor(maxHP * this.defenderHPPercent / 100);
+        },
+
+        // Get best case KO (using max damage rolls)
+        getBestCaseKO() {
+            if (!this.result || !this.result.maxDamage) return '-';
+
+            const currentHP = this.getDefenderCurrentHP();
+            if (currentHP <= 0) return '-';
+
+            const hitsNeeded = Math.ceil(currentHP / this.result.maxDamage);
+            return hitsNeeded === 1 ? 'OHKO' : hitsNeeded + 'HKO';
+        },
+
+        // Get worst case KO (using min damage rolls)
+        getWorstCaseKO() {
+            if (!this.result || !this.result.minDamage) return '-';
+
+            const currentHP = this.getDefenderCurrentHP();
+            if (currentHP <= 0) return '-';
+
+            const hitsNeeded = Math.ceil(currentHP / this.result.minDamage);
+            return hitsNeeded === 1 ? 'OHKO' : hitsNeeded + 'HKO';
         }
     };
 }

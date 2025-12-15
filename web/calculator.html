@@ -138,7 +138,7 @@
             <div x-show="move.name" class="move-details">
                 <div class="form-row">
                     <label>
-                        <input type="checkbox" x-model="move.isCrit"> Critical Hit
+                        <input type="checkbox" x-model="move.isCrit"> Critical Hit <span class="crit-chance" x-text="'(' + getCritChance() + ')'"></span>
                     </label>
                 </div>
             </div>
@@ -266,11 +266,21 @@
         <div class="result-content">
             <p class="damage-description" x-text="result?.description"></p>
 
-            <div class="damage-bar-container">
-                <div class="damage-bar" :style="getDamageBarStyle()"></div>
+            <!-- Damage Range Bar -->
+            <div class="damage-range">
+                <span class="damage-min" x-text="result?.minDamage + ' (' + result?.minPercent?.toFixed(1) + '%)'"></span>
+                <div class="damage-bar-container">
+                    <div class="damage-bar damage-bar-min" :style="getMinBarStyle()"></div>
+                    <div class="damage-bar damage-bar-range" :style="getRangeBarStyle()"></div>
+                </div>
+                <span class="damage-max" x-text="result?.maxDamage + ' (' + result?.maxPercent?.toFixed(1) + '%)'"></span>
             </div>
 
-            <p class="ko-text" x-text="result?.ko?.text"></p>
+            <!-- KO Information -->
+            <div class="ko-info">
+                <p><span class="ko-label">Best case:</span> <span class="ko-value" x-text="getBestCaseKO()"></span></p>
+                <p><span class="ko-label">Worst case:</span> <span class="ko-value" x-text="getWorstCaseKO()"></span></p>
+            </div>
 
             <div x-show="result?.recoil" class="recoil-info">
                 <p>Recoil: <span x-text="result?.recoil?.percent?.toFixed(1) + '%'"></span></p>
@@ -279,15 +289,6 @@
             <div x-show="result?.recovery" class="recovery-info">
                 <p>Recovery: <span x-text="result?.recovery?.minPercent?.toFixed(1) + '% - ' + result?.recovery?.maxPercent?.toFixed(1) + '%'"></span></p>
             </div>
-
-            <details x-show="result?.factors?.length">
-                <summary>Factors</summary>
-                <ul>
-                    <template x-for="factor in result?.factors || []" :key="factor">
-                        <li x-text="factor"></li>
-                    </template>
-                </ul>
-            </details>
         </div>
     </section>
 
