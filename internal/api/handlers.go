@@ -398,6 +398,7 @@ type BoxPokemonResponse struct {
 	Ability      *AbilityDetail        `json:"ability,omitempty"`
 	Item         *ItemDetail           `json:"item,omitempty"`
 	Moves        []MoveDetail          `json:"moves"`
+	Stats        savefile.PokemonStats `json:"stats"`
 	IVs          savefile.PokemonStats `json:"ivs"`
 	EVs          savefile.PokemonStats `json:"evs"`
 }
@@ -539,6 +540,24 @@ func (h *Handler) HandleParseSave(w http.ResponseWriter, r *http.Request) {
 			speciesData := h.Store.GetPokemonByNum(p.SpeciesNum)
 			if speciesData != nil {
 				pokemon.Species = speciesData.Name
+
+				// Calculate stats from base stats, IVs, EVs, level, nature
+				natureData := h.Store.GetNature(strings.ToLower(p.Nature))
+				if natureData != nil {
+					ivs := models.StatSpread{
+						HP: p.IVs.HP, Atk: p.IVs.Attack, Def: p.IVs.Defense,
+						SpA: p.IVs.SpAtk, SpD: p.IVs.SpDef, Spe: p.IVs.Speed,
+					}
+					evs := models.StatSpread{
+						HP: p.EVs.HP, Atk: p.EVs.Attack, Def: p.EVs.Defense,
+						SpA: p.EVs.SpAtk, SpD: p.EVs.SpDef, Spe: p.EVs.Speed,
+					}
+					calcStats := models.CalculateAllStats(speciesData.BaseStats, ivs, evs, p.Level, natureData)
+					pokemon.Stats = savefile.PokemonStats{
+						HP: calcStats.HP, Attack: calcStats.Atk, Defense: calcStats.Def,
+						SpAtk: calcStats.SpA, SpDef: calcStats.SpD, Speed: calcStats.Spe,
+					}
+				}
 
 				// Resolve ability based on slot
 				slot := "0"

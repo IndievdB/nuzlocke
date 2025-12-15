@@ -142,21 +142,83 @@
                     <template x-if="box && box.length > 0">
                         <div class="box-container">
                             <h3 class="box-header" x-text="'Box ' + (boxIndex + 1) + ' (' + box.length + ')'"></h3>
-                            <div class="box-grid">
+                            <div class="party-grid">
                                 <template x-for="(pokemon, slotIndex) in box" :key="'box-' + boxIndex + '-' + slotIndex">
-                                    <div class="box-pokemon">
-                                        <div class="box-sprite">
+                                    <div class="party-member">
+                                        <div class="party-sprite">
                                             <img :src="getSpriteUrl(pokemon.species)"
                                                  :alt="pokemon.species"
                                                  @error="handleSpriteError($event)">
                                         </div>
-                                        <div class="box-info">
-                                            <span class="box-pokemon-name" x-text="pokemon.nickname && pokemon.nickname.toLowerCase() !== pokemon.species.toLowerCase() ? pokemon.nickname : pokemon.species"></span>
-                                            <span class="box-pokemon-level" x-text="'Lv. ' + pokemon.level"></span>
+                                        <div class="party-info">
+                                            <span class="pokemon-name" x-text="pokemon.nickname && pokemon.nickname.toLowerCase() !== pokemon.species.toLowerCase() ? pokemon.nickname : pokemon.species"></span>
+                                            <span class="pokemon-species" x-show="pokemon.nickname && pokemon.nickname.toLowerCase() !== pokemon.species.toLowerCase()" x-text="'(' + pokemon.species + ')'"></span>
+                                            <div class="pokemon-details-grid">
+                                                <span class="pokemon-level" x-text="'Lv. ' + pokemon.level"></span>
+                                                <span class="pokemon-ability has-tooltip"
+                                                      x-show="pokemon.ability"
+                                                      x-text="pokemon.ability?.name"
+                                                      :data-tooltip="pokemon.ability?.description || ''"></span>
+                                                <span class="pokemon-nature has-tooltip"
+                                                      x-text="pokemon.nature"
+                                                      :data-tooltip="getNatureTooltip(pokemon.natureEffect)"></span>
+                                                <span class="pokemon-item has-tooltip"
+                                                      x-show="pokemon.item"
+                                                      x-text="pokemon.item?.name"
+                                                      :data-tooltip="pokemon.item?.description || 'Held item'"></span>
+                                            </div>
                                         </div>
-                                        <div class="box-moves">
+                                        <!-- Stats Display -->
+                                        <div class="party-stats">
+                                            <div class="hp-bar" x-show="pokemon.stats?.hp">
+                                                <div class="hp-fill" style="width: 100%"></div>
+                                                <span class="hp-text" x-text="pokemon.stats?.hp + '/' + pokemon.stats?.hp"></span>
+                                            </div>
+                                            <div class="stats-grid">
+                                                <span class="stat" :class="{'stat-plus': pokemon.natureEffect?.plus === 'Attack', 'stat-minus': pokemon.natureEffect?.minus === 'Attack'}">
+                                                    <span class="stat-label">Atk</span>
+                                                    <span class="stat-value" x-text="pokemon.stats?.attack || '-'"></span>
+                                                </span>
+                                                <span class="stat" :class="{'stat-plus': pokemon.natureEffect?.plus === 'Defense', 'stat-minus': pokemon.natureEffect?.minus === 'Defense'}">
+                                                    <span class="stat-label">Def</span>
+                                                    <span class="stat-value" x-text="pokemon.stats?.defense || '-'"></span>
+                                                </span>
+                                                <span class="stat" :class="{'stat-plus': pokemon.natureEffect?.plus === 'Sp. Atk', 'stat-minus': pokemon.natureEffect?.minus === 'Sp. Atk'}">
+                                                    <span class="stat-label">SpA</span>
+                                                    <span class="stat-value" x-text="pokemon.stats?.spAtk || '-'"></span>
+                                                </span>
+                                                <span class="stat" :class="{'stat-plus': pokemon.natureEffect?.plus === 'Sp. Def', 'stat-minus': pokemon.natureEffect?.minus === 'Sp. Def'}">
+                                                    <span class="stat-label">SpD</span>
+                                                    <span class="stat-value" x-text="pokemon.stats?.spDef || '-'"></span>
+                                                </span>
+                                                <span class="stat" :class="{'stat-plus': pokemon.natureEffect?.plus === 'Speed', 'stat-minus': pokemon.natureEffect?.minus === 'Speed'}">
+                                                    <span class="stat-label">Spe</span>
+                                                    <span class="stat-value" x-text="pokemon.stats?.speed || '-'"></span>
+                                                </span>
+                                            </div>
+                                            <!-- IVs -->
+                                            <div class="ivs-evs-row" x-show="pokemon.ivs">
+                                                <span class="ivs-label">IVs:</span>
+                                                <span class="ivs-values" x-text="pokemon.ivs?.hp + '/' + pokemon.ivs?.attack + '/' + pokemon.ivs?.defense + '/' + pokemon.ivs?.spAtk + '/' + pokemon.ivs?.spDef + '/' + pokemon.ivs?.speed"></span>
+                                            </div>
+                                            <!-- EVs -->
+                                            <div class="ivs-evs-row" x-show="pokemon.evs">
+                                                <span class="evs-label">EVs:</span>
+                                                <span class="evs-values" x-text="pokemon.evs?.hp + '/' + pokemon.evs?.attack + '/' + pokemon.evs?.defense + '/' + pokemon.evs?.spAtk + '/' + pokemon.evs?.spDef + '/' + pokemon.evs?.speed"></span>
+                                            </div>
+                                        </div>
+                                        <!-- Moves with Tooltips -->
+                                        <div class="party-moves">
                                             <template x-for="move in pokemon.moves" :key="move.name">
-                                                <span class="box-move-chip" :class="'type-' + move.type.toLowerCase()" x-text="move.name"></span>
+                                                <span class="move-chip tooltip" :class="'type-' + move.type.toLowerCase()">
+                                                    <span x-text="move.name"></span>
+                                                    <span class="tooltip-text">
+                                                        <span x-text="move.type + ' | ' + move.category"></span><br>
+                                                        <span x-show="move.power > 0" x-text="'Power: ' + move.power + ' | '"></span>
+                                                        <span x-text="'Acc: ' + (move.accuracy || '-') + ' | PP: ' + move.pp"></span><br>
+                                                        <span x-text="move.description"></span>
+                                                    </span>
+                                                </span>
                                             </template>
                                         </div>
                                     </div>
