@@ -217,6 +217,15 @@
                 <select @change="selectLearnsetMove($event.target.value)" class="move-dropdown">
                     <option value="">Select a move...</option>
 
+                    <!-- Known Moves (from party import) -->
+                    <template x-if="attackerKnownMoves.length > 0">
+                        <optgroup label="Known Moves">
+                            <template x-for="m in attackerKnownMoves" :key="'K' + m.id">
+                                <option :value="m.id" :selected="move.name === m.id" x-text="formatMove(m.id)"></option>
+                            </template>
+                        </optgroup>
+                    </template>
+
                     <!-- Level Up Moves -->
                     <template x-if="attackerLearnset?.levelup?.length > 0">
                         <optgroup label="Level Up">
