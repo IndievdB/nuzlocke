@@ -57,6 +57,10 @@
                                 <span class="pokemon-name" x-text="pokemon.species"></span>
                                 <span class="pokemon-nickname" x-show="pokemon.nickname && pokemon.nickname !== pokemon.species" x-text="'\"' + pokemon.nickname + '\"'"></span>
                                 <span class="pokemon-level" x-text="'Lv. ' + pokemon.level"></span>
+                                <span class="pokemon-ability has-tooltip"
+                                      x-show="pokemon.ability"
+                                      x-text="pokemon.ability?.name"
+                                      :data-tooltip="pokemon.ability?.description || ''"></span>
                                 <span class="pokemon-nature has-tooltip"
                                       x-text="pokemon.nature"
                                       :data-tooltip="getNatureTooltip(pokemon.natureEffect)"></span>

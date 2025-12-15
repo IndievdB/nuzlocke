@@ -17,17 +17,18 @@ type PokemonStats struct {
 
 // PartyPokemon represents a Pokemon in the party
 type PartyPokemon struct {
-	Species    string       `json:"species"`
-	Nickname   string       `json:"nickname"`
-	Level      int          `json:"level"`
-	SpeciesNum int          `json:"speciesNum"`
-	Nature     string       `json:"nature"`
-	Item       string       `json:"item"`
-	ItemNum    int          `json:"itemNum"`
-	Moves      []string     `json:"moves"`
-	MoveNums   []int        `json:"moveNums"`
-	Stats      PokemonStats `json:"stats"`
-	CurrentHP  int          `json:"currentHp"`
+	Species     string       `json:"species"`
+	Nickname    string       `json:"nickname"`
+	Level       int          `json:"level"`
+	SpeciesNum  int          `json:"speciesNum"`
+	Nature      string       `json:"nature"`
+	Item        string       `json:"item"`
+	ItemNum     int          `json:"itemNum"`
+	Moves       []string     `json:"moves"`
+	MoveNums    []int        `json:"moveNums"`
+	Stats       PokemonStats `json:"stats"`
+	CurrentHP   int          `json:"currentHp"`
+	AbilitySlot int          `json:"abilitySlot"` // 0 = first ability, 1 = second ability
 }
 
 // ParseResult contains the parsed save data
@@ -720,8 +721,9 @@ func parsePokemon(data []byte) PartyPokemon {
 		typeToPos[typ] = pos
 	}
 
-	growthPos := typeToPos[0] * 12   // G = 0
-	attacksPos := typeToPos[1] * 12  // A = 1
+	growthPos := typeToPos[0] * 12  // G = 0
+	attacksPos := typeToPos[1] * 12 // A = 1
+	miscPos := typeToPos[3] * 12    // M = 3
 
 	// Get species ID from Growth substructure (bytes 0-1)
 	rawSpeciesID := int(binary.LittleEndian.Uint16(decryptedData[growthPos : growthPos+2]))
@@ -746,6 +748,12 @@ func parsePokemon(data []byte) PartyPokemon {
 		}
 	}
 
+	// Get ability slot from Misc substructure (bits 29-30 of bytes 8-11)
+	// In pokeemerald-expansion, abilityNum is a 2-bit field in the ribbon data:
+	// Bytes 8-11 contain: ribbons (29 bits) + abilityNum (2 bits) + fatefulEncounter (1 bit)
+	ribbonData := binary.LittleEndian.Uint32(decryptedData[miscPos+8 : miscPos+12])
+	abilitySlot := int((ribbonData >> 29) & 3) // 2 bits for ability index (0, 1, or 2 for hidden)
+
 	// Get stats from party data section (bytes 86-99)
 	// Party data: status(4), level(1), pokerus(1), currentHP(2), maxHP(2), atk(2), def(2), spe(2), spa(2), spd(2)
 	currentHP := int(binary.LittleEndian.Uint16(data[86:88]))
@@ -759,14 +767,15 @@ func parsePokemon(data []byte) PartyPokemon {
 	}
 
 	return PartyPokemon{
-		Nickname:   nickname,
-		Level:      level,
-		SpeciesNum: speciesNum,
-		Nature:     nature,
-		ItemNum:    itemNum,
-		MoveNums:   moveNums,
-		Stats:      stats,
-		CurrentHP:  currentHP,
+		Nickname:    nickname,
+		Level:       level,
+		SpeciesNum:  speciesNum,
+		Nature:      nature,
+		ItemNum:     itemNum,
+		MoveNums:    moveNums,
+		Stats:       stats,
+		CurrentHP:   currentHP,
+		AbilitySlot: abilitySlot,
 	}
 }
 

@@ -341,6 +341,12 @@ type ItemDetail struct {
 	Description string `json:"description"`
 }
 
+// AbilityDetail contains ability information for tooltips
+type AbilityDetail struct {
+	Name        string `json:"name"`
+	Description string `json:"description"`
+}
+
 // PartyPokemonResponse is the rich response for a party Pokemon
 type PartyPokemonResponse struct {
 	Species      string                 `json:"species"`
@@ -348,6 +354,7 @@ type PartyPokemonResponse struct {
 	Level        int                    `json:"level"`
 	Nature       string                 `json:"nature"`
 	NatureEffect savefile.NatureEffect  `json:"natureEffect"`
+	Ability      *AbilityDetail         `json:"ability,omitempty"`
 	Item         *ItemDetail            `json:"item,omitempty"`
 	Moves        []MoveDetail           `json:"moves"`
 	Stats        savefile.PokemonStats  `json:"stats"`
@@ -399,6 +406,29 @@ func (h *Handler) HandleParseSave(w http.ResponseWriter, r *http.Request) {
 		speciesData := h.Store.GetPokemonByNum(p.SpeciesNum)
 		if speciesData != nil {
 			pokemon.Species = speciesData.Name
+
+			// Resolve ability based on slot (0, 1, or 2 for hidden)
+			// If requested slot doesn't exist, fall back to slot 0
+			slot := "0"
+			if p.AbilitySlot == 1 {
+				slot = "1"
+			} else if p.AbilitySlot == 2 {
+				slot = "H"
+			}
+			abilityName := speciesData.GetAbility(slot)
+			if abilityName == "" && slot != "0" {
+				// Fallback to slot 0 if the requested slot doesn't exist
+				abilityName = speciesData.GetAbility("0")
+			}
+			if abilityName != "" {
+				ability := h.Store.GetAbility(abilityName)
+				if ability != nil {
+					pokemon.Ability = &AbilityDetail{
+						Name:        ability.Name,
+						Description: ability.ShortDesc,
+					}
+				}
+			}
 		} else {
 			pokemon.Species = "Unknown"
 		}

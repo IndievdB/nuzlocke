@@ -918,6 +918,11 @@ nav a:hover, nav a.active {
     font-size: 0.85rem;
 }
 
+.party-info .pokemon-ability {
+    color: #BB86FC;
+    font-size: 0.8rem;
+}
+
 .party-info .pokemon-nature {
     color: #98D8C8;
     font-size: 0.8rem;
