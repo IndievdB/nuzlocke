@@ -190,3 +190,116 @@ func (h *Handler) HandleSearchMoves(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string][]SearchResult{"results": searchResults})
 }
+
+// LearnsetResponse represents the parsed learnset response
+type LearnsetResponse struct {
+	Pokemon  string               `json:"pokemon"`
+	Learnset *data.ParsedLearnset `json:"learnset"`
+}
+
+// HandleGetLearnset handles GET /api/pokemon/{id}/learnset
+func (h *Handler) HandleGetLearnset(w http.ResponseWriter, r *http.Request) {
+	// Extract Pokemon ID from path: /api/pokemon/{id}/learnset
+	path := r.URL.Path
+	id := strings.TrimPrefix(path, "/api/pokemon/")
+	id = strings.TrimSuffix(id, "/learnset")
+
+	if id == "" {
+		http.Error(w, "Pokemon ID is required", http.StatusBadRequest)
+		return
+	}
+
+	pokemon := h.Store.GetPokemon(id)
+	if pokemon == nil {
+		http.Error(w, "Pokemon not found", http.StatusNotFound)
+		return
+	}
+
+	learnset := h.Store.GetLearnset(id)
+	parsed := data.ParseLearnset(learnset, 9) // Default to Gen 9
+
+	response := LearnsetResponse{
+		Pokemon:  id,
+		Learnset: parsed,
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(response)
+}
+
+// TypeMatchups represents type effectiveness info
+type TypeMatchups struct {
+	Weaknesses  map[string]float64 `json:"weaknesses"`
+	Resistances map[string]float64 `json:"resistances"`
+	Immunities  []string           `json:"immunities"`
+}
+
+// FullPokemonResponse represents the full Pokemon data with learnset and type matchups
+type FullPokemonResponse struct {
+	Pokemon     *data.Pokemon        `json:"pokemon"`
+	Learnset    *data.ParsedLearnset `json:"learnset"`
+	TypeMatchups *TypeMatchups       `json:"typeMatchups"`
+}
+
+// HandleGetPokemonFull handles GET /api/pokemon/{id}/full
+func (h *Handler) HandleGetPokemonFull(w http.ResponseWriter, r *http.Request) {
+	// Extract Pokemon ID from path: /api/pokemon/{id}/full
+	path := r.URL.Path
+	id := strings.TrimPrefix(path, "/api/pokemon/")
+	id = strings.TrimSuffix(id, "/full")
+
+	if id == "" {
+		http.Error(w, "Pokemon ID is required", http.StatusBadRequest)
+		return
+	}
+
+	pokemon := h.Store.GetPokemon(id)
+	if pokemon == nil {
+		http.Error(w, "Pokemon not found", http.StatusNotFound)
+		return
+	}
+
+	learnset := h.Store.GetLearnset(id)
+	parsed := data.ParseLearnset(learnset, 9)
+
+	// Calculate type matchups
+	matchups := calculateTypeMatchups(h.Store, pokemon.Types)
+
+	response := FullPokemonResponse{
+		Pokemon:      pokemon,
+		Learnset:     parsed,
+		TypeMatchups: matchups,
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(response)
+}
+
+// calculateTypeMatchups calculates type effectiveness against a Pokemon's types
+func calculateTypeMatchups(store *data.Store, defenderTypes []string) *TypeMatchups {
+	allTypes := []string{
+		"Normal", "Fire", "Water", "Electric", "Grass", "Ice",
+		"Fighting", "Poison", "Ground", "Flying", "Psychic", "Bug",
+		"Rock", "Ghost", "Dragon", "Dark", "Steel", "Fairy",
+	}
+
+	matchups := &TypeMatchups{
+		Weaknesses:  make(map[string]float64),
+		Resistances: make(map[string]float64),
+		Immunities:  []string{},
+	}
+
+	for _, attackType := range allTypes {
+		multiplier := store.GetTypeEffectivenessMultiple(attackType, defenderTypes)
+
+		if multiplier == 0 {
+			matchups.Immunities = append(matchups.Immunities, strings.ToLower(attackType))
+		} else if multiplier > 1 {
+			matchups.Weaknesses[strings.ToLower(attackType)] = multiplier
+		} else if multiplier < 1 {
+			matchups.Resistances[strings.ToLower(attackType)] = multiplier
+		}
+	}
+
+	return matchups
+}

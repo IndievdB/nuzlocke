@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokemon Moves Lookup</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="/js/moves.js"></script>
+</head>
+<body x-data="movesApp()" x-init="init()">
+    <header>
+        <h1>Pokemon Moves Lookup</h1>
+        <nav>
+            <a href="/calculator">Damage Calculator</a>
+            <a href="/moves" class="active">Moves</a>
+        </nav>
+    </header>
+
+    <main class="moves-layout">
+        <!-- Search Section -->
+        <section class="search-section">
+            <div class="search-container large">
+                <input type="text"
+                       x-model="searchQuery"
+                       @input.debounce.200ms="searchPokemon()"
+                       @focus="showResults = searchResults.length > 0"
+                       placeholder="Search Pokemon..."
+                       autocomplete="off">
+                <ul x-show="showResults && searchResults.length > 0"
+                    class="search-results"
+                    @click.away="showResults = false">
+                    <template x-for="result in searchResults" :key="result.id">
+                        <li @click="selectPokemon(result)" x-text="result.name"></li>
+                    </template>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Pokemon Info Section -->
+        <template x-if="selectedPokemon">
+            <section class="pokemon-info-section">
+                <!-- Pokemon Header -->
+                <div class="pokemon-header">
+                    <div class="pokemon-sprite">
+                        <img :src="getSpriteUrl()" :alt="selectedPokemon.name" @error="handleSpriteError($event)">
+                    </div>
+                    <div class="pokemon-details">
+                        <h2 x-text="selectedPokemon.name"></h2>
+                        <div class="type-badges">
+                            <template x-for="type in selectedPokemon.types" :key="type">
+                                <span class="type-badge" :class="'type-' + type.toLowerCase()" x-text="type"></span>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats -->
+                <div class="stats-section">
+                    <h3>Base Stats</h3>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <span class="stat-name">HP</span>
+                            <div class="stat-bar-container">
+                                <div class="stat-bar" :style="getStatBarStyle(selectedPokemon.baseStats.hp)"></div>
+                            </div>
+                            <span class="stat-value" x-text="selectedPokemon.baseStats.hp"></span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-name">Atk</span>
+                            <div class="stat-bar-container">
+                                <div class="stat-bar" :style="getStatBarStyle(selectedPokemon.baseStats.atk)"></div>
+                            </div>
+                            <span class="stat-value" x-text="selectedPokemon.baseStats.atk"></span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-name">Def</span>
+                            <div class="stat-bar-container">
+                                <div class="stat-bar" :style="getStatBarStyle(selectedPokemon.baseStats.def)"></div>
+                            </div>
+                            <span class="stat-value" x-text="selectedPokemon.baseStats.def"></span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-name">SpA</span>
+                            <div class="stat-bar-container">
+                                <div class="stat-bar" :style="getStatBarStyle(selectedPokemon.baseStats.spa)"></div>
+                            </div>
+                            <span class="stat-value" x-text="selectedPokemon.baseStats.spa"></span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-name">SpD</span>
+                            <div class="stat-bar-container">
+                                <div class="stat-bar" :style="getStatBarStyle(selectedPokemon.baseStats.spd)"></div>
+                            </div>
+                            <span class="stat-value" x-text="selectedPokemon.baseStats.spd"></span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-name">Spe</span>
+                            <div class="stat-bar-container">
+                                <div class="stat-bar" :style="getStatBarStyle(selectedPokemon.baseStats.spe)"></div>
+                            </div>
+                            <span class="stat-value" x-text="selectedPokemon.baseStats.spe"></span>
+                        </div>
+                    </div>
+                    <div class="stat-total">
+                        <span>Total: </span>
+                        <span x-text="getStatTotal()"></span>
+                    </div>
+                </div>
+
+                <!-- Abilities -->
+                <div class="abilities-section">
+                    <h3>Abilities</h3>
+                    <div class="ability-list">
+                        <template x-for="(ability, slot) in selectedPokemon.abilities" :key="slot">
+                            <span class="ability-badge" :class="{ 'hidden-ability': slot === 'H' }" x-text="ability"></span>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- Type Effectiveness -->
+                <div class="type-effectiveness-section">
+                    <h3>Type Effectiveness</h3>
+                    <template x-if="typeMatchups">
+                        <div class="matchups-grid">
+                            <div class="matchup-group" x-show="Object.keys(typeMatchups.weaknesses).length > 0">
+                                <h4>Weak to</h4>
+                                <div class="matchup-types">
+                                    <template x-for="(mult, type) in typeMatchups.weaknesses" :key="type">
+                                        <span class="type-badge small" :class="'type-' + type">
+                                            <span x-text="type"></span>
+                                            <span class="multiplier" x-text="mult + 'x'"></span>
+                                        </span>
+                                    </template>
+                                </div>
+                            </div>
+                            <div class="matchup-group" x-show="Object.keys(typeMatchups.resistances).length > 0">
+                                <h4>Resistant to</h4>
+                                <div class="matchup-types">
+                                    <template x-for="(mult, type) in typeMatchups.resistances" :key="type">
+                                        <span class="type-badge small" :class="'type-' + type">
+                                            <span x-text="type"></span>
+                                            <span class="multiplier" x-text="mult + 'x'"></span>
+                                        </span>
+                                    </template>
+                                </div>
+                            </div>
+                            <div class="matchup-group" x-show="typeMatchups.immunities.length > 0">
+                                <h4>Immune to</h4>
+                                <div class="matchup-types">
+                                    <template x-for="type in typeMatchups.immunities" :key="type">
+                                        <span class="type-badge small" :class="'type-' + type" x-text="type"></span>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </section>
+
+            <!-- Moves Section -->
+            <section class="moves-section">
+                <h3>Moves</h3>
+
+                <!-- Source Filters -->
+                <div class="source-filters">
+                    <label>
+                        <input type="checkbox" x-model="showLevelUp"> Level Up
+                        <span class="count" x-text="'(' + (learnset?.levelup?.length || 0) + ')'"></span>
+                    </label>
+                    <label>
+                        <input type="checkbox" x-model="showTM"> TM/HM
+                        <span class="count" x-text="'(' + (learnset?.tm?.length || 0) + ')'"></span>
+                    </label>
+                    <label>
+                        <input type="checkbox" x-model="showEgg"> Egg
+                        <span class="count" x-text="'(' + (learnset?.egg?.length || 0) + ')'"></span>
+                    </label>
+                    <label>
+                        <input type="checkbox" x-model="showTutor"> Tutor
+                        <span class="count" x-text="'(' + (learnset?.tutor?.length || 0) + ')'"></span>
+                    </label>
+                </div>
+
+                <!-- Moves Table -->
+                <div class="moves-table-container">
+                    <table class="moves-table">
+                        <thead>
+                            <tr>
+                                <th>Source</th>
+                                <th>Move</th>
+                                <th>Type</th>
+                                <th>Cat</th>
+                                <th>Power</th>
+                                <th>Acc</th>
+                                <th>PP</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Level Up Moves -->
+                            <template x-if="showLevelUp && learnset?.levelup">
+                                <template x-for="move in sortedLevelUpMoves()" :key="'L' + move.move">
+                                    <tr>
+                                        <td class="source-cell">Lv. <span x-text="move.level"></span></td>
+                                        <td class="move-name" x-text="getMoveData(move.move)?.name || move.move"></td>
+                                        <td>
+                                            <span class="type-badge tiny"
+                                                  :class="'type-' + (getMoveData(move.move)?.type?.toLowerCase() || 'normal')"
+                                                  x-text="getMoveData(move.move)?.type || '?'"></span>
+                                        </td>
+                                        <td>
+                                            <span class="category-icon" :class="getCategoryClass(getMoveData(move.move)?.category)"
+                                                  :title="getMoveData(move.move)?.category"></span>
+                                        </td>
+                                        <td x-text="getMoveData(move.move)?.basePower || '-'"></td>
+                                        <td x-text="getMoveData(move.move)?.accuracy === true ? '-' : (getMoveData(move.move)?.accuracy || '-')"></td>
+                                        <td x-text="getMoveData(move.move)?.pp || '-'"></td>
+                                    </tr>
+                                </template>
+                            </template>
+
+                            <!-- TM Moves -->
+                            <template x-if="showTM && learnset?.tm">
+                                <template x-for="moveId in learnset.tm" :key="'TM' + moveId">
+                                    <tr>
+                                        <td class="source-cell">TM</td>
+                                        <td class="move-name" x-text="getMoveData(moveId)?.name || moveId"></td>
+                                        <td>
+                                            <span class="type-badge tiny"
+                                                  :class="'type-' + (getMoveData(moveId)?.type?.toLowerCase() || 'normal')"
+                                                  x-text="getMoveData(moveId)?.type || '?'"></span>
+                                        </td>
+                                        <td>
+                                            <span class="category-icon" :class="getCategoryClass(getMoveData(moveId)?.category)"
+                                                  :title="getMoveData(moveId)?.category"></span>
+                                        </td>
+                                        <td x-text="getMoveData(moveId)?.basePower || '-'"></td>
+                                        <td x-text="getMoveData(moveId)?.accuracy === true ? '-' : (getMoveData(moveId)?.accuracy || '-')"></td>
+                                        <td x-text="getMoveData(moveId)?.pp || '-'"></td>
+                                    </tr>
+                                </template>
+                            </template>
+
+                            <!-- Egg Moves -->
+                            <template x-if="showEgg && learnset?.egg">
+                                <template x-for="moveId in learnset.egg" :key="'E' + moveId">
+                                    <tr>
+                                        <td class="source-cell">Egg</td>
+                                        <td class="move-name" x-text="getMoveData(moveId)?.name || moveId"></td>
+                                        <td>
+                                            <span class="type-badge tiny"
+                                                  :class="'type-' + (getMoveData(moveId)?.type?.toLowerCase() || 'normal')"
+                                                  x-text="getMoveData(moveId)?.type || '?'"></span>
+                                        </td>
+                                        <td>
+                                            <span class="category-icon" :class="getCategoryClass(getMoveData(moveId)?.category)"
+                                                  :title="getMoveData(moveId)?.category"></span>
+                                        </td>
+                                        <td x-text="getMoveData(moveId)?.basePower || '-'"></td>
+                                        <td x-text="getMoveData(moveId)?.accuracy === true ? '-' : (getMoveData(moveId)?.accuracy || '-')"></td>
+                                        <td x-text="getMoveData(moveId)?.pp || '-'"></td>
+                                    </tr>
+                                </template>
+                            </template>
+
+                            <!-- Tutor Moves -->
+                            <template x-if="showTutor && learnset?.tutor">
+                                <template x-for="moveId in learnset.tutor" :key="'T' + moveId">
+                                    <tr>
+                                        <td class="source-cell">Tutor</td>
+                                        <td class="move-name" x-text="getMoveData(moveId)?.name || moveId"></td>
+                                        <td>
+                                            <span class="type-badge tiny"
+                                                  :class="'type-' + (getMoveData(moveId)?.type?.toLowerCase() || 'normal')"
+                                                  x-text="getMoveData(moveId)?.type || '?'"></span>
+                                        </td>
+                                        <td>
+                                            <span class="category-icon" :class="getCategoryClass(getMoveData(moveId)?.category)"
+                                                  :title="getMoveData(moveId)?.category"></span>
+                                        </td>
+                                        <td x-text="getMoveData(moveId)?.basePower || '-'"></td>
+                                        <td x-text="getMoveData(moveId)?.accuracy === true ? '-' : (getMoveData(moveId)?.accuracy || '-')"></td>
+                                        <td x-text="getMoveData(moveId)?.pp || '-'"></td>
+                                    </tr>
+                                </template>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </template>
+
+        <!-- Empty State -->
+        <template x-if="!selectedPokemon">
+            <div class="empty-state">
+                <p>Search for a Pokemon to view its moves and stats.</p>
+            </div>
+        </template>
+    </main>
+
+    <footer>
+        <p>Pokemon Moves Lookup - Using data from Pokemon Showdown</p>
+    </footer>
+</body>
+</html>

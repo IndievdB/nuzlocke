@@ -242,10 +242,111 @@ function convertAbilities() {
     console.log(`Converted abilities.json (${Object.keys(abilities).length} abilities)`);
 }
 
+/**
+ * Convert learnsets.ts to learnsets.json
+ * Extracts the learnset data for each Pokemon
+ */
+function convertLearnsets() {
+    const content = fs.readFileSync(path.join(dataDir, 'learnsets.ts'), 'utf8');
+
+    const learnsets = {};
+
+    // Find the start of the export
+    const exportStart = content.indexOf('export const Learnsets');
+    if (exportStart === -1) {
+        console.error('Could not find Learnsets export');
+        return;
+    }
+
+    // Find each learnset block by looking for pattern: \n\tpokemonname: {
+    const lines = content.slice(exportStart).split('\n');
+    let currentPokemonId = null;
+    let braceCount = 0;
+    let inPokemon = false;
+    let pokemonContent = '';
+
+    for (const line of lines) {
+        // Check for start of new pokemon (single tab + identifier + colon + brace)
+        const pokemonStart = line.match(/^\t(\w+):\s*\{/);
+
+        if (pokemonStart && !inPokemon) {
+            currentPokemonId = pokemonStart[1];
+            inPokemon = true;
+            braceCount = 1; // Opening brace
+            pokemonContent = line;
+            continue;
+        }
+
+        if (inPokemon) {
+            pokemonContent += '\n' + line;
+
+            // Count braces
+            for (const char of line) {
+                if (char === '{') braceCount++;
+                if (char === '}') braceCount--;
+            }
+
+            // End of pokemon block
+            if (braceCount === 0) {
+                // Extract learnset from pokemonContent
+                const learnsetMatch = pokemonContent.match(/learnset:\s*\{([^}]+(?:\{[^}]*\}[^}]*)*)\}/s);
+                if (learnsetMatch) {
+                    const learnsetBody = learnsetMatch[1];
+                    const learnset = {};
+
+                    // Match each move: movename: ["source1", "source2", ...]
+                    const moveRegex = /(\w+):\s*\[([^\]]+)\]/g;
+                    let moveMatch;
+                    while ((moveMatch = moveRegex.exec(learnsetBody)) !== null) {
+                        const [, moveName, sourcesStr] = moveMatch;
+                        // Parse the sources array
+                        const sources = [];
+                        const sourceMatches = sourcesStr.matchAll(/"([^"]+)"/g);
+                        for (const sm of sourceMatches) {
+                            sources.push(sm[1]);
+                        }
+                        if (sources.length > 0) {
+                            learnset[moveName] = sources;
+                        }
+                    }
+
+                    if (Object.keys(learnset).length > 0) {
+                        learnsets[currentPokemonId] = { learnset };
+                    }
+                }
+
+                inPokemon = false;
+                currentPokemonId = null;
+                pokemonContent = '';
+            }
+        }
+    }
+
+    fs.writeFileSync(
+        path.join(dataDir, 'learnsets.json'),
+        JSON.stringify(learnsets, null, 2)
+    );
+    console.log(`Converted learnsets.json (${Object.keys(learnsets).length} Pokemon)`);
+}
+
 // Run conversions
 console.log('Converting Pokemon Showdown data files...');
-convertNatures();
-convertTypechart();
-convertItems();
-convertAbilities();
+
+// Only convert files that exist (skip already-converted ones)
+if (fs.existsSync(path.join(dataDir, 'natures.ts'))) {
+    convertNatures();
+}
+if (fs.existsSync(path.join(dataDir, 'typechart.ts'))) {
+    convertTypechart();
+}
+if (fs.existsSync(path.join(dataDir, 'items.ts'))) {
+    convertItems();
+}
+if (fs.existsSync(path.join(dataDir, 'abilities.ts'))) {
+    convertAbilities();
+}
+if (fs.existsSync(path.join(dataDir, 'learnsets.ts'))) {
+    convertLearnsets();
+}
+
 console.log('Done!');

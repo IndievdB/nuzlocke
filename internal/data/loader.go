@@ -16,6 +16,7 @@ type Store struct {
 	Abilities map[string]*Ability
 	TypeChart map[string]*TypeData
 	Natures   map[string]*Nature
+	Learnsets map[string]*Learnset
 
 	// Index maps for case-insensitive lookups
 	pokedexIndex   map[string]string
@@ -34,6 +35,7 @@ func NewStore() *Store {
 		Abilities:      make(map[string]*Ability),
 		TypeChart:      make(map[string]*TypeData),
 		Natures:        make(map[string]*Nature),
+		Learnsets:      make(map[string]*Learnset),
 		pokedexIndex:   make(map[string]string),
 		movesIndex:     make(map[string]string),
 		itemsIndex:     make(map[string]string),
@@ -74,6 +76,11 @@ func LoadFromDirectory(dir string) (*Store, error) {
 	// Load natures
 	if err := store.loadNatures(filepath.Join(dir, "natures.json")); err != nil {
 		return nil, fmt.Errorf("loading natures: %w", err)
+	}
+
+	// Load learnsets
+	if err := store.loadLearnsets(filepath.Join(dir, "learnsets.json")); err != nil {
+		return nil, fmt.Errorf("loading learnsets: %w", err)
 	}
 
 	return store, nil
@@ -201,6 +208,15 @@ func (s *Store) loadNatures(path string) error {
 	return nil
 }
 
+func (s *Store) loadLearnsets(path string) error {
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return err
+	}
+
+	return json.Unmarshal(data, &s.Learnsets)
+}
+
 // GetPokemon returns a Pokemon by name or ID (case-insensitive)
 func (s *Store) GetPokemon(nameOrID string) *Pokemon {
 	id := toID(nameOrID)
@@ -242,6 +258,15 @@ func (s *Store) GetNature(nameOrID string) *Nature {
 	id := toID(nameOrID)
 	if realID, ok := s.naturesIndex[id]; ok {
 		return s.Natures[realID]
+	}
+	return nil
+}
+
+// GetLearnset returns a Pokemon's learnset by species ID
+func (s *Store) GetLearnset(pokemonID string) *Learnset {
+	id := toID(pokemonID)
+	if learnset, ok := s.Learnsets[id]; ok {
+		return learnset
 	}
 	return nil
 }

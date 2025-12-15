@@ -33,12 +33,13 @@ func main() {
 	if err != nil {
 		log.Fatal("Failed to load data:", err)
 	}
-	log.Printf("Loaded %d Pokemon, %d moves, %d items, %d abilities, %d natures",
+	log.Printf("Loaded %d Pokemon, %d moves, %d items, %d abilities, %d natures, %d learnsets",
 		len(store.Pokedex),
 		len(store.Moves),
 		len(store.Items),
 		len(store.Abilities),
 		len(store.Natures),
+		len(store.Learnsets),
 	)
 
 	// Create handler
@@ -48,9 +49,21 @@ func main() {
 	mux := http.NewServeMux()
 	handler.SetupRoutes(mux)
 
-	// Serve static files
-	fs := http.FileServer(http.Dir(absWebDir))
-	mux.Handle("/", fs)
+	// Serve specific pages
+	mux.HandleFunc("/calculator", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, filepath.Join(absWebDir, "calculator.html"))
+	})
+	mux.HandleFunc("/moves", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, filepath.Join(absWebDir, "moves.html"))
+	})
+	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path == "/" {
+			http.Redirect(w, r, "/calculator", http.StatusFound)
+			return
+		}
+		// Serve static files for other paths
+		http.FileServer(http.Dir(absWebDir)).ServeHTTP(w, r)
+	})
 
 	// Apply middleware
 	finalHandler := api.Chain(mux, api.CORS, api.Logging)

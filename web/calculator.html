@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokemon Damage Calculator</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="/js/app.js"></script>
+</head>
+<body x-data="calculator()" x-init="init()">
+    <header>
+        <h1>Pokemon Damage Calculator</h1>
+        <nav>
+            <a href="/calculator" class="active">Damage Calculator</a>
+            <a href="/moves">Moves</a>
+        </nav>
+        <div class="generation-toggle">
+            <label>
+                <input type="radio" x-model="generation" value="3"> Gen 3
+            </label>
+            <label>
+                <input type="radio" x-model="generation" value="9"> Gen 5+
+            </label>
+        </div>
+    </header>
+
+    <main class="calculator-layout">
+        <!-- Attacker Panel -->
+        <section class="pokemon-panel">
+            <h2>Attacker</h2>
+
+            <!-- Pokemon Search -->
+            <div class="search-container">
+                <input type="text"
+                       x-model="attackerSearch"
+                       @input.debounce.200ms="searchPokemon('attacker')"
+                       @focus="showAttackerResults = attackerSearchResults.length > 0"
+                       placeholder="Search Pokemon..."
+                       autocomplete="off">
+                <ul x-show="showAttackerResults && attackerSearchResults.length > 0"
+                    class="search-results"
+                    @click.away="showAttackerResults = false">
+                    <template x-for="result in attackerSearchResults" :key="result.id">
+                        <li @click="selectPokemon('attacker', result)" x-text="result.name"></li>
+                    </template>
+                </ul>
+            </div>
+
+            <div x-show="attacker.species" class="pokemon-details">
+                <!-- Level -->
+                <div class="form-row">
+                    <label>Level:</label>
+                    <input type="number" x-model.number="attacker.level" min="1" max="100">
+                </div>
+
+                <!-- Nature -->
+                <div class="form-row">
+                    <label>Nature:</label>
+                    <select x-model="attacker.nature">
+                        <template x-for="nature in natures" :key="nature.id">
+                            <option :value="nature.id" x-text="nature.name"></option>
+                        </template>
+                    </select>
+                </div>
+
+                <!-- Ability -->
+                <div class="form-row">
+                    <label>Ability:</label>
+                    <input type="text" x-model="attacker.ability" placeholder="Ability">
+                </div>
+
+                <!-- Item -->
+                <div class="form-row">
+                    <label>Item:</label>
+                    <input type="text" x-model="attacker.item" placeholder="Item">
+                </div>
+
+                <!-- EVs -->
+                <div class="stat-group">
+                    <h4>EVs</h4>
+                    <div class="stat-row">
+                        <label>HP:</label><input type="number" x-model.number="attacker.evs.hp" min="0" max="252">
+                        <label>Atk:</label><input type="number" x-model.number="attacker.evs.atk" min="0" max="252">
+                        <label>Def:</label><input type="number" x-model.number="attacker.evs.def" min="0" max="252">
+                    </div>
+                    <div class="stat-row">
+                        <label>SpA:</label><input type="number" x-model.number="attacker.evs.spa" min="0" max="252">
+                        <label>SpD:</label><input type="number" x-model.number="attacker.evs.spd" min="0" max="252">
+                        <label>Spe:</label><input type="number" x-model.number="attacker.evs.spe" min="0" max="252">
+                    </div>
+                </div>
+
+                <!-- Boosts -->
+                <div class="stat-group">
+                    <h4>Boosts</h4>
+                    <div class="stat-row">
+                        <label>Atk:</label><input type="number" x-model.number="attacker.boosts.atk" min="-6" max="6">
+                        <label>SpA:</label><input type="number" x-model.number="attacker.boosts.spa" min="-6" max="6">
+                    </div>
+                </div>
+
+                <!-- Status -->
+                <div class="form-row">
+                    <label>Status:</label>
+                    <select x-model="attacker.status">
+                        <option value="">None</option>
+                        <option value="brn">Burned</option>
+                        <option value="par">Paralyzed</option>
+                        <option value="psn">Poisoned</option>
+                        <option value="tox">Badly Poisoned</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <!-- Move Panel -->
+        <section class="move-panel">
+            <h2>Move</h2>
+
+            <!-- Move Search -->
+            <div class="search-container">
+                <input type="text"
+                       x-model="moveSearch"
+                       @input.debounce.200ms="searchMoves()"
+                       @focus="showMoveResults = moveSearchResults.length > 0"
+                       placeholder="Search Move..."
+                       autocomplete="off">
+                <ul x-show="showMoveResults && moveSearchResults.length > 0"
+                    class="search-results"
+                    @click.away="showMoveResults = false">
+                    <template x-for="result in moveSearchResults" :key="result.id">
+                        <li @click="selectMove(result)" x-text="result.name"></li>
+                    </template>
+                </ul>
+            </div>
+
+            <div x-show="move.name" class="move-details">
+                <div class="form-row">
+                    <label>
+                        <input type="checkbox" x-model="move.isCrit"> Critical Hit
+                    </label>
+                </div>
+            </div>
+
+            <!-- Field Conditions -->
+            <h3>Field</h3>
+            <div class="form-row">
+                <label>Weather:</label>
+                <select x-model="field.weather">
+                    <option value="">None</option>
+                    <option value="sun">Sun</option>
+                    <option value="rain">Rain</option>
+                    <option value="sand">Sandstorm</option>
+                    <option value="snow">Snow</option>
+                </select>
+            </div>
+            <div class="form-row">
+                <label>Terrain:</label>
+                <select x-model="field.terrain">
+                    <option value="">None</option>
+                    <option value="electric">Electric</option>
+                    <option value="grassy">Grassy</option>
+                    <option value="misty">Misty</option>
+                    <option value="psychic">Psychic</option>
+                </select>
+            </div>
+            <div class="checkbox-group">
+                <label><input type="checkbox" x-model="field.defenderSide.reflect"> Reflect</label>
+                <label><input type="checkbox" x-model="field.defenderSide.lightScreen"> Light Screen</label>
+                <label><input type="checkbox" x-model="field.attackerSide.helpingHand"> Helping Hand</label>
+            </div>
+
+            <!-- Calculate Button -->
+            <button @click="calculate()" class="calculate-btn" :disabled="!canCalculate()">
+                Calculate Damage
+            </button>
+        </section>
+
+        <!-- Defender Panel -->
+        <section class="pokemon-panel">
+            <h2>Defender</h2>
+
+            <!-- Pokemon Search -->
+            <div class="search-container">
+                <input type="text"
+                       x-model="defenderSearch"
+                       @input.debounce.200ms="searchPokemon('defender')"
+                       @focus="showDefenderResults = defenderSearchResults.length > 0"
+                       placeholder="Search Pokemon..."
+                       autocomplete="off">
+                <ul x-show="showDefenderResults && defenderSearchResults.length > 0"
+                    class="search-results"
+                    @click.away="showDefenderResults = false">
+                    <template x-for="result in defenderSearchResults" :key="result.id">
+                        <li @click="selectPokemon('defender', result)" x-text="result.name"></li>
+                    </template>
+                </ul>
+            </div>
+
+            <div x-show="defender.species" class="pokemon-details">
+                <!-- Level -->
+                <div class="form-row">
+                    <label>Level:</label>
+                    <input type="number" x-model.number="defender.level" min="1" max="100">
+                </div>
+
+                <!-- Nature -->
+                <div class="form-row">
+                    <label>Nature:</label>
+                    <select x-model="defender.nature">
+                        <template x-for="nature in natures" :key="nature.id">
+                            <option :value="nature.id" x-text="nature.name"></option>
+                        </template>
+                    </select>
+                </div>
+
+                <!-- Ability -->
+                <div class="form-row">
+                    <label>Ability:</label>
+                    <input type="text" x-model="defender.ability" placeholder="Ability">
+                </div>
+
+                <!-- Item -->
+                <div class="form-row">
+                    <label>Item:</label>
+                    <input type="text" x-model="defender.item" placeholder="Item">
+                </div>
+
+                <!-- EVs -->
+                <div class="stat-group">
+                    <h4>EVs</h4>
+                    <div class="stat-row">
+                        <label>HP:</label><input type="number" x-model.number="defender.evs.hp" min="0" max="252">
+                        <label>Atk:</label><input type="number" x-model.number="defender.evs.atk" min="0" max="252">
+                        <label>Def:</label><input type="number" x-model.number="defender.evs.def" min="0" max="252">
+                    </div>
+                    <div class="stat-row">
+                        <label>SpA:</label><input type="number" x-model.number="defender.evs.spa" min="0" max="252">
+                        <label>SpD:</label><input type="number" x-model.number="defender.evs.spd" min="0" max="252">
+                        <label>Spe:</label><input type="number" x-model.number="defender.evs.spe" min="0" max="252">
+                    </div>
+                </div>
+
+                <!-- Boosts -->
+                <div class="stat-group">
+                    <h4>Boosts</h4>
+                    <div class="stat-row">
+                        <label>Def:</label><input type="number" x-model.number="defender.boosts.def" min="-6" max="6">
+                        <label>SpD:</label><input type="number" x-model.number="defender.boosts.spd" min="-6" max="6">
+                    </div>
+                </div>
+
+                <!-- Current HP -->
+                <div class="form-row">
+                    <label>HP %:</label>
+                    <input type="number" x-model.number="defenderHPPercent" min="1" max="100" placeholder="100">
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Results -->
+    <section class="results-panel" x-show="result">
+        <h2>Results</h2>
+        <div class="result-content">
+            <p class="damage-description" x-text="result?.description"></p>
+
+            <div class="damage-bar-container">
+                <div class="damage-bar" :style="getDamageBarStyle()"></div>
+            </div>
+
+            <p class="ko-text" x-text="result?.ko?.text"></p>
+
+            <div x-show="result?.recoil" class="recoil-info">
+                <p>Recoil: <span x-text="result?.recoil?.percent?.toFixed(1) + '%'"></span></p>
+            </div>
+
+            <div x-show="result?.recovery" class="recovery-info">
+                <p>Recovery: <span x-text="result?.recovery?.minPercent?.toFixed(1) + '% - ' + result?.recovery?.maxPercent?.toFixed(1) + '%'"></span></p>
+            </div>
+
+            <details x-show="result?.factors?.length">
+                <summary>Factors</summary>
+                <ul>
+                    <template x-for="factor in result?.factors || []" :key="factor">
+                        <li x-text="factor"></li>
+                    </template>
+                </ul>
+            </details>
+        </div>
+    </section>
+
+    <footer>
+        <p>Pokemon Damage Calculator - Using data from Pokemon Showdown</p>
+    </footer>
+</body>
+</html>

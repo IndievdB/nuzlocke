@@ -22,11 +22,22 @@ func (h *Handler) SetupRoutes(mux *http.ServeMux) {
 
 // routePokemon routes Pokemon requests based on path
 func (h *Handler) routePokemon(w http.ResponseWriter, r *http.Request) {
-	id := strings.TrimPrefix(r.URL.Path, "/api/pokemon/")
-	if id == "" {
+	path := strings.TrimPrefix(r.URL.Path, "/api/pokemon/")
+	if path == "" {
 		h.HandleListPokemon(w, r)
 		return
 	}
+
+	// Check for sub-routes: /api/pokemon/{id}/learnset or /api/pokemon/{id}/full
+	if strings.HasSuffix(path, "/learnset") {
+		h.HandleGetLearnset(w, r)
+		return
+	}
+	if strings.HasSuffix(path, "/full") {
+		h.HandleGetPokemonFull(w, r)
+		return
+	}
+
 	h.HandleGetPokemon(w, r)
 }
 
