@@ -19,6 +19,7 @@ func (h *Handler) SetupRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("/api/natures", h.HandleListNatures)
 	mux.HandleFunc("/api/search/pokemon", h.HandleSearchPokemon)
 	mux.HandleFunc("/api/search/moves", h.HandleSearchMoves)
+	mux.HandleFunc("/api/party/parse", h.HandleParseSave)
 }
 
 // routePokemon routes Pokemon requests based on path

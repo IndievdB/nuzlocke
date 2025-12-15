@@ -386,3 +386,42 @@ func (s *Store) AllNaturesList() []map[string]string {
 	}
 	return list
 }
+
+// GetPokemonByNum returns a Pokemon by its national dex number
+// Prefers base forms (without hyphens) over form variants
+func (s *Store) GetPokemonByNum(num int) *Pokemon {
+	var fallback *Pokemon
+	for _, pokemon := range s.Pokedex {
+		if pokemon.Num == num {
+			// Prefer base form (no hyphen in name) over variants
+			if !strings.Contains(pokemon.Name, "-") {
+				return pokemon
+			}
+			// Keep first variant as fallback
+			if fallback == nil {
+				fallback = pokemon
+			}
+		}
+	}
+	return fallback
+}
+
+// GetMoveByNum returns a Move by its number
+func (s *Store) GetMoveByNum(num int) *Move {
+	for _, move := range s.Moves {
+		if move.Num == num {
+			return move
+		}
+	}
+	return nil
+}
+
+// GetItemByNum returns an Item by its number
+func (s *Store) GetItemByNum(num int) *Item {
+	for _, item := range s.Items {
+		if item.Num == num {
+			return item
+		}
+	}
+	return nil
+}

@@ -56,6 +56,9 @@ func main() {
 	mux.HandleFunc("/moves", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, filepath.Join(absWebDir, "moves.html"))
 	})
+	mux.HandleFunc("/party", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, filepath.Join(absWebDir, "party.html"))
+	})
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path == "/" {
 			http.Redirect(w, r, "/calculator", http.StatusFound)

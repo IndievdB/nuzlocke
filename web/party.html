@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Party Viewer</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="/js/party.js"></script>
+</head>
+<body x-data="partyApp()" x-init="init()">
+    <header>
+        <h1>Party Viewer</h1>
+        <nav>
+            <a href="/calculator">Damage Calculator</a>
+            <a href="/moves">Moves</a>
+            <a href="/party" class="active">Party</a>
+        </nav>
+    </header>
+
+    <main class="party-layout">
+        <!-- File Upload Section -->
+        <section class="upload-section">
+            <h2>Upload Save File</h2>
+            <p class="description">Upload a Pokemon Emerald EX Speedchoice Randomizer save file (.sav) to view your party.</p>
+
+            <div class="file-upload-container">
+                <input type="file"
+                       id="saveFile"
+                       accept=".sav"
+                       @change="handleFileUpload($event)"
+                       class="file-input">
+                <label for="saveFile" class="file-label">
+                    <span x-text="fileName || 'Choose a .sav file...'"></span>
+                </label>
+            </div>
+
+            <div x-show="error" class="error-message" x-text="error"></div>
+            <div x-show="loading" class="loading-message">Parsing save file...</div>
+        </section>
+
+        <!-- Party Display Section -->
+        <template x-if="party && party.length > 0">
+            <section class="party-section">
+                <h2>Party Pokemon</h2>
+                <div class="party-grid">
+                    <template x-for="(pokemon, index) in party" :key="index">
+                        <div class="party-member">
+                            <div class="party-sprite">
+                                <img :src="getSpriteUrl(pokemon.species)"
+                                     :alt="pokemon.species"
+                                     @error="handleSpriteError($event)">
+                            </div>
+                            <div class="party-info">
+                                <span class="pokemon-name" x-text="pokemon.species"></span>
+                                <span class="pokemon-nickname" x-show="pokemon.nickname && pokemon.nickname !== pokemon.species" x-text="'\"' + pokemon.nickname + '\"'"></span>
+                                <span class="pokemon-level" x-text="'Lv. ' + pokemon.level"></span>
+                                <span class="pokemon-nature tooltip" x-text="pokemon.nature">
+                                    <span class="tooltip-text" x-text="getNatureTooltip(pokemon.natureEffect)"></span>
+                                </span>
+                                <span class="pokemon-item tooltip" x-show="pokemon.item" x-text="pokemon.item?.name">
+                                    <span class="tooltip-text" x-text="pokemon.item?.description || 'Held item'"></span>
+                                </span>
+                            </div>
+                            <!-- Stats Display -->
+                            <div class="party-stats">
+                                <div class="hp-bar">
+                                    <div class="hp-fill" :style="'width: ' + (pokemon.currentHp / pokemon.stats.hp * 100) + '%'"></div>
+                                    <span class="hp-text" x-text="pokemon.currentHp + '/' + pokemon.stats.hp"></span>
+                                </div>
+                                <div class="stats-grid">
+                                    <span class="stat" :class="{'stat-plus': pokemon.natureEffect?.plus === 'Attack', 'stat-minus': pokemon.natureEffect?.minus === 'Attack'}">
+                                        <span class="stat-label">Atk</span>
+                                        <span class="stat-value" x-text="pokemon.stats.attack"></span>
+                                    </span>
+                                    <span class="stat" :class="{'stat-plus': pokemon.natureEffect?.plus === 'Defense', 'stat-minus': pokemon.natureEffect?.minus === 'Defense'}">
+                                        <span class="stat-label">Def</span>
+                                        <span class="stat-value" x-text="pokemon.stats.defense"></span>
+                                    </span>
+                                    <span class="stat" :class="{'stat-plus': pokemon.natureEffect?.plus === 'Sp. Atk', 'stat-minus': pokemon.natureEffect?.minus === 'Sp. Atk'}">
+                                        <span class="stat-label">SpA</span>
+                                        <span class="stat-value" x-text="pokemon.stats.spAtk"></span>
+                                    </span>
+                                    <span class="stat" :class="{'stat-plus': pokemon.natureEffect?.plus === 'Sp. Def', 'stat-minus': pokemon.natureEffect?.minus === 'Sp. Def'}">
+                                        <span class="stat-label">SpD</span>
+                                        <span class="stat-value" x-text="pokemon.stats.spDef"></span>
+                                    </span>
+                                    <span class="stat" :class="{'stat-plus': pokemon.natureEffect?.plus === 'Speed', 'stat-minus': pokemon.natureEffect?.minus === 'Speed'}">
+                                        <span class="stat-label">Spe</span>
+                                        <span class="stat-value" x-text="pokemon.stats.speed"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <!-- Moves with Tooltips -->
+                            <div class="party-moves">
+                                <template x-for="move in pokemon.moves" :key="move.name">
+                                    <span class="move-chip tooltip" :class="'type-' + move.type.toLowerCase()">
+                                        <span x-text="move.name"></span>
+                                        <span class="tooltip-text">
+                                            <span x-text="move.type + ' | ' + move.category"></span><br>
+                                            <span x-show="move.power > 0" x-text="'Power: ' + move.power + ' | '"></span>
+                                            <span x-text="'Acc: ' + (move.accuracy || '-') + ' | PP: ' + move.pp"></span><br>
+                                            <span x-text="move.description"></span>
+                                        </span>
+                                    </span>
+                                </template>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </section>
+        </template>
+
+        <!-- Empty State -->
+        <template x-if="!party || party.length === 0">
+            <div class="empty-state" x-show="!loading && !error">
+                <p>Upload a save file to view your party Pokemon.</p>
+            </div>
+        </template>
+    </main>
+
+    <footer>
+        <p>Party Viewer - Supports Emerald EX Speedchoice Randomizer</p>
+    </footer>
+</body>
+</html>

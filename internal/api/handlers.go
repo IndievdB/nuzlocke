@@ -2,12 +2,14 @@ package api
 
 import (
 	"encoding/json"
+	"io"
 	"net/http"
 	"strings"
 
 	"nuzlocke/internal/calc"
 	"nuzlocke/internal/data"
 	"nuzlocke/internal/models"
+	"nuzlocke/internal/savefile"
 )
 
 // Handler holds the dependencies for HTTP handlers
@@ -320,4 +322,129 @@ func calculateTypeMatchups(store *data.Store, defenderTypes []string) *TypeMatch
 	}
 
 	return matchups
+}
+
+// MoveDetail contains move information for tooltips
+type MoveDetail struct {
+	Name        string `json:"name"`
+	Type        string `json:"type"`
+	Category    string `json:"category"`
+	Power       int    `json:"power"`
+	Accuracy    int    `json:"accuracy"`
+	PP          int    `json:"pp"`
+	Description string `json:"description"`
+}
+
+// ItemDetail contains item information for tooltips
+type ItemDetail struct {
+	Name        string `json:"name"`
+	Description string `json:"description"`
+}
+
+// PartyPokemonResponse is the rich response for a party Pokemon
+type PartyPokemonResponse struct {
+	Species      string                 `json:"species"`
+	Nickname     string                 `json:"nickname"`
+	Level        int                    `json:"level"`
+	Nature       string                 `json:"nature"`
+	NatureEffect savefile.NatureEffect  `json:"natureEffect"`
+	Item         *ItemDetail            `json:"item,omitempty"`
+	Moves        []MoveDetail           `json:"moves"`
+	Stats        savefile.PokemonStats  `json:"stats"`
+	CurrentHP    int                    `json:"currentHp"`
+}
+
+// ParseSaveResponse is the response for the parse save endpoint
+type ParseSaveResponse struct {
+	Party []PartyPokemonResponse `json:"party"`
+}
+
+// HandleParseSave handles POST /api/nuzlocke/parse
+func (h *Handler) HandleParseSave(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	// Read the save file from the request body
+	saveData, err := io.ReadAll(r.Body)
+	if err != nil {
+		http.Error(w, "Failed to read request body", http.StatusBadRequest)
+		return
+	}
+
+	// Parse the save file
+	result, err := savefile.ParseGen3Save(saveData)
+	if err != nil {
+		http.Error(w, "Failed to parse save file: "+err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	// Build rich response
+	response := ParseSaveResponse{
+		Party: make([]PartyPokemonResponse, 0, len(result.Party)),
+	}
+
+	for _, p := range result.Party {
+		pokemon := PartyPokemonResponse{
+			Nickname:     p.Nickname,
+			Level:        p.Level,
+			Nature:       p.Nature,
+			NatureEffect: savefile.GetNatureEffect(p.Nature),
+			Stats:        p.Stats,
+			CurrentHP:    p.CurrentHP,
+		}
+
+		// Resolve species
+		speciesData := h.Store.GetPokemonByNum(p.SpeciesNum)
+		if speciesData != nil {
+			pokemon.Species = speciesData.Name
+		} else {
+			pokemon.Species = "Unknown"
+		}
+
+		// Resolve item with description
+		if p.ItemNum > 0 {
+			item := h.Store.GetItemByNum(p.ItemNum)
+			if item != nil {
+				pokemon.Item = &ItemDetail{
+					Name:        item.Name,
+					Description: item.Desc,
+				}
+			}
+		}
+
+		// Resolve moves with details
+		pokemon.Moves = make([]MoveDetail, 0, len(p.MoveNums))
+		for _, moveNum := range p.MoveNums {
+			move := h.Store.GetMoveByNum(moveNum)
+			if move != nil {
+				accuracy := 0
+				switch v := move.Accuracy.(type) {
+				case int:
+					accuracy = v
+				case float64:
+					accuracy = int(v)
+				case bool:
+					if v {
+						accuracy = 100 // "true" means never-miss
+					}
+				}
+				pokemon.Moves = append(pokemon.Moves, MoveDetail{
+					Name:        move.Name,
+					Type:        move.Type,
+					Category:    move.Category,
+					Power:       move.BasePower,
+					Accuracy:    accuracy,
+					PP:          move.PP,
+					Description: move.ShortDesc,
+				})
+			}
+		}
+
+		response.Party = append(response.Party, pokemon)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(response)
 }
