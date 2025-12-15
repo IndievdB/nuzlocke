@@ -134,6 +134,40 @@
             </section>
         </template>
 
+        <!-- Box Pokemon Section -->
+        <template x-if="hasBoxPokemon()">
+            <section class="box-section">
+                <h2>Box Pokemon</h2>
+                <template x-for="(box, boxIndex) in boxes" :key="'box-' + boxIndex">
+                    <template x-if="box && box.length > 0">
+                        <div class="box-container">
+                            <h3 class="box-header" x-text="'Box ' + (boxIndex + 1) + ' (' + box.length + ')'"></h3>
+                            <div class="box-grid">
+                                <template x-for="(pokemon, slotIndex) in box" :key="'box-' + boxIndex + '-' + slotIndex">
+                                    <div class="box-pokemon">
+                                        <div class="box-sprite">
+                                            <img :src="getSpriteUrl(pokemon.species)"
+                                                 :alt="pokemon.species"
+                                                 @error="handleSpriteError($event)">
+                                        </div>
+                                        <div class="box-info">
+                                            <span class="box-pokemon-name" x-text="pokemon.nickname && pokemon.nickname.toLowerCase() !== pokemon.species.toLowerCase() ? pokemon.nickname : pokemon.species"></span>
+                                            <span class="box-pokemon-level" x-text="'Lv. ' + pokemon.level"></span>
+                                        </div>
+                                        <div class="box-moves">
+                                            <template x-for="move in pokemon.moves" :key="move.name">
+                                                <span class="box-move-chip" :class="'type-' + move.type.toLowerCase()" x-text="move.name"></span>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </template>
+                </template>
+            </section>
+        </template>
+
         <!-- Empty State -->
         <template x-if="!party || party.length === 0">
             <div class="empty-state" x-show="!loading && !error">

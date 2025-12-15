@@ -33,9 +33,24 @@ type PartyPokemon struct {
 	AbilitySlot int          `json:"abilitySlot"` // 0 = first ability, 1 = second ability
 }
 
+// BoxPokemon represents a Pokemon in PC storage (80 bytes, no calculated stats)
+type BoxPokemon struct {
+	Nickname    string       `json:"nickname"`
+	Level       int          `json:"level"` // Calculated from experience
+	SpeciesNum  int          `json:"speciesNum"`
+	Nature      string       `json:"nature"`
+	ItemNum     int          `json:"itemNum"`
+	MoveNums    []int        `json:"moveNums"`
+	IVs         PokemonStats `json:"ivs"`
+	EVs         PokemonStats `json:"evs"`
+	AbilitySlot int          `json:"abilitySlot"`
+	Experience  uint32       `json:"experience"`
+}
+
 // ParseResult contains the parsed save data
 type ParseResult struct {
 	Party []PartyPokemon `json:"party"`
+	Boxes [][]BoxPokemon `json:"boxes"` // 14 boxes, each up to 30 Pokemon
 }
 
 // Substructure order lookup table (personality % 24)
@@ -609,7 +624,7 @@ var gen3CharTable = map[byte]rune{
 	0xFF: 0, // Terminator
 }
 
-// ParseGen3Save parses a Gen 3 Pokemon save file and extracts party Pokemon
+// ParseGen3Save parses a Gen 3 Pokemon save file and extracts party and box Pokemon
 func ParseGen3Save(data []byte) (*ParseResult, error) {
 	if len(data) < 0x20000 {
 		return nil, errors.New("save file too small")
@@ -617,6 +632,10 @@ func ParseGen3Save(data []byte) (*ParseResult, error) {
 
 	result := &ParseResult{
 		Party: []PartyPokemon{},
+		Boxes: make([][]BoxPokemon, 14),
+	}
+	for i := range result.Boxes {
+		result.Boxes[i] = []BoxPokemon{}
 	}
 
 	// Gen 3 saves use sectors of 0x1000 bytes each
@@ -624,6 +643,7 @@ func ParseGen3Save(data []byte) (*ParseResult, error) {
 	// Save A: sectors 0x0000-0xDFFF, Save B: sectors 0xE000-0x1BFFF
 	// Each sector has a footer at offset 0xFF4 with section ID (2 bytes)
 	// Section 1 contains party data at offset 0x234 (count) and 0x238 (data)
+	// Sections 5-13 contain PC box storage
 
 	// Try Save B first (usually more recent), then Save A
 	saveSlots := []int{0xE000, 0x0000}
@@ -671,6 +691,9 @@ func ParseGen3Save(data []byte) (*ParseResult, error) {
 				result.Party = append(result.Party, pokemon)
 			}
 		}
+
+		// Parse box Pokemon from the same save slot
+		result.Boxes = parseBoxes(data, slotBase)
 
 		if len(result.Party) > 0 {
 			break
@@ -841,4 +864,222 @@ func decodeGen3String(data []byte) string {
 		}
 	}
 	return string(result)
+}
+
+// parseBoxes parses PC box storage from sections 5-13
+// Returns 14 boxes, each containing up to 30 Pokemon
+func parseBoxes(data []byte, slotBase int) [][]BoxPokemon {
+	boxes := make([][]BoxPokemon, 14)
+	for i := range boxes {
+		boxes[i] = []BoxPokemon{}
+	}
+
+	// Find sections 5-13 by checking sector footers
+	// These 9 sections form the PC storage buffer
+	sectionOffsets := make(map[int]int) // sectionID -> sector offset
+
+	for sectorIdx := 0; sectorIdx < 14; sectorIdx++ {
+		sectorBase := slotBase + (sectorIdx * 0x1000)
+		footerOffset := sectorBase + 0xFF4
+
+		if footerOffset+4 > len(data) {
+			continue
+		}
+
+		sectionID := int(binary.LittleEndian.Uint16(data[footerOffset : footerOffset+2]))
+		if sectionID >= 5 && sectionID <= 13 {
+			sectionOffsets[sectionID] = sectorBase
+		}
+	}
+
+	// Check if we have all 9 sections
+	if len(sectionOffsets) < 9 {
+		return boxes // Return empty boxes if PC data incomplete
+	}
+
+	// Assemble the PC buffer from sections 5-13
+	// Each section contributes 0xF80 bytes of data (before footer)
+	// Total: 9 * 0xF80 = 0x8B80 = 35,712 bytes
+	// But actual PC data is 33,744 bytes starting at offset 0
+	pcBuffer := make([]byte, 0, 9*0xF80)
+	for sectionID := 5; sectionID <= 13; sectionID++ {
+		sectorBase, ok := sectionOffsets[sectionID]
+		if !ok {
+			return boxes
+		}
+		// Copy the data portion of the sector (excluding footer)
+		pcBuffer = append(pcBuffer, data[sectorBase:sectorBase+0xF80]...)
+	}
+
+	// PC buffer layout:
+	// Offset 0x0000-0x0003: Current box index (4 bytes)
+	// Offset 0x0004: Start of Pokemon records
+	// 14 boxes * 30 Pokemon * 80 bytes = 33,600 bytes
+
+	// Parse each box (14 boxes, 30 Pokemon each, 80 bytes per Pokemon)
+	const pokemonPerBox = 30
+	const pokemonSize = 80
+
+	for boxIdx := 0; boxIdx < 14; boxIdx++ {
+		for slotIdx := 0; slotIdx < pokemonPerBox; slotIdx++ {
+			// Calculate offset: 4 (current box) + (boxIdx * 30 + slotIdx) * 80
+			offset := 4 + (boxIdx*pokemonPerBox+slotIdx)*pokemonSize
+			if offset+pokemonSize > len(pcBuffer) {
+				break
+			}
+
+			pokemon := parseBoxPokemon(pcBuffer[offset : offset+pokemonSize])
+			if pokemon.SpeciesNum > 0 && pokemon.SpeciesNum <= 1500 {
+				boxes[boxIdx] = append(boxes[boxIdx], pokemon)
+			}
+		}
+	}
+
+	return boxes
+}
+
+// parseBoxPokemon parses an 80-byte box Pokemon record
+func parseBoxPokemon(data []byte) BoxPokemon {
+	if len(data) < 80 {
+		return BoxPokemon{}
+	}
+
+	// Read personality value (bytes 0-3)
+	personality := binary.LittleEndian.Uint32(data[0:4])
+	if personality == 0 {
+		return BoxPokemon{} // Empty slot
+	}
+
+	// Read OT ID (bytes 4-7)
+	otID := binary.LittleEndian.Uint32(data[4:8])
+
+	// Read base nickname (bytes 8-17, 10 characters)
+	baseNickname := decodeGen3String(data[8:18])
+
+	// Calculate nature from personality
+	nature := natureNames[personality%25]
+
+	// Decrypt the data block (bytes 32-79)
+	encryptionKey := personality ^ otID
+	decryptedData := make([]byte, 48)
+	copy(decryptedData, data[32:80])
+
+	// XOR each 4-byte word
+	for i := 0; i < 48; i += 4 {
+		word := binary.LittleEndian.Uint32(decryptedData[i : i+4])
+		word ^= encryptionKey
+		binary.LittleEndian.PutUint32(decryptedData[i:i+4], word)
+	}
+
+	// Find substructure positions
+	order := substructOrder[personality%24]
+	typeToPos := make(map[int]int)
+	for pos, typ := range order {
+		typeToPos[typ] = pos
+	}
+
+	growthPos := typeToPos[0] * 12  // G = 0
+	attacksPos := typeToPos[1] * 12 // A = 1
+	miscPos := typeToPos[3] * 12    // M = 3
+
+	// Get species ID from Growth substructure (bytes 0-1)
+	rawSpeciesID := int(binary.LittleEndian.Uint16(decryptedData[growthPos : growthPos+2]))
+	speciesNum := rawSpeciesID & 0x7FF
+	if nationalDex, ok := expansionToNationalDex[speciesNum]; ok {
+		speciesNum = nationalDex
+	}
+
+	// Get item ID from Growth substructure (bytes 2-3)
+	rawItemID := int(binary.LittleEndian.Uint16(decryptedData[growthPos+2 : growthPos+4]))
+	itemNum := rawItemID
+	if showdownID, ok := expansionItemToShowdown[rawItemID]; ok {
+		itemNum = showdownID
+	}
+
+	// Get experience from Growth substructure (bytes 4-7)
+	experience := binary.LittleEndian.Uint32(decryptedData[growthPos+4 : growthPos+8])
+
+	// Get extended nickname characters (11th and 12th) from Growth substruct
+	expData := binary.LittleEndian.Uint32(decryptedData[growthPos+4 : growthPos+8])
+	nickname11 := byte((expData >> 21) & 0xFF)
+	pokeballData := binary.LittleEndian.Uint16(decryptedData[growthPos+10 : growthPos+12])
+	nickname12 := byte((pokeballData >> 6) & 0xFF)
+
+	// Build full nickname (base + extended chars if present)
+	nickname := baseNickname
+	if nickname11 != 0xFF && nickname11 != 0 {
+		if char, ok := gen3CharTable[nickname11]; ok && char != 0 {
+			nickname += string(char)
+		}
+	}
+	if nickname12 != 0xFF && nickname12 != 0 {
+		if char, ok := gen3CharTable[nickname12]; ok && char != 0 {
+			nickname += string(char)
+		}
+	}
+
+	// Get moves from Attacks substructure (bytes 0-7, 4 moves of 2 bytes each)
+	moveNums := make([]int, 0, 4)
+	for i := 0; i < 4; i++ {
+		moveID := int(binary.LittleEndian.Uint16(decryptedData[attacksPos+i*2 : attacksPos+i*2+2]))
+		if moveID > 0 {
+			moveNums = append(moveNums, moveID)
+		}
+	}
+
+	// Get ability slot from Misc substructure
+	ribbonData := binary.LittleEndian.Uint32(decryptedData[miscPos+8 : miscPos+12])
+	abilitySlot := int((ribbonData >> 29) & 3)
+
+	// Get EVs from EV/Condition substructure (E = 2)
+	evsPos := typeToPos[2] * 12
+	evs := PokemonStats{
+		HP:      int(decryptedData[evsPos]),
+		Attack:  int(decryptedData[evsPos+1]),
+		Defense: int(decryptedData[evsPos+2]),
+		Speed:   int(decryptedData[evsPos+3]),
+		SpAtk:   int(decryptedData[evsPos+4]),
+		SpDef:   int(decryptedData[evsPos+5]),
+	}
+
+	// Get IVs from Misc substructure bytes 4-7
+	ivData := binary.LittleEndian.Uint32(decryptedData[miscPos+4 : miscPos+8])
+	ivs := PokemonStats{
+		HP:      int(ivData & 0x1F),
+		Attack:  int((ivData >> 5) & 0x1F),
+		Defense: int((ivData >> 10) & 0x1F),
+		Speed:   int((ivData >> 15) & 0x1F),
+		SpAtk:   int((ivData >> 20) & 0x1F),
+		SpDef:   int((ivData >> 25) & 0x1F),
+	}
+
+	// Calculate level from experience (using Medium Fast as approximation)
+	// Medium Fast: EXP = n^3 where n is level
+	level := expToLevel(experience)
+
+	return BoxPokemon{
+		Nickname:    nickname,
+		Level:       level,
+		SpeciesNum:  speciesNum,
+		Nature:      nature,
+		ItemNum:     itemNum,
+		MoveNums:    moveNums,
+		IVs:         ivs,
+		EVs:         evs,
+		AbilitySlot: abilitySlot,
+		Experience:  experience,
+	}
+}
+
+// expToLevel converts experience to level using Medium Fast curve as approximation
+// Medium Fast: EXP = n^3
+func expToLevel(exp uint32) int {
+	// Binary search for the level
+	for level := 100; level >= 1; level-- {
+		requiredExp := uint32(level * level * level)
+		if exp >= requiredExp {
+			return level
+		}
+	}
+	return 1
 }

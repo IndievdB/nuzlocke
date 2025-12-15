@@ -1,6 +1,7 @@
 function partyApp() {
     return {
         party: [],
+        boxes: [], // 14 boxes, each an array of Pokemon
         fileName: '',
         lastFile: null,
         error: '',
@@ -16,6 +17,7 @@ function partyApp() {
                 if (saved) {
                     const state = JSON.parse(saved);
                     this.party = state.party || [];
+                    this.boxes = state.boxes || [];
                     this.fileName = state.fileName || '';
                 }
             } catch (e) {
@@ -27,6 +29,7 @@ function partyApp() {
             try {
                 const state = {
                     party: this.party,
+                    boxes: this.boxes,
                     fileName: this.fileName
                 };
                 localStorage.setItem('nuzlocke_party', JSON.stringify(state));
@@ -37,9 +40,18 @@ function partyApp() {
 
         discardParty() {
             this.party = [];
+            this.boxes = [];
             this.fileName = '';
             this.lastFile = null;
             localStorage.removeItem('nuzlocke_party');
+        },
+
+        hasBoxPokemon() {
+            return this.boxes && this.boxes.some(box => box && box.length > 0);
+        },
+
+        getBoxCount(box) {
+            return box ? box.length : 0;
         },
 
         async handleFileUpload(event) {
@@ -60,6 +72,7 @@ function partyApp() {
             this.error = '';
             this.loading = true;
             this.party = [];
+            this.boxes = [];
 
             try {
                 const arrayBuffer = await file.arrayBuffer();
@@ -77,22 +90,17 @@ function partyApp() {
                 }
 
                 const result = await response.json();
-                console.log('Parsed party data:', result);
-                // Debug: log item info for each Pokemon
-                if (result.party) {
-                    result.party.forEach((p, i) => {
-                        console.log(`Pokemon ${i} (${p.species}): item =`, p.item);
-                    });
-                }
+                console.log('Parsed save data:', result);
                 this.party = result.party || [];
+                this.boxes = result.boxes || [];
+
+                // Count total box Pokemon
+                const boxCount = this.boxes.reduce((sum, box) => sum + (box ? box.length : 0), 0);
+                console.log(`Found ${this.party.length} party Pokemon and ${boxCount} box Pokemon`);
 
                 if (this.party.length === 0) {
                     this.error = 'No party Pokemon found in save file.';
                 } else {
-                    if (this.party[0]) {
-                        console.log('First Pokemon IVs:', this.party[0].ivs);
-                        console.log('First Pokemon EVs:', this.party[0].evs);
-                    }
                     this.saveState();
                 }
             } catch (e) {

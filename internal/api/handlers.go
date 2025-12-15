@@ -388,9 +388,24 @@ type PartyPokemonResponse struct {
 	CurrentHP    int                    `json:"currentHp"`
 }
 
+// BoxPokemonResponse represents a Pokemon in a PC box with enriched data
+type BoxPokemonResponse struct {
+	Species      string                `json:"species"`
+	Nickname     string                `json:"nickname"`
+	Level        int                   `json:"level"`
+	Nature       string                `json:"nature"`
+	NatureEffect savefile.NatureEffect `json:"natureEffect"`
+	Ability      *AbilityDetail        `json:"ability,omitempty"`
+	Item         *ItemDetail           `json:"item,omitempty"`
+	Moves        []MoveDetail          `json:"moves"`
+	IVs          savefile.PokemonStats `json:"ivs"`
+	EVs          savefile.PokemonStats `json:"evs"`
+}
+
 // ParseSaveResponse is the response for the parse save endpoint
 type ParseSaveResponse struct {
-	Party []PartyPokemonResponse `json:"party"`
+	Party []PartyPokemonResponse   `json:"party"`
+	Boxes [][]BoxPokemonResponse   `json:"boxes"`
 }
 
 // HandleParseSave handles POST /api/nuzlocke/parse
@@ -417,6 +432,10 @@ func (h *Handler) HandleParseSave(w http.ResponseWriter, r *http.Request) {
 	// Build rich response
 	response := ParseSaveResponse{
 		Party: make([]PartyPokemonResponse, 0, len(result.Party)),
+		Boxes: make([][]BoxPokemonResponse, len(result.Boxes)),
+	}
+	for i := range response.Boxes {
+		response.Boxes[i] = []BoxPokemonResponse{}
 	}
 
 	for _, p := range result.Party {
@@ -502,6 +521,90 @@ func (h *Handler) HandleParseSave(w http.ResponseWriter, r *http.Request) {
 		}
 
 		response.Party = append(response.Party, pokemon)
+	}
+
+	// Process box Pokemon
+	for boxIdx, box := range result.Boxes {
+		for _, p := range box {
+			pokemon := BoxPokemonResponse{
+				Nickname:     p.Nickname,
+				Level:        p.Level,
+				Nature:       p.Nature,
+				NatureEffect: savefile.GetNatureEffect(p.Nature),
+				IVs:          p.IVs,
+				EVs:          p.EVs,
+			}
+
+			// Resolve species
+			speciesData := h.Store.GetPokemonByNum(p.SpeciesNum)
+			if speciesData != nil {
+				pokemon.Species = speciesData.Name
+
+				// Resolve ability based on slot
+				slot := "0"
+				if p.AbilitySlot == 1 {
+					slot = "1"
+				} else if p.AbilitySlot == 2 {
+					slot = "H"
+				}
+				abilityName := speciesData.GetAbility(slot)
+				if abilityName == "" && slot != "0" {
+					abilityName = speciesData.GetAbility("0")
+				}
+				if abilityName != "" {
+					ability := h.Store.GetAbility(abilityName)
+					if ability != nil {
+						pokemon.Ability = &AbilityDetail{
+							Name:        ability.Name,
+							Description: ability.ShortDesc,
+						}
+					}
+				}
+			} else {
+				pokemon.Species = "Unknown"
+			}
+
+			// Resolve item
+			if p.ItemNum > 0 {
+				item := h.Store.GetItemByNum(p.ItemNum)
+				if item != nil {
+					pokemon.Item = &ItemDetail{
+						Name:        item.Name,
+						Description: item.Desc,
+					}
+				}
+			}
+
+			// Resolve moves
+			pokemon.Moves = make([]MoveDetail, 0, len(p.MoveNums))
+			for _, moveNum := range p.MoveNums {
+				move := h.Store.GetMoveByNum(moveNum)
+				if move != nil {
+					accuracy := 0
+					switch v := move.Accuracy.(type) {
+					case int:
+						accuracy = v
+					case float64:
+						accuracy = int(v)
+					case bool:
+						if v {
+							accuracy = 100
+						}
+					}
+					pokemon.Moves = append(pokemon.Moves, MoveDetail{
+						Name:        move.Name,
+						Type:        move.Type,
+						Category:    move.Category,
+						Power:       move.BasePower,
+						Accuracy:    accuracy,
+						PP:          move.PP,
+						Description: move.ShortDesc,
+					})
+				}
+			}
+
+			response.Boxes[boxIdx] = append(response.Boxes[boxIdx], pokemon)
+		}
 	}
 
 	w.Header().Set("Content-Type", "application/json")
