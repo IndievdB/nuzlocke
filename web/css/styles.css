@@ -1075,6 +1075,17 @@ nav a:hover, nav a.active {
     margin-left: 0.25rem;
 }
 
+.party-info .pokemon-types {
+    display: flex;
+    gap: 0.25rem;
+    margin-top: 0.25rem;
+}
+
+.party-info .pokemon-types .type-badge {
+    padding: 0.15rem 0.4rem;
+    font-size: 0.7rem;
+}
+
 .party-info .pokemon-level {
     color: #4a90d9;
     font-size: 0.85rem;

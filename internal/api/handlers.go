@@ -377,6 +377,7 @@ type PartyPokemonResponse struct {
 	Species      string                 `json:"species"`
 	Nickname     string                 `json:"nickname"`
 	Level        int                    `json:"level"`
+	Types        []string               `json:"types"`
 	Nature       string                 `json:"nature"`
 	NatureEffect savefile.NatureEffect  `json:"natureEffect"`
 	Ability      *AbilityDetail         `json:"ability,omitempty"`
@@ -393,6 +394,7 @@ type BoxPokemonResponse struct {
 	Species      string                `json:"species"`
 	Nickname     string                `json:"nickname"`
 	Level        int                   `json:"level"`
+	Types        []string              `json:"types"`
 	Nature       string                `json:"nature"`
 	NatureEffect savefile.NatureEffect `json:"natureEffect"`
 	Ability      *AbilityDetail        `json:"ability,omitempty"`
@@ -455,6 +457,7 @@ func (h *Handler) HandleParseSave(w http.ResponseWriter, r *http.Request) {
 		speciesData := h.Store.GetPokemonByNum(p.SpeciesNum)
 		if speciesData != nil {
 			pokemon.Species = speciesData.Name
+			pokemon.Types = speciesData.Types
 
 			// Resolve ability based on slot (0, 1, or 2 for hidden)
 			// If requested slot doesn't exist, fall back to slot 0
@@ -540,6 +543,7 @@ func (h *Handler) HandleParseSave(w http.ResponseWriter, r *http.Request) {
 			speciesData := h.Store.GetPokemonByNum(p.SpeciesNum)
 			if speciesData != nil {
 				pokemon.Species = speciesData.Name
+				pokemon.Types = speciesData.Types
 
 				// Calculate stats from base stats, IVs, EVs, level, nature
 				natureData := h.Store.GetNature(strings.ToLower(p.Nature))

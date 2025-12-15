@@ -60,6 +60,11 @@
                             <div class="party-info">
                                 <span class="pokemon-name" x-text="pokemon.nickname && pokemon.nickname.toLowerCase() !== pokemon.species.toLowerCase() ? pokemon.nickname : pokemon.species"></span>
                                 <span class="pokemon-species" x-show="pokemon.nickname && pokemon.nickname.toLowerCase() !== pokemon.species.toLowerCase()" x-text="'(' + pokemon.species + ')'"></span>
+                                <div class="pokemon-types" x-show="pokemon.types && pokemon.types.length > 0">
+                                    <template x-for="type in pokemon.types" :key="type">
+                                        <span class="type-badge" :class="'type-' + type.toLowerCase()" x-text="type"></span>
+                                    </template>
+                                </div>
                                 <div class="pokemon-details-grid">
                                     <span class="pokemon-level" x-text="'Lv. ' + pokemon.level"></span>
                                     <span class="pokemon-ability has-tooltip"
@@ -153,6 +158,11 @@
                                         <div class="party-info">
                                             <span class="pokemon-name" x-text="pokemon.nickname && pokemon.nickname.toLowerCase() !== pokemon.species.toLowerCase() ? pokemon.nickname : pokemon.species"></span>
                                             <span class="pokemon-species" x-show="pokemon.nickname && pokemon.nickname.toLowerCase() !== pokemon.species.toLowerCase()" x-text="'(' + pokemon.species + ')'"></span>
+                                            <div class="pokemon-types" x-show="pokemon.types && pokemon.types.length > 0">
+                                                <template x-for="type in pokemon.types" :key="type">
+                                                    <span class="type-badge" :class="'type-' + type.toLowerCase()" x-text="type"></span>
+                                                </template>
+                                            </div>
                                             <div class="pokemon-details-grid">
                                                 <span class="pokemon-level" x-text="'Lv. ' + pokemon.level"></span>
                                                 <span class="pokemon-ability has-tooltip"
