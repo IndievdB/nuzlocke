@@ -933,6 +933,13 @@ nav a:hover, nav a.active {
     font-size: 0.8rem;
 }
 
+.pokemon-details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.25rem 0.75rem;
+    margin-top: 0.25rem;
+}
+
 /* Stats Display */
 .party-stats {
     margin-top: 0.5rem;
