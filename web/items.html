@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Item Lookup</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="/js/items.js"></script>
+</head>
+<body x-data="itemsApp()" x-init="init()">
+    <header>
+        <h1>Item Lookup</h1>
+        <nav>
+            <a href="/calculator">Damage</a>
+            <a href="/moves">Moves</a>
+            <a href="/items" class="active">Items</a>
+            <a href="/party">Party</a>
+            <a href="/catch">Catch</a>
+        </nav>
+    </header>
+
+    <main class="items-layout">
+        <!-- Search Section -->
+        <section class="search-section">
+            <div class="search-container large">
+                <input type="text"
+                       x-model="searchQuery"
+                       @input.debounce.200ms="searchItems()"
+                       placeholder="Search items..."
+                       autocomplete="off">
+            </div>
+            <p class="search-hint" x-show="!searchQuery">Type to search for items by name</p>
+            <p class="search-count" x-show="searchQuery" x-text="filteredItems.length + ' items found'"></p>
+        </section>
+
+        <!-- Results Section -->
+        <section class="items-results" x-show="filteredItems.length > 0">
+            <div class="items-grid">
+                <template x-for="item in filteredItems" :key="item.id">
+                    <div class="item-card">
+                        <div class="item-name" x-text="item.name"></div>
+                        <div class="item-desc" x-text="item.desc || 'No description available'"></div>
+                    </div>
+                </template>
+            </div>
+        </section>
+
+        <!-- Empty State -->
+        <div class="empty-state" x-show="searchQuery && filteredItems.length === 0">
+            <p>No items found matching your search.</p>
+        </div>
+
+        <!-- Initial State -->
+        <div class="empty-state" x-show="!searchQuery && !loading">
+            <p>Search for items to see their descriptions.</p>
+        </div>
+
+        <!-- Loading State -->
+        <div class="loading-message" x-show="loading">Loading items...</div>
+    </main>
+
+    <footer>
+        <p>Item Lookup - Using data from Pokemon Showdown</p>
+    </footer>
+</body>
+</html>
