@@ -278,6 +278,122 @@ header h1 {
     color: #e74c3c;
 }
 
+/* Unknown toggle and hint */
+.unknown-toggle {
+    font-size: 0.75rem;
+    font-weight: normal;
+    color: #888;
+    margin-left: 0.5rem;
+}
+
+.unknown-toggle input {
+    margin-right: 0.25rem;
+}
+
+.iv-buttons {
+    margin-left: 0.5rem;
+}
+
+.iv-btn {
+    padding: 0.1rem 0.4rem;
+    font-size: 0.7rem;
+    background: #2a2a4e;
+    border: 1px solid #444;
+    color: #aaa;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-right: 0.25rem;
+}
+
+.iv-btn:hover {
+    background: #3a3a5e;
+    color: #fff;
+}
+
+/* Item preset buttons */
+.item-presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    margin-top: 0.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.item-btn {
+    padding: 0.2rem 0.4rem;
+    font-size: 0.7rem;
+    background: #2a2a4e;
+    border: 1px solid #444;
+    color: #888;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.item-btn:hover {
+    background: #3a3a5e;
+    color: #fff;
+}
+
+.item-btn.active {
+    background: #4a4a6e;
+    border-color: #6a6a8e;
+    color: #fff;
+}
+
+.unknown-hint {
+    font-size: 0.75rem;
+    color: #666;
+    font-style: italic;
+    padding: 0.25rem 0;
+}
+
+/* Multi-bar damage range for unknown EVs/IVs */
+.damage-range-multi {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.damage-range-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.damage-range-row .range-label {
+    width: 80px;
+    font-size: 0.75rem;
+    color: #888;
+}
+
+.damage-range-row .damage-min,
+.damage-range-row .damage-max {
+    font-size: 0.75rem;
+    min-width: 70px;
+}
+
+.damage-range-row .damage-bar-container {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+.damage-bar-best-min {
+    background: #27ae60;
+}
+
+.damage-bar-best-range {
+    background: #f39c12;
+}
+
+.damage-bar-worst-min {
+    background: #7f8c8d;
+}
+
+.damage-bar-worst-range {
+    background: #bdc3c7;
+}
+
 /* KO Information */
 .ko-info {
     display: flex;
@@ -1426,4 +1542,13 @@ nav a:hover, nav a.active {
     color: #666;
     font-size: 0.9rem;
     margin-bottom: 1rem;
+}
+
+/* Move Description */
+.move-description {
+    font-size: 0.8rem;
+    color: #888;
+    font-style: italic;
+    margin: 0.5rem 0;
+    line-height: 1.4;
 }

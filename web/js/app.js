@@ -320,6 +320,18 @@ function calculator() {
             }
         },
 
+        // Set all IVs to a value
+        setAllIvs(role, value) {
+            const target = role === 'attacker' ? this.attacker : this.defender;
+            target.ivs = { hp: value, atk: value, def: value, spa: value, spd: value, spe: value };
+        },
+
+        // Set all EVs to a value
+        setAllEvs(role, value) {
+            const target = role === 'attacker' ? this.attacker : this.defender;
+            target.evs = { hp: value, atk: value, def: value, spa: value, spd: value, spe: value };
+        },
+
         // Get abilities list for a Pokemon
         getAbilitiesList(role) {
             const target = role === 'attacker' ? this.attacker : this.defender;
@@ -379,34 +391,48 @@ function calculator() {
             return this.attacker.species && this.defender.species && this.move.name;
         },
 
+        // Check if any unknowns are set
+        hasUnknowns() {
+            return this.attacker.unknownEvs || this.attacker.unknownIvs ||
+                   this.defender.unknownEvs || this.defender.unknownIvs;
+        },
+
+        // Build Pokemon request with specific EV/IV overrides
+        buildPokemonRequest(pokemon, evOverride = null, ivOverride = null) {
+            return {
+                species: pokemon.species,
+                level: pokemon.level,
+                nature: pokemon.nature,
+                ability: pokemon.ability,
+                item: pokemon.item,
+                status: pokemon.status,
+                evs: evOverride || pokemon.evs,
+                ivs: ivOverride || pokemon.ivs,
+                boosts: pokemon.boosts
+            };
+        },
+
         // Perform calculation
         async calculate() {
             if (!this.canCalculate()) return;
 
-            // Build request
+            // If no unknowns, do a single calculation
+            if (!this.hasUnknowns()) {
+                await this.calculateSingle();
+                return;
+            }
+
+            // With unknowns, calculate best and worst case scenarios
+            await this.calculateWithUnknowns();
+        },
+
+        // Single calculation (no unknowns)
+        async calculateSingle() {
             const request = {
                 generation: parseInt(this.generation),
-                attacker: {
-                    species: this.attacker.species,
-                    level: this.attacker.level,
-                    nature: this.attacker.nature,
-                    ability: this.attacker.ability,
-                    item: this.attacker.item,
-                    status: this.attacker.status,
-                    evs: this.attacker.evs,
-                    ivs: this.attacker.ivs,
-                    boosts: this.attacker.boosts
-                },
+                attacker: this.buildPokemonRequest(this.attacker),
                 defender: {
-                    species: this.defender.species,
-                    level: this.defender.level,
-                    nature: this.defender.nature,
-                    ability: this.defender.ability,
-                    item: this.defender.item,
-                    status: this.defender.status,
-                    evs: this.defender.evs,
-                    ivs: this.defender.ivs,
-                    boosts: this.defender.boosts,
+                    ...this.buildPokemonRequest(this.defender),
                     currentHP: this.defenderHPPercent < 100 ? Math.floor(this.defender.maxHP * this.defenderHPPercent / 100) : 0
                 },
                 move: {
@@ -419,22 +445,148 @@ function calculator() {
             try {
                 const response = await fetch('/api/calculate', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(request)
                 });
 
                 if (!response.ok) {
-                    const error = await response.text();
-                    console.error('Calculation failed:', error);
+                    console.error('Calculation failed:', await response.text());
                     return;
                 }
 
                 this.result = await response.json();
+                this.result.hasRange = false;
             } catch (e) {
                 console.error('Calculation failed:', e);
             }
+        },
+
+        // Calculate with unknowns - compute best and worst case
+        async calculateWithUnknowns() {
+            // Get the move to determine which stats matter
+            const moveData = this.getMoveDetails(this.move.name);
+            const isPhysical = moveData?.category === 'Physical';
+            const attackStat = isPhysical ? 'atk' : 'spa';
+            const defenseStat = isPhysical ? 'def' : 'spd';
+
+            // Build EV/IV scenarios for attacker
+            const attackerScenarios = this.getStatScenarios(this.attacker, attackStat, true);
+
+            // Build EV/IV scenarios for defender (need HP + defense stat)
+            const defenderScenarios = this.getStatScenarios(this.defender, defenseStat, false);
+
+            // Calculate all combinations and find extremes
+            let bestResult = null;  // Highest damage
+            let worstResult = null; // Lowest damage
+
+            for (const atkScenario of attackerScenarios) {
+                for (const defScenario of defenderScenarios) {
+                    const request = {
+                        generation: parseInt(this.generation),
+                        attacker: {
+                            ...this.buildPokemonRequest(this.attacker, atkScenario.evs, atkScenario.ivs)
+                        },
+                        defender: {
+                            ...this.buildPokemonRequest(this.defender, defScenario.evs, defScenario.ivs),
+                            currentHP: this.defenderHPPercent < 100 ? Math.floor(this.defender.maxHP * this.defenderHPPercent / 100) : 0
+                        },
+                        move: {
+                            name: this.move.name,
+                            isCrit: this.move.isCrit
+                        },
+                        field: this.field
+                    };
+
+                    try {
+                        const response = await fetch('/api/calculate', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(request)
+                        });
+
+                        if (!response.ok) continue;
+
+                        const result = await response.json();
+
+                        if (!bestResult || result.maxPercent > bestResult.maxPercent) {
+                            bestResult = result;
+                        }
+                        if (!worstResult || result.minPercent < worstResult.minPercent) {
+                            worstResult = result;
+                        }
+                    } catch (e) {
+                        console.error('Calculation failed:', e);
+                    }
+                }
+            }
+
+            // Combine results into a range result
+            if (bestResult && worstResult) {
+                this.result = {
+                    hasRange: true,
+                    // Best case (highest damage)
+                    bestMinDamage: bestResult.minDamage,
+                    bestMaxDamage: bestResult.maxDamage,
+                    bestMinPercent: bestResult.minPercent,
+                    bestMaxPercent: bestResult.maxPercent,
+                    // Worst case (lowest damage)
+                    worstMinDamage: worstResult.minDamage,
+                    worstMaxDamage: worstResult.maxDamage,
+                    worstMinPercent: worstResult.minPercent,
+                    worstMaxPercent: worstResult.maxPercent,
+                    // For compatibility with existing display
+                    minDamage: worstResult.minDamage,
+                    maxDamage: bestResult.maxDamage,
+                    minPercent: worstResult.minPercent,
+                    maxPercent: bestResult.maxPercent,
+                    description: bestResult.description
+                };
+            }
+        },
+
+        // Get EV/IV scenarios for a stat
+        getStatScenarios(pokemon, stat, isAttacker) {
+            const scenarios = [];
+
+            // If nothing is unknown, just return current values
+            if (!pokemon.unknownEvs && !pokemon.unknownIvs) {
+                scenarios.push({ evs: pokemon.evs, ivs: pokemon.ivs });
+                return scenarios;
+            }
+
+            // Generate min and max scenarios
+            const minEvs = { ...pokemon.evs };
+            const maxEvs = { ...pokemon.evs };
+            const minIvs = { ...pokemon.ivs };
+            const maxIvs = { ...pokemon.ivs };
+
+            if (pokemon.unknownEvs) {
+                // For attacker: 0 EV is worst, 252 is best
+                // For defender: 0 EV is worst (takes more damage), 252 is best (takes less)
+                minEvs[stat] = 0;
+                maxEvs[stat] = 252;
+                // Also consider HP for defender
+                if (!isAttacker) {
+                    minEvs.hp = 0;
+                    maxEvs.hp = 252;
+                }
+            }
+
+            if (pokemon.unknownIvs) {
+                minIvs[stat] = 0;
+                maxIvs[stat] = 31;
+                if (!isAttacker) {
+                    minIvs.hp = 0;
+                    maxIvs.hp = 31;
+                }
+            }
+
+            // For attacker: min scenario = min EVs/IVs, max scenario = max EVs/IVs
+            // For defender: min scenario (more damage taken) = min EVs/IVs, max scenario (less damage taken) = max EVs/IVs
+            scenarios.push({ evs: minEvs, ivs: minIvs });
+            scenarios.push({ evs: maxEvs, ivs: maxIvs });
+
+            return scenarios;
         },
 
         // Get critical hit chance based on generation
@@ -490,6 +642,33 @@ function calculator() {
 
             const hitsNeeded = Math.ceil(currentHP / this.result.minDamage);
             return hitsNeeded === 1 ? 'OHKO' : hitsNeeded + 'HKO';
+        },
+
+        // Get KO info for range results
+        getRangeKO(type) {
+            if (!this.result) return '-';
+
+            // For range results, we need to estimate HP from damage percentages
+            // Best case uses best damage, worst case uses worst damage
+            if (type === 'best') {
+                const damage = this.result.bestMaxDamage;
+                if (!damage) return '-';
+                // Estimate HP from percentage
+                const hp = Math.round(damage / this.result.bestMaxPercent * 100);
+                const currentHP = Math.floor(hp * this.defenderHPPercent / 100);
+                if (currentHP <= 0) return '-';
+                const hitsNeeded = Math.ceil(currentHP / damage);
+                return hitsNeeded === 1 ? 'OHKO' : hitsNeeded + 'HKO';
+            } else {
+                const damage = this.result.worstMinDamage;
+                if (!damage) return '-';
+                // Estimate HP from percentage
+                const hp = Math.round(damage / this.result.worstMinPercent * 100);
+                const currentHP = Math.floor(hp * this.defenderHPPercent / 100);
+                if (currentHP <= 0) return '-';
+                const hitsNeeded = Math.ceil(currentHP / damage);
+                return hitsNeeded === 1 ? 'OHKO' : hitsNeeded + 'HKO';
+            }
         }
     };
 }
@@ -506,6 +685,8 @@ function createDefaultPokemon() {
         status: '',
         evs: { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
         ivs: { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 },
-        boosts: { atk: 0, def: 0, spa: 0, spd: 0, spe: 0 }
+        boosts: { atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
+        unknownEvs: false,
+        unknownIvs: false
     };
 }

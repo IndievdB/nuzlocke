@@ -91,35 +91,55 @@
                     <label>Item:</label>
                     <input type="text" x-model="attacker.item" placeholder="Item">
                 </div>
+                <div class="item-presets">
+                    <button type="button" class="item-btn" @click="attacker.item = 'Choice Band'" :class="{ active: attacker.item === 'Choice Band' }">C.Band</button>
+                    <button type="button" class="item-btn" @click="attacker.item = 'Choice Specs'" :class="{ active: attacker.item === 'Choice Specs' }">C.Specs</button>
+                    <button type="button" class="item-btn" @click="attacker.item = 'Life Orb'" :class="{ active: attacker.item === 'Life Orb' }">Life Orb</button>
+                    <button type="button" class="item-btn" @click="attacker.item = ''" :class="{ active: !attacker.item }">None</button>
+                </div>
 
                 <!-- EVs -->
                 <div class="stat-group">
-                    <h4>EVs</h4>
-                    <div class="stat-row">
+                    <h4>EVs
+                        <span class="iv-buttons" x-show="!attacker.unknownEvs">
+                            <button type="button" class="iv-btn" @click="setAllEvs('attacker', 252)">252</button>
+                            <button type="button" class="iv-btn" @click="setAllEvs('attacker', 0)">0</button>
+                        </span>
+                        <label class="unknown-toggle"><input type="checkbox" x-model="attacker.unknownEvs"> Unknown</label>
+                    </h4>
+                    <div class="stat-row" x-show="!attacker.unknownEvs">
                         <label>HP:</label><input type="number" x-model.number="attacker.evs.hp" min="0" max="252">
                         <label>Atk:</label><input type="number" x-model.number="attacker.evs.atk" min="0" max="252">
                         <label>Def:</label><input type="number" x-model.number="attacker.evs.def" min="0" max="252">
                     </div>
-                    <div class="stat-row">
+                    <div class="stat-row" x-show="!attacker.unknownEvs">
                         <label>SpA:</label><input type="number" x-model.number="attacker.evs.spa" min="0" max="252">
                         <label>SpD:</label><input type="number" x-model.number="attacker.evs.spd" min="0" max="252">
                         <label>Spe:</label><input type="number" x-model.number="attacker.evs.spe" min="0" max="252">
                     </div>
+                    <div class="unknown-hint" x-show="attacker.unknownEvs">Will calculate 0-252 EV range</div>
                 </div>
 
                 <!-- IVs -->
                 <div class="stat-group">
-                    <h4>IVs</h4>
-                    <div class="stat-row">
+                    <h4>IVs
+                        <span class="iv-buttons" x-show="!attacker.unknownIvs">
+                            <button type="button" class="iv-btn" @click="setAllIvs('attacker', 31)">31</button>
+                            <button type="button" class="iv-btn" @click="setAllIvs('attacker', 0)">0</button>
+                        </span>
+                        <label class="unknown-toggle"><input type="checkbox" x-model="attacker.unknownIvs"> Unknown</label>
+                    </h4>
+                    <div class="stat-row" x-show="!attacker.unknownIvs">
                         <label>HP:</label><input type="number" x-model.number="attacker.ivs.hp" min="0" max="31">
                         <label>Atk:</label><input type="number" x-model.number="attacker.ivs.atk" min="0" max="31">
                         <label>Def:</label><input type="number" x-model.number="attacker.ivs.def" min="0" max="31">
                     </div>
-                    <div class="stat-row">
+                    <div class="stat-row" x-show="!attacker.unknownIvs">
                         <label>SpA:</label><input type="number" x-model.number="attacker.ivs.spa" min="0" max="31">
                         <label>SpD:</label><input type="number" x-model.number="attacker.ivs.spd" min="0" max="31">
                         <label>Spe:</label><input type="number" x-model.number="attacker.ivs.spe" min="0" max="31">
                     </div>
+                    <div class="unknown-hint" x-show="attacker.unknownIvs">Will calculate 0-31 IV range</div>
                 </div>
 
                 <!-- Boosts -->
@@ -203,6 +223,7 @@
             </div>
 
             <div x-show="move.name" class="move-details">
+                <p class="move-description" x-text="getMoveDetails(move.name)?.shortDesc || getMoveDetails(move.name)?.desc || ''"></p>
                 <div class="form-row">
                     <label>
                         <input type="checkbox" x-model="move.isCrit"> Critical Hit <span class="crit-chance" x-text="'(' + getCritChance() + ')'"></span>
@@ -307,35 +328,54 @@
                     <label>Item:</label>
                     <input type="text" x-model="defender.item" placeholder="Item">
                 </div>
+                <div class="item-presets">
+                    <button type="button" class="item-btn" @click="defender.item = 'Assault Vest'" :class="{ active: defender.item === 'Assault Vest' }">A.Vest</button>
+                    <button type="button" class="item-btn" @click="defender.item = 'Eviolite'" :class="{ active: defender.item === 'Eviolite' }">Eviolite</button>
+                    <button type="button" class="item-btn" @click="defender.item = ''" :class="{ active: !defender.item }">None</button>
+                </div>
 
                 <!-- EVs -->
                 <div class="stat-group">
-                    <h4>EVs</h4>
-                    <div class="stat-row">
+                    <h4>EVs
+                        <span class="iv-buttons" x-show="!defender.unknownEvs">
+                            <button type="button" class="iv-btn" @click="setAllEvs('defender', 252)">252</button>
+                            <button type="button" class="iv-btn" @click="setAllEvs('defender', 0)">0</button>
+                        </span>
+                        <label class="unknown-toggle"><input type="checkbox" x-model="defender.unknownEvs"> Unknown</label>
+                    </h4>
+                    <div class="stat-row" x-show="!defender.unknownEvs">
                         <label>HP:</label><input type="number" x-model.number="defender.evs.hp" min="0" max="252">
                         <label>Atk:</label><input type="number" x-model.number="defender.evs.atk" min="0" max="252">
                         <label>Def:</label><input type="number" x-model.number="defender.evs.def" min="0" max="252">
                     </div>
-                    <div class="stat-row">
+                    <div class="stat-row" x-show="!defender.unknownEvs">
                         <label>SpA:</label><input type="number" x-model.number="defender.evs.spa" min="0" max="252">
                         <label>SpD:</label><input type="number" x-model.number="defender.evs.spd" min="0" max="252">
                         <label>Spe:</label><input type="number" x-model.number="defender.evs.spe" min="0" max="252">
                     </div>
+                    <div class="unknown-hint" x-show="defender.unknownEvs">Will calculate 0-252 EV range</div>
                 </div>
 
                 <!-- IVs -->
                 <div class="stat-group">
-                    <h4>IVs</h4>
-                    <div class="stat-row">
+                    <h4>IVs
+                        <span class="iv-buttons" x-show="!defender.unknownIvs">
+                            <button type="button" class="iv-btn" @click="setAllIvs('defender', 31)">31</button>
+                            <button type="button" class="iv-btn" @click="setAllIvs('defender', 0)">0</button>
+                        </span>
+                        <label class="unknown-toggle"><input type="checkbox" x-model="defender.unknownIvs"> Unknown</label>
+                    </h4>
+                    <div class="stat-row" x-show="!defender.unknownIvs">
                         <label>HP:</label><input type="number" x-model.number="defender.ivs.hp" min="0" max="31">
                         <label>Atk:</label><input type="number" x-model.number="defender.ivs.atk" min="0" max="31">
                         <label>Def:</label><input type="number" x-model.number="defender.ivs.def" min="0" max="31">
                     </div>
-                    <div class="stat-row">
+                    <div class="stat-row" x-show="!defender.unknownIvs">
                         <label>SpA:</label><input type="number" x-model.number="defender.ivs.spa" min="0" max="31">
                         <label>SpD:</label><input type="number" x-model.number="defender.ivs.spd" min="0" max="31">
                         <label>Spe:</label><input type="number" x-model.number="defender.ivs.spe" min="0" max="31">
                     </div>
+                    <div class="unknown-hint" x-show="defender.unknownIvs">Will calculate 0-31 IV range</div>
                 </div>
 
                 <!-- Boosts -->
@@ -362,20 +402,58 @@
         <div class="result-content">
             <p class="damage-description" x-text="result?.description"></p>
 
-            <!-- Damage Range Bar -->
-            <div class="damage-range">
-                <span class="damage-min" x-text="result?.minDamage + ' (' + result?.minPercent?.toFixed(1) + '%)'"></span>
-                <div class="damage-bar-container">
-                    <div class="damage-bar damage-bar-min" :style="getMinBarStyle()"></div>
-                    <div class="damage-bar damage-bar-range" :style="getRangeBarStyle()"></div>
+            <!-- Single result (no unknowns) -->
+            <template x-if="!result?.hasRange">
+                <div class="damage-range">
+                    <span class="damage-min" x-text="result?.minDamage + ' (' + result?.minPercent?.toFixed(1) + '%)'"></span>
+                    <div class="damage-bar-container">
+                        <div class="damage-bar damage-bar-min" :style="getMinBarStyle()"></div>
+                        <div class="damage-bar damage-bar-range" :style="getRangeBarStyle()"></div>
+                    </div>
+                    <span class="damage-max" x-text="result?.maxDamage + ' (' + result?.maxPercent?.toFixed(1) + '%)'"></span>
                 </div>
-                <span class="damage-max" x-text="result?.maxDamage + ' (' + result?.maxPercent?.toFixed(1) + '%)'"></span>
-            </div>
+            </template>
+
+            <!-- Range result (with unknowns) -->
+            <template x-if="result?.hasRange">
+                <div class="damage-range-multi">
+                    <!-- Best case bar -->
+                    <div class="damage-range-row">
+                        <span class="range-label">Best case:</span>
+                        <span class="damage-min" x-text="result?.bestMinDamage + '-' + result?.bestMaxDamage"></span>
+                        <div class="damage-bar-container">
+                            <div class="damage-bar damage-bar-best-min" :style="{ width: Math.min(result?.bestMinPercent, 100) + '%' }"></div>
+                            <div class="damage-bar damage-bar-best-range" :style="{ width: Math.min(result?.bestMaxPercent - result?.bestMinPercent, 100 - result?.bestMinPercent) + '%' }"></div>
+                        </div>
+                        <span class="damage-max" x-text="result?.bestMinPercent?.toFixed(1) + '%-' + result?.bestMaxPercent?.toFixed(1) + '%'"></span>
+                    </div>
+                    <!-- Worst case bar -->
+                    <div class="damage-range-row">
+                        <span class="range-label">Worst case:</span>
+                        <span class="damage-min" x-text="result?.worstMinDamage + '-' + result?.worstMaxDamage"></span>
+                        <div class="damage-bar-container">
+                            <div class="damage-bar damage-bar-worst-min" :style="{ width: Math.min(result?.worstMinPercent, 100) + '%' }"></div>
+                            <div class="damage-bar damage-bar-worst-range" :style="{ width: Math.min(result?.worstMaxPercent - result?.worstMinPercent, 100 - result?.worstMinPercent) + '%' }"></div>
+                        </div>
+                        <span class="damage-max" x-text="result?.worstMinPercent?.toFixed(1) + '%-' + result?.worstMaxPercent?.toFixed(1) + '%'"></span>
+                    </div>
+                </div>
+            </template>
 
             <!-- KO Information -->
             <div class="ko-info">
-                <p><span class="ko-label">Best case:</span> <span class="ko-value" x-text="getBestCaseKO()"></span></p>
-                <p><span class="ko-label">Worst case:</span> <span class="ko-value" x-text="getWorstCaseKO()"></span></p>
+                <template x-if="!result?.hasRange">
+                    <div>
+                        <p><span class="ko-label">Best case:</span> <span class="ko-value" x-text="getBestCaseKO()"></span></p>
+                        <p><span class="ko-label">Worst case:</span> <span class="ko-value" x-text="getWorstCaseKO()"></span></p>
+                    </div>
+                </template>
+                <template x-if="result?.hasRange">
+                    <div>
+                        <p><span class="ko-label">Best case:</span> <span class="ko-value" x-text="getRangeKO('best')"></span></p>
+                        <p><span class="ko-label">Worst case:</span> <span class="ko-value" x-text="getRangeKO('worst')"></span></p>
+                    </div>
+                </template>
             </div>
 
             <div x-show="result?.recoil" class="recoil-info">
