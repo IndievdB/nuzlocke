@@ -6,13 +6,13 @@
     <title>Pokemon Damage Calculator</title>
     <link rel="stylesheet" href="/css/styles.css">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <script src="/js/app.js"></script>
+    <script src="/js/app.js?v=2"></script>
 </head>
 <body x-data="calculator()" x-init="init()">
     <header>
         <h1>Pokemon Damage Calculator</h1>
         <nav>
-            <a href="/calculator" class="active">Damage Calculator</a>
+            <a href="/calculator" class="active">Damage</a>
             <a href="/moves">Moves</a>
             <a href="/party">Party</a>
             <a href="/catch">Catch</a>
@@ -49,6 +49,16 @@
                 </ul>
             </div>
 
+            <!-- Form Selector -->
+            <div x-show="attackerForms.length > 1" class="form-row">
+                <label>Form:</label>
+                <select @change="selectForm('attacker', $event.target.value)">
+                    <template x-for="form in attackerForms" :key="form.id">
+                        <option :value="form.id" :selected="attacker.species === form.id" x-text="form.name.includes('-') ? form.name.split('-').slice(1).join('-') || 'Base' : 'Base'"></option>
+                    </template>
+                </select>
+            </div>
+
             <div x-show="attacker.species" class="pokemon-details">
                 <!-- Level -->
                 <div class="form-row">
@@ -69,7 +79,11 @@
                 <!-- Ability -->
                 <div class="form-row">
                     <label>Ability:</label>
-                    <input type="text" x-model="attacker.ability" placeholder="Ability">
+                    <select x-model="attacker.ability">
+                        <template x-for="ability in getAbilitiesList('attacker')" :key="ability.slot">
+                            <option :value="ability.name" x-text="ability.name + (ability.hidden ? ' (H)' : '')"></option>
+                        </template>
+                    </select>
                 </div>
 
                 <!-- Item -->
@@ -120,21 +134,57 @@
         <section class="move-panel">
             <h2>Move</h2>
 
-            <!-- Move Search -->
-            <div class="search-container">
-                <input type="text"
-                       x-model="moveSearch"
-                       @input.debounce.200ms="searchMoves()"
-                       @focus="showMoveResults = moveSearchResults.length > 0"
-                       placeholder="Search Move..."
-                       autocomplete="off">
-                <ul x-show="showMoveResults && moveSearchResults.length > 0"
-                    class="search-results"
-                    @click.away="showMoveResults = false">
-                    <template x-for="result in moveSearchResults" :key="result.id">
-                        <li @click="selectMove(result)" x-text="result.name"></li>
+            <!-- Swap Button -->
+            <button @click="swapPokemon()" class="swap-btn" title="Swap Attacker and Defender">
+                Swap
+            </button>
+
+            <!-- Move Selector (from learnset) -->
+            <div x-show="attacker.species && attackerLearnset" class="move-selector">
+                <select @change="selectLearnsetMove($event.target.value)" class="move-dropdown">
+                    <option value="">Select a move...</option>
+
+                    <!-- Level Up Moves -->
+                    <template x-if="attackerLearnset?.levelup?.length > 0">
+                        <optgroup label="Level Up">
+                            <template x-for="m in attackerLearnset.levelup" :key="'L' + m.move">
+                                <option :value="m.move" :selected="move.name === m.move" x-text="formatMove(m.move, m.level)"></option>
+                            </template>
+                        </optgroup>
                     </template>
-                </ul>
+
+                    <!-- TM Moves -->
+                    <template x-if="attackerLearnset?.tm?.length > 0">
+                        <optgroup label="TM/HM">
+                            <template x-for="moveId in attackerLearnset.tm" :key="'TM' + moveId">
+                                <option :value="moveId" :selected="move.name === moveId" x-text="formatMove(moveId)"></option>
+                            </template>
+                        </optgroup>
+                    </template>
+
+                    <!-- Tutor Moves -->
+                    <template x-if="attackerLearnset?.tutor?.length > 0">
+                        <optgroup label="Tutor">
+                            <template x-for="moveId in attackerLearnset.tutor" :key="'T' + moveId">
+                                <option :value="moveId" :selected="move.name === moveId" x-text="formatMove(moveId)"></option>
+                            </template>
+                        </optgroup>
+                    </template>
+
+                    <!-- Egg Moves -->
+                    <template x-if="attackerLearnset?.egg?.length > 0">
+                        <optgroup label="Egg">
+                            <template x-for="moveId in attackerLearnset.egg" :key="'E' + moveId">
+                                <option :value="moveId" :selected="move.name === moveId" x-text="formatMove(moveId)"></option>
+                            </template>
+                        </optgroup>
+                    </template>
+                </select>
+            </div>
+
+            <!-- Fallback: No Pokemon selected -->
+            <div x-show="!attacker.species" class="move-placeholder">
+                <p>Select an attacker to see moves</p>
             </div>
 
             <div x-show="move.name" class="move-details">
@@ -200,6 +250,16 @@
                 </ul>
             </div>
 
+            <!-- Form Selector -->
+            <div x-show="defenderForms.length > 1" class="form-row">
+                <label>Form:</label>
+                <select @change="selectForm('defender', $event.target.value)">
+                    <template x-for="form in defenderForms" :key="form.id">
+                        <option :value="form.id" :selected="defender.species === form.id" x-text="form.name.includes('-') ? form.name.split('-').slice(1).join('-') || 'Base' : 'Base'"></option>
+                    </template>
+                </select>
+            </div>
+
             <div x-show="defender.species" class="pokemon-details">
                 <!-- Level -->
                 <div class="form-row">
@@ -220,7 +280,11 @@
                 <!-- Ability -->
                 <div class="form-row">
                     <label>Ability:</label>
-                    <input type="text" x-model="defender.ability" placeholder="Ability">
+                    <select x-model="defender.ability">
+                        <template x-for="ability in getAbilitiesList('defender')" :key="ability.slot">
+                            <option :value="ability.name" x-text="ability.name + (ability.hidden ? ' (H)' : '')"></option>
+                        </template>
+                    </select>
                 </div>
 
                 <!-- Item -->
