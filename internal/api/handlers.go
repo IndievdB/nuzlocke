@@ -137,6 +137,24 @@ func (h *Handler) HandleListAbilities(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(h.Store.AllAbilitiesList())
 }
 
+// HandleGetAbility handles GET /api/abilities/{id}
+func (h *Handler) HandleGetAbility(w http.ResponseWriter, r *http.Request) {
+	id := strings.TrimPrefix(r.URL.Path, "/api/abilities/")
+	if id == "" {
+		http.Error(w, "Ability ID is required", http.StatusBadRequest)
+		return
+	}
+
+	ability := h.Store.GetAbility(id)
+	if ability == nil {
+		http.Error(w, "Ability not found", http.StatusNotFound)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(ability)
+}
+
 // HandleListNatures handles GET /api/natures
 func (h *Handler) HandleListNatures(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")

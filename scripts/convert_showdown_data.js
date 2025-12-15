@@ -142,11 +142,73 @@ function convertItems() {
 }
 
 /**
+ * Parse ability descriptions from abilities-text.ts
+ */
+function parseAbilityDescriptions() {
+    const textPath = path.join(dataDir, 'abilities-text.ts');
+    if (!fs.existsSync(textPath)) {
+        console.log('abilities-text.ts not found, skipping descriptions');
+        return {};
+    }
+
+    const content = fs.readFileSync(textPath, 'utf8');
+    const descriptions = {};
+
+    // Find each ability text block
+    const lines = content.split('\n');
+    let currentAbilityId = null;
+    let braceCount = 0;
+    let inAbility = false;
+    let abilityContent = '';
+
+    for (const line of lines) {
+        const abilityStart = line.match(/^\t(\w+):\s*\{/);
+
+        if (abilityStart && !inAbility) {
+            currentAbilityId = abilityStart[1];
+            inAbility = true;
+            braceCount = 1;
+            abilityContent = line;
+            continue;
+        }
+
+        if (inAbility) {
+            abilityContent += '\n' + line;
+
+            for (const char of line) {
+                if (char === '{') braceCount++;
+                if (char === '}') braceCount--;
+            }
+
+            if (braceCount === 0) {
+                // Extract desc and shortDesc - handle escaped quotes and apostrophes
+                const descMatch = abilityContent.match(/\tdesc:\s*"((?:[^"\\]|\\.)*)"/);
+                const shortDescMatch = abilityContent.match(/\tshortDesc:\s*"((?:[^"\\]|\\.)*)"/);
+
+                descriptions[currentAbilityId] = {
+                    desc: descMatch ? descMatch[1].replace(/\\'/g, "'") : null,
+                    shortDesc: shortDescMatch ? shortDescMatch[1].replace(/\\'/g, "'") : null
+                };
+
+                inAbility = false;
+                currentAbilityId = null;
+                abilityContent = '';
+            }
+        }
+    }
+
+    return descriptions;
+}
+
+/**
  * Convert abilities.ts to abilities.json
  * Handles complex nested structures with functions
  */
 function convertAbilities() {
     const content = fs.readFileSync(path.join(dataDir, 'abilities.ts'), 'utf8');
+
+    // Load descriptions from text file
+    const descriptions = parseAbilityDescriptions();
 
     const abilities = {};
 
@@ -198,6 +260,16 @@ function convertAbilities() {
 
                 const ratingMatch = abilityContent.match(/rating:\s*(-?\d+(?:\.\d+)?)/);
                 if (ratingMatch) ability.rating = parseFloat(ratingMatch[1]);
+
+                // Add descriptions from text file
+                if (descriptions[currentAbilityId]) {
+                    if (descriptions[currentAbilityId].desc) {
+                        ability.desc = descriptions[currentAbilityId].desc;
+                    }
+                    if (descriptions[currentAbilityId].shortDesc) {
+                        ability.shortDesc = descriptions[currentAbilityId].shortDesc;
+                    }
+                }
 
                 // Check for key ability effects (for damage calculation)
                 if (abilityContent.includes('onModifyDamage')) ability.onModifyDamage = true;

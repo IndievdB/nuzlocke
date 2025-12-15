@@ -19,6 +19,9 @@ function movesApp() {
         // Cached move data
         moveCache: {},
 
+        // Cached ability data
+        abilityCache: {},
+
         // Initialize
         async init() {
             // Pre-load all moves for quick lookup
@@ -64,9 +67,45 @@ function movesApp() {
 
                 // Pre-load move data for all moves in learnset
                 await this.loadMoveData();
+
+                // Load ability data
+                await this.loadAbilityData();
             } catch (e) {
                 console.error('Failed to load Pokemon:', e);
             }
+        },
+
+        // Load ability data for the Pokemon's abilities
+        async loadAbilityData() {
+            if (!this.selectedPokemon?.abilities) return;
+
+            const promises = [];
+            for (const ability of Object.values(this.selectedPokemon.abilities)) {
+                const abilityId = this.toID(ability);
+                if (!this.abilityCache[abilityId]) {
+                    promises.push(this.fetchAbility(abilityId));
+                }
+            }
+            await Promise.all(promises);
+        },
+
+        // Fetch a single ability
+        async fetchAbility(abilityId) {
+            try {
+                const response = await fetch(`/api/abilities/${abilityId}`);
+                if (response.ok) {
+                    this.abilityCache[abilityId] = await response.json();
+                }
+            } catch (e) {
+                console.error(`Failed to load ability ${abilityId}:`, e);
+            }
+        },
+
+        // Get ability description for tooltip
+        getAbilityDesc(abilityName) {
+            const abilityId = this.toID(abilityName);
+            const ability = this.abilityCache[abilityId];
+            return ability?.shortDesc || ability?.desc || '';
         },
 
         // Load move data for all moves in learnset
@@ -112,6 +151,12 @@ function movesApp() {
         // Get move data from cache
         getMoveData(moveId) {
             return this.moveCache[moveId];
+        },
+
+        // Get move description for tooltip
+        getMoveDesc(moveId) {
+            const move = this.moveCache[moveId];
+            return move?.shortDesc || move?.desc || '';
         },
 
         // Get sprite URL

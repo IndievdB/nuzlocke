@@ -6,6 +6,8 @@ type Ability struct {
 	Name                 string     `json:"name"`
 	Num                  int        `json:"num"`
 	Rating               float64    `json:"rating,omitempty"`
+	Desc                 string     `json:"desc,omitempty"`
+	ShortDesc            string     `json:"shortDesc,omitempty"`
 	OnModifyDamage       bool       `json:"onModifyDamage,omitempty"`
 	OnModifyAtk          bool       `json:"onModifyAtk,omitempty"`
 	OnModifyDef          bool       `json:"onModifyDef,omitempty"`

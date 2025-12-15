@@ -39,6 +39,7 @@
 
         <!-- Pokemon Info Section -->
         <template x-if="selectedPokemon">
+            <div class="pokemon-content">
             <section class="pokemon-info-section">
                 <!-- Pokemon Header -->
                 <div class="pokemon-header">
@@ -113,7 +114,10 @@
                     <h3>Abilities</h3>
                     <div class="ability-list">
                         <template x-for="(ability, slot) in selectedPokemon.abilities" :key="slot">
-                            <span class="ability-badge" :class="{ 'hidden-ability': slot === 'H' }" x-text="ability"></span>
+                            <span class="ability-badge has-tooltip"
+                                  :class="{ 'hidden-ability': slot === 'H' }"
+                                  x-text="ability"
+                                  :data-tooltip="getAbilityDesc(ability)"></span>
                         </template>
                     </div>
                 </div>
@@ -194,6 +198,7 @@
                                 <th>Power</th>
                                 <th>Acc</th>
                                 <th>PP</th>
+                                <th>Description</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -215,6 +220,7 @@
                                         <td x-text="getMoveData(move.move)?.basePower || '-'"></td>
                                         <td x-text="getMoveData(move.move)?.accuracy === true ? '-' : (getMoveData(move.move)?.accuracy || '-')"></td>
                                         <td x-text="getMoveData(move.move)?.pp || '-'"></td>
+                                        <td class="move-desc" x-text="getMoveDesc(move.move)"></td>
                                     </tr>
                                 </template>
                             </template>
@@ -237,6 +243,7 @@
                                         <td x-text="getMoveData(moveId)?.basePower || '-'"></td>
                                         <td x-text="getMoveData(moveId)?.accuracy === true ? '-' : (getMoveData(moveId)?.accuracy || '-')"></td>
                                         <td x-text="getMoveData(moveId)?.pp || '-'"></td>
+                                        <td class="move-desc" x-text="getMoveDesc(moveId)"></td>
                                     </tr>
                                 </template>
                             </template>
@@ -259,6 +266,7 @@
                                         <td x-text="getMoveData(moveId)?.basePower || '-'"></td>
                                         <td x-text="getMoveData(moveId)?.accuracy === true ? '-' : (getMoveData(moveId)?.accuracy || '-')"></td>
                                         <td x-text="getMoveData(moveId)?.pp || '-'"></td>
+                                        <td class="move-desc" x-text="getMoveDesc(moveId)"></td>
                                     </tr>
                                 </template>
                             </template>
@@ -281,6 +289,7 @@
                                         <td x-text="getMoveData(moveId)?.basePower || '-'"></td>
                                         <td x-text="getMoveData(moveId)?.accuracy === true ? '-' : (getMoveData(moveId)?.accuracy || '-')"></td>
                                         <td x-text="getMoveData(moveId)?.pp || '-'"></td>
+                                        <td class="move-desc" x-text="getMoveDesc(moveId)"></td>
                                     </tr>
                                 </template>
                             </template>
@@ -288,6 +297,7 @@
                     </table>
                 </div>
             </section>
+            </div>
         </template>
 
         <!-- Empty State -->

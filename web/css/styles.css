@@ -526,6 +526,46 @@ nav a:hover, nav a.active {
     border: 1px dashed #4a4a8e;
 }
 
+/* Tooltip styling */
+.has-tooltip {
+    position: relative;
+    cursor: help;
+}
+
+.has-tooltip::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    background: #1a1a2e;
+    border: 1px solid #3a3a6e;
+    border-radius: 4px;
+    padding: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: normal;
+    white-space: normal;
+    width: max-content;
+    max-width: 300px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s, visibility 0.2s;
+    z-index: 1000;
+    pointer-events: none;
+    margin-bottom: 4px;
+    text-align: left;
+    line-height: 1.4;
+    color: #eee;
+}
+
+.has-tooltip:hover::after {
+    opacity: 1;
+    visibility: visible;
+}
+
+.has-tooltip[data-tooltip=""]::after {
+    display: none;
+}
+
 /* Type Effectiveness Section */
 .type-effectiveness-section h3 {
     font-size: 0.9rem;
@@ -626,6 +666,12 @@ nav a:hover, nav a.active {
 
 .move-name {
     font-weight: 500;
+}
+
+.move-desc {
+    font-size: 0.75rem;
+    color: #aaa;
+    max-width: 300px;
 }
 
 /* Empty State */

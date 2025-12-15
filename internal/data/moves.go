@@ -27,6 +27,8 @@ type Move struct {
 	DefensiveCategory string     `json:"defensiveCategory,omitempty"` // For moves like Psyshock
 	OverrideOffensiveStat string `json:"overrideOffensiveStat,omitempty"`
 	OverrideDefensiveStat string `json:"overrideDefensiveStat,omitempty"`
+	Desc                  string `json:"desc,omitempty"`
+	ShortDesc             string `json:"shortDesc,omitempty"`
 }
 
 // MoveSecondary represents secondary effects of a move
