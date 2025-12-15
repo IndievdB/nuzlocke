@@ -1,7 +1,7 @@
 function calculator() {
     return {
         // Generation setting
-        generation: '9',
+        generation: '3',
 
         // Pokemon data
         attacker: createDefaultPokemon(),
@@ -16,6 +16,8 @@ function calculator() {
         // Attacker's learnset and move details cache
         attackerLearnset: null,
         moveCache: {},
+        abilityCache: {},
+        itemCache: {},
 
         // Form variants
         attackerForms: [],
@@ -43,6 +45,12 @@ function calculator() {
         defenderSearchResults: [],
         showDefenderResults: false,
 
+        // Item search state
+        attackerItemResults: [],
+        defenderItemResults: [],
+        showAttackerItemResults: false,
+        showDefenderItemResults: false,
+
         // Defender HP percent (for display)
         defenderHPPercent: 100,
 
@@ -51,6 +59,7 @@ function calculator() {
 
         // Data caches
         natures: [],
+        allItems: null, // Cached items list
 
         // Initialize
         async init() {
@@ -61,6 +70,8 @@ function calculator() {
             } catch (e) {
                 console.error('Failed to load natures:', e);
             }
+            // Preload items for autocomplete and descriptions
+            this.loadItems();
         },
 
         // Search Pokemon (filters out form variants)
@@ -295,6 +306,108 @@ function calculator() {
             return this.moveCache[moveId] || null;
         },
 
+        // Fetch and cache ability data
+        async fetchAbility(abilityName) {
+            if (!abilityName) return null;
+            const key = abilityName.toLowerCase().replace(/\s+/g, '');
+            if (this.abilityCache[key]) {
+                return this.abilityCache[key];
+            }
+            try {
+                const response = await fetch(`/api/abilities/${key}`);
+                if (response.ok) {
+                    const ability = await response.json();
+                    this.abilityCache[key] = ability;
+                    return ability;
+                }
+            } catch (e) {
+                console.error('Failed to fetch ability:', e);
+            }
+            return null;
+        },
+
+        // Get ability description (from cache or fetch)
+        getAbilityDescription(role) {
+            const target = role === 'attacker' ? this.attacker : this.defender;
+            if (!target.ability) return '';
+            const key = target.ability.toLowerCase().replace(/\s+/g, '');
+            const cached = this.abilityCache[key];
+            if (cached) {
+                return cached.shortDesc || cached.desc || '';
+            }
+            // Trigger fetch if not cached
+            this.fetchAbility(target.ability);
+            return '';
+        },
+
+        // Get item description
+        getItemDescription(role) {
+            const target = role === 'attacker' ? this.attacker : this.defender;
+            if (!target.item || !this.allItems) return '';
+
+            // Find item in cached list
+            const itemLower = target.item.toLowerCase();
+            const item = this.allItems.find(i => i.name.toLowerCase() === itemLower);
+            return item?.desc || '';
+        },
+
+        // Load and cache all items
+        async loadItems() {
+            if (this.allItems) return this.allItems;
+            try {
+                const response = await fetch('/api/items');
+                this.allItems = await response.json();
+                return this.allItems;
+            } catch (e) {
+                console.error('Failed to load items:', e);
+                return [];
+            }
+        },
+
+        // Search items for autocomplete
+        async searchItems(role) {
+            const target = role === 'attacker' ? this.attacker : this.defender;
+            const query = target.item;
+
+            if (!query || query.length < 2) {
+                if (role === 'attacker') {
+                    this.attackerItemResults = [];
+                    this.showAttackerItemResults = false;
+                } else {
+                    this.defenderItemResults = [];
+                    this.showDefenderItemResults = false;
+                }
+                return;
+            }
+
+            const items = await this.loadItems();
+
+            // Filter items that match the query
+            const queryLower = query.toLowerCase();
+            const results = items
+                .filter(item => item.name.toLowerCase().includes(queryLower))
+                .slice(0, 8); // Limit results
+
+            if (role === 'attacker') {
+                this.attackerItemResults = results;
+                this.showAttackerItemResults = results.length > 0;
+            } else {
+                this.defenderItemResults = results;
+                this.showDefenderItemResults = results.length > 0;
+            }
+        },
+
+        // Select an item from autocomplete
+        selectItem(role, item) {
+            const target = role === 'attacker' ? this.attacker : this.defender;
+            target.item = item.name;
+            if (role === 'attacker') {
+                this.showAttackerItemResults = false;
+            } else {
+                this.showDefenderItemResults = false;
+            }
+        },
+
         // Format move for display
         formatMove(moveId, level = null) {
             const move = this.getMoveDetails(moveId);
@@ -330,6 +443,20 @@ function calculator() {
         setAllEvs(role, value) {
             const target = role === 'attacker' ? this.attacker : this.defender;
             target.evs = { hp: value, atk: value, def: value, spa: value, spd: value, spe: value };
+        },
+
+        // Set nature by stat boost
+        setNature(role, boostStat) {
+            const target = role === 'attacker' ? this.attacker : this.defender;
+            // Common competitive natures for each boost
+            const natureMap = {
+                'atk': 'adamant',    // +Atk -SpA
+                'spa': 'modest',     // +SpA -Atk
+                'def': 'bold',       // +Def -Atk (for special attackers) or impish for physical
+                'spd': 'calm',       // +SpD -Atk (for special attackers) or careful for physical
+                'spe': 'jolly'       // +Spe -SpA
+            };
+            target.nature = natureMap[boostStat] || 'hardy';
         },
 
         // Get abilities list for a Pokemon

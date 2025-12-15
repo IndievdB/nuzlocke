@@ -383,6 +383,7 @@ func (s *Store) AllItemsList() []map[string]string {
 		list = append(list, map[string]string{
 			"id":   id,
 			"name": item.Name,
+			"desc": item.Desc,
 		})
 	}
 	return list

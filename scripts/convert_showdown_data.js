@@ -88,8 +88,11 @@ function convertItems() {
         const item = { id };
 
         // Extract simple properties
-        const nameMatch = body.match(/name:\s*["']([^"']+)["']/);
-        if (nameMatch) item.name = nameMatch[1];
+        // Handle names with apostrophes - match based on delimiter type
+        const nameMatchDouble = body.match(/name:\s*"([^"]+)"/);
+        const nameMatchSingle = body.match(/name:\s*'([^']+)'/);
+        if (nameMatchDouble) item.name = nameMatchDouble[1];
+        else if (nameMatchSingle) item.name = nameMatchSingle[1];
 
         const numMatch = body.match(/num:\s*(\d+)/);
         if (numMatch) item.num = parseInt(numMatch[1]);

@@ -236,6 +236,13 @@ func (h *Handler) HandleGetLearnset(w http.ResponseWriter, r *http.Request) {
 	}
 
 	learnset := h.Store.GetLearnset(id)
+
+	// If form has no learnset, fall back to base species
+	if learnset == nil && pokemon.BaseSpecies != "" {
+		baseId := strings.ToLower(strings.ReplaceAll(pokemon.BaseSpecies, " ", ""))
+		learnset = h.Store.GetLearnset(baseId)
+	}
+
 	parsed := data.ParseLearnset(learnset, 9) // Default to Gen 9
 
 	response := LearnsetResponse{
