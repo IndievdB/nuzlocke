@@ -18,6 +18,14 @@
             <a href="/party">Party</a>
             <a href="/catch">Catch</a>
         </nav>
+        <div class="generation-toggle">
+            <label>
+                <input type="radio" x-model="generation" value="3" @change="reloadLearnset(); saveState()"> Gen 3
+            </label>
+            <label>
+                <input type="radio" x-model="generation" value="9" @change="reloadLearnset(); saveState()"> Gen 9
+            </label>
+        </div>
     </header>
 
     <main class="moves-layout">

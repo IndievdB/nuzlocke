@@ -37,7 +37,7 @@
                 <button x-show="lastFile" @click="refreshFile()" class="refresh-btn" title="Reload save file from disk">
                     ↻ Refresh
                 </button>
-                <button x-show="party.length > 0" @click="discardParty()" class="discard-btn" title="Clear party data">
+                <button x-show="party.length > 0 && !lastFile" @click="discardParty()" class="discard-btn" title="Clear party data">
                     ✕ Discard
                 </button>
             </div>

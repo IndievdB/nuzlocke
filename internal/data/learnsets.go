@@ -37,6 +37,17 @@ func ParseLearnset(raw *Learnset, generation int) *ParsedLearnset {
 
 	genStr := string('0' + generation)
 
+	// Track level-up moves with their generation to pick highest gen's level
+	levelUpByMove := make(map[string]struct {
+		level int
+		gen   byte
+	})
+
+	tmSeen := make(map[string]bool)
+	tutorSeen := make(map[string]bool)
+	eggSeen := make(map[string]bool)
+	eventSeen := make(map[string]bool)
+
 	for moveName, sources := range raw.Learnset {
 		for _, source := range sources {
 			if len(source) < 2 {
@@ -44,8 +55,8 @@ func ParseLearnset(raw *Learnset, generation int) *ParsedLearnset {
 			}
 
 			// Check if this source is from the target generation or earlier
-			sourceGen := string(source[0])
-			if sourceGen > genStr {
+			sourceGen := source[0]
+			if string(sourceGen) > genStr {
 				continue
 			}
 
@@ -61,68 +72,49 @@ func ParseLearnset(raw *Learnset, generation int) *ParsedLearnset {
 						}
 					}
 				}
-				// Only add if this is the highest generation available
-				parsed.LevelUp = append(parsed.LevelUp, LevelUpMove{
-					Move:  moveName,
-					Level: level,
-				})
+				// Keep the highest generation's level for each move
+				if existing, ok := levelUpByMove[moveName]; !ok || sourceGen > existing.gen {
+					levelUpByMove[moveName] = struct {
+						level int
+						gen   byte
+					}{level, sourceGen}
+				}
 			case 'M':
-				// TM/HM move
-				parsed.TM = append(parsed.TM, moveName)
+				// TM/HM move - deduplicate
+				if !tmSeen[moveName] {
+					tmSeen[moveName] = true
+					parsed.TM = append(parsed.TM, moveName)
+				}
 			case 'T':
-				// Tutor move
-				parsed.Tutor = append(parsed.Tutor, moveName)
+				// Tutor move - deduplicate
+				if !tutorSeen[moveName] {
+					tutorSeen[moveName] = true
+					parsed.Tutor = append(parsed.Tutor, moveName)
+				}
 			case 'E':
-				// Egg move
-				parsed.Egg = append(parsed.Egg, moveName)
+				// Egg move - deduplicate
+				if !eggSeen[moveName] {
+					eggSeen[moveName] = true
+					parsed.Egg = append(parsed.Egg, moveName)
+				}
 			case 'S':
-				// Event move
-				parsed.Event = append(parsed.Event, moveName)
+				// Event move - deduplicate
+				if !eventSeen[moveName] {
+					eventSeen[moveName] = true
+					parsed.Event = append(parsed.Event, moveName)
+				}
 			}
 		}
 	}
 
-	// Remove duplicates from each category
-	parsed.LevelUp = deduplicateLevelUp(parsed.LevelUp)
-	parsed.TM = deduplicate(parsed.TM)
-	parsed.Tutor = deduplicate(parsed.Tutor)
-	parsed.Egg = deduplicate(parsed.Egg)
-	parsed.Event = deduplicate(parsed.Event)
+	// Convert level-up map to slice
+	for moveName, data := range levelUpByMove {
+		parsed.LevelUp = append(parsed.LevelUp, LevelUpMove{
+			Move:  moveName,
+			Level: data.level,
+		})
+	}
 
 	return parsed
 }
 
-// deduplicateLevelUp removes duplicate moves, keeping the lowest level for each
-func deduplicateLevelUp(moves []LevelUpMove) []LevelUpMove {
-	seen := make(map[string]int) // moveName -> index in result
-	result := []LevelUpMove{}
-
-	for _, m := range moves {
-		if idx, ok := seen[m.Move]; ok {
-			// Keep the lower level
-			if m.Level < result[idx].Level {
-				result[idx].Level = m.Level
-			}
-		} else {
-			seen[m.Move] = len(result)
-			result = append(result, m)
-		}
-	}
-
-	return result
-}
-
-// deduplicate removes duplicate strings from a slice
-func deduplicate(items []string) []string {
-	seen := make(map[string]bool)
-	result := []string{}
-
-	for _, item := range items {
-		if !seen[item] {
-			seen[item] = true
-			result = append(result, item)
-		}
-	}
-
-	return result
-}

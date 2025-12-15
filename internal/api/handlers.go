@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"nuzlocke/internal/calc"
@@ -243,7 +244,15 @@ func (h *Handler) HandleGetLearnset(w http.ResponseWriter, r *http.Request) {
 		learnset = h.Store.GetLearnset(baseId)
 	}
 
-	parsed := data.ParseLearnset(learnset, 9) // Default to Gen 9
+	// Parse generation from query param (default to 9)
+	generation := 9
+	if genStr := r.URL.Query().Get("gen"); genStr != "" {
+		if g, err := strconv.Atoi(genStr); err == nil && g >= 1 && g <= 9 {
+			generation = g
+		}
+	}
+
+	parsed := data.ParseLearnset(learnset, generation)
 
 	response := LearnsetResponse{
 		Pokemon:  id,
@@ -287,7 +296,16 @@ func (h *Handler) HandleGetPokemonFull(w http.ResponseWriter, r *http.Request) {
 	}
 
 	learnset := h.Store.GetLearnset(id)
-	parsed := data.ParseLearnset(learnset, 9)
+
+	// Parse generation from query param (default to 9)
+	generation := 9
+	if genStr := r.URL.Query().Get("gen"); genStr != "" {
+		if g, err := strconv.Atoi(genStr); err == nil && g >= 1 && g <= 9 {
+			generation = g
+		}
+	}
+
+	parsed := data.ParseLearnset(learnset, generation)
 
 	// Calculate type matchups
 	matchups := calculateTypeMatchups(h.Store, pokemon.Types)

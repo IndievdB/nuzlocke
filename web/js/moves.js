@@ -1,5 +1,8 @@
 function movesApp() {
     return {
+        // Generation setting (9 = Gen 9 default)
+        generation: '9',
+
         // Search state
         searchQuery: '',
         searchResults: [],
@@ -62,6 +65,7 @@ function movesApp() {
         saveState() {
             try {
                 const state = {
+                    generation: this.generation,
                     selectedPokemonId: this.selectedPokemon ? this.toID(this.selectedPokemon.name) : null,
                     searchQuery: this.searchQuery,
                     showLevelUp: this.showLevelUp,
@@ -82,6 +86,9 @@ function movesApp() {
                 if (!saved) return;
 
                 const state = JSON.parse(saved);
+
+                // Restore generation
+                if (state.generation) this.generation = state.generation;
 
                 // Restore filters
                 if (state.showLevelUp !== undefined) this.showLevelUp = state.showLevelUp;
@@ -104,7 +111,7 @@ function movesApp() {
         // Select Pokemon by ID (for state restoration)
         async selectPokemonById(pokemonId) {
             try {
-                const response = await fetch(`/api/pokemon/${pokemonId}/full`);
+                const response = await fetch(`/api/pokemon/${pokemonId}/full?gen=${this.generation}`);
                 const data = await response.json();
                 this.selectedPokemon = data.pokemon;
                 this.learnset = data.learnset;
@@ -116,6 +123,20 @@ function movesApp() {
                 await this.loadAbilityData();
             } catch (e) {
                 console.error('Failed to load Pokemon:', e);
+            }
+        },
+
+        // Reload learnset when generation changes
+        async reloadLearnset() {
+            if (!this.selectedPokemon) return;
+            const pokemonId = this.toID(this.selectedPokemon.name);
+            try {
+                const response = await fetch(`/api/pokemon/${pokemonId}/learnset?gen=${this.generation}`);
+                const data = await response.json();
+                this.learnset = data.learnset;
+                await this.loadMoveData();
+            } catch (e) {
+                console.error('Failed to reload learnset:', e);
             }
         },
 
@@ -149,7 +170,7 @@ function movesApp() {
             this.showResults = false;
 
             try {
-                const response = await fetch(`/api/pokemon/${result.id}/full`);
+                const response = await fetch(`/api/pokemon/${result.id}/full?gen=${this.generation}`);
                 const data = await response.json();
                 this.selectedPokemon = data.pokemon;
                 this.learnset = data.learnset;

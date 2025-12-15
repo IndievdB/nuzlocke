@@ -113,6 +113,27 @@ function calculator() {
             }
         },
 
+        // Clear all saved calculator state
+        clearState() {
+            localStorage.removeItem('calculator_state');
+            this.attacker = createDefaultPokemon();
+            this.defender = createDefaultPokemon();
+            this.attackerSearch = '';
+            this.defenderSearch = '';
+            this.attackerForms = [];
+            this.defenderForms = [];
+            this.attackerLearnset = null;
+            this.move = { name: '', isCrit: false };
+            this.field = {
+                weather: '',
+                terrain: '',
+                attackerSide: { helpingHand: false },
+                defenderSide: { reflect: false, lightScreen: false }
+            };
+            this.defenderHPPercent = 100;
+            this.result = null;
+        },
+
         // Serialize Pokemon state (excluding non-serializable speciesData)
         serializePokemon(pokemon) {
             return {

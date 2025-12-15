@@ -78,6 +78,12 @@ function partyApp() {
 
                 const result = await response.json();
                 console.log('Parsed party data:', result);
+                // Debug: log item info for each Pokemon
+                if (result.party) {
+                    result.party.forEach((p, i) => {
+                        console.log(`Pokemon ${i} (${p.species}): item =`, p.item);
+                    });
+                }
                 this.party = result.party || [];
 
                 if (this.party.length === 0) {
