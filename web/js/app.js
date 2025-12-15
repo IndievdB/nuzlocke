@@ -15,7 +15,6 @@ function calculator() {
 
         // Attacker's learnset and move details cache
         attackerLearnset: null,
-        attackerKnownMoves: [], // Moves the attacker actually knows (from party import)
         moveCache: {},
         abilityCache: {},
         itemCache: {},
@@ -89,11 +88,33 @@ function calculator() {
                 const saved = localStorage.getItem('nuzlocke_party');
                 if (saved) {
                     const state = JSON.parse(saved);
-                    this.partyPokemon = state.party || [];
+                    this.partyPokemon = [...(state.party || []), ...(state.boxes || []).flat()];
                 }
             } catch (e) {
                 console.error('Failed to load party data:', e);
             }
+        },
+
+        // Get known moves for the current attacker (if they match a party Pokemon)
+        getAttackerKnownMoves() {
+            if (!this.attacker.species || !this.partyPokemon.length) {
+                return [];
+            }
+            // Find a party Pokemon with matching species (case-insensitive)
+            const attackerSpecies = this.attacker.species.toLowerCase();
+            const partyMatch = this.partyPokemon.find(p =>
+                p.species && p.species.toLowerCase() === attackerSpecies
+            );
+            if (partyMatch && partyMatch.moves && partyMatch.moves.length > 0) {
+                return partyMatch.moves.map(m => ({
+                    id: m.name.toLowerCase().replace(/[^a-z0-9]/g, ''),
+                    name: m.name,
+                    type: m.type,
+                    category: m.category,
+                    power: m.power
+                }));
+            }
+            return [];
         },
 
         // Save calculator state to localStorage
@@ -105,7 +126,6 @@ function calculator() {
                     defender: this.serializePokemon(this.defender),
                     attackerSearch: this.attackerSearch,
                     defenderSearch: this.defenderSearch,
-                    attackerKnownMoves: this.attackerKnownMoves,
                     move: this.move,
                     field: this.field,
                     attackerHPPercent: this.attackerHPPercent,
@@ -127,7 +147,6 @@ function calculator() {
             this.attackerForms = [];
             this.defenderForms = [];
             this.attackerLearnset = null;
-            this.attackerKnownMoves = [];
             this.move = { name: '', isCrit: false };
             this.field = {
                 weather: '',
@@ -179,11 +198,6 @@ function calculator() {
                 // Restore attacker
                 if (state.attacker && state.attacker.species) {
                     await this.restorePokemon('attacker', state.attacker, state.attackerSearch);
-                }
-
-                // Restore attacker's known moves
-                if (state.attackerKnownMoves) {
-                    this.attackerKnownMoves = state.attackerKnownMoves;
                 }
 
                 // Restore defender
@@ -284,19 +298,10 @@ function calculator() {
                     await this.loadAttackerLearnset(speciesId);
                     await this.loadForms('attacker', pokemon.baseSpecies || pokemon.name);
 
-                    // Store known moves from party
-                    if (partyPokemon.moves && partyPokemon.moves.length > 0) {
-                        this.attackerKnownMoves = partyPokemon.moves.map(m => ({
-                            id: m.name.toLowerCase().replace(/[^a-z0-9]/g, ''),
-                            name: m.name,
-                            type: m.type,
-                            category: m.category,
-                            power: m.power
-                        }));
-                        // Set first move as default
-                        this.move.name = this.attackerKnownMoves[0].id;
-                    } else {
-                        this.attackerKnownMoves = [];
+                    // Set first known move as default
+                    const knownMoves = this.getAttackerKnownMoves();
+                    if (knownMoves.length > 0) {
+                        this.move.name = knownMoves[0].id;
                     }
                 } else {
                     this.defenderSearch = partyPokemon.species;
@@ -388,7 +393,6 @@ function calculator() {
                 if (role === 'attacker') {
                     this.attackerSearch = result.name;
                     this.showAttackerResults = false;
-                    this.attackerKnownMoves = []; // Clear known moves when selecting via search
                     // Load learnset for attacker
                     await this.loadAttackerLearnset(result.id);
                     // Load forms
