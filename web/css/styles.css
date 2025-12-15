@@ -1069,6 +1069,12 @@ nav a:hover, nav a.active {
     font-style: italic;
 }
 
+.party-info .pokemon-species {
+    color: #888;
+    font-size: 0.85rem;
+    margin-left: 0.25rem;
+}
+
 .party-info .pokemon-level {
     color: #4a90d9;
     font-size: 0.85rem;
@@ -1634,4 +1640,30 @@ nav a:hover, nav a.active {
     font-size: 0.9rem;
     color: #ccc;
     line-height: 1.4;
+}
+
+/* Calculator Pokemon Sprites */
+.pokemon-search-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.pokemon-sprite-small {
+    width: 64px;
+    height: 64px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pokemon-sprite-small img {
+    max-width: 100%;
+    max-height: 100%;
+    image-rendering: pixelated;
+}
+
+.pokemon-search-row .search-container {
+    flex-grow: 1;
 }

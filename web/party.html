@@ -55,8 +55,8 @@
                                      @error="handleSpriteError($event)">
                             </div>
                             <div class="party-info">
-                                <span class="pokemon-name" x-text="pokemon.species"></span>
-                                <span class="pokemon-nickname" x-show="pokemon.nickname && pokemon.nickname !== pokemon.species" x-text="'\"' + pokemon.nickname + '\"'"></span>
+                                <span class="pokemon-name" x-text="pokemon.nickname && pokemon.nickname.toLowerCase() !== pokemon.species.toLowerCase() ? pokemon.nickname : pokemon.species"></span>
+                                <span class="pokemon-species" x-show="pokemon.nickname && pokemon.nickname.toLowerCase() !== pokemon.species.toLowerCase()" x-text="'(' + pokemon.species + ')'"></span>
                                 <div class="pokemon-details-grid">
                                     <span class="pokemon-level" x-text="'Lv. ' + pokemon.level"></span>
                                     <span class="pokemon-ability has-tooltip"

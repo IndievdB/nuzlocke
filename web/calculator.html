@@ -33,21 +33,26 @@
         <section class="pokemon-panel">
             <h2>Attacker</h2>
 
-            <!-- Pokemon Search -->
-            <div class="search-container">
-                <input type="text"
-                       x-model="attackerSearch"
-                       @input.debounce.200ms="searchPokemon('attacker')"
-                       @focus="showAttackerResults = attackerSearchResults.length > 0"
-                       placeholder="Search Pokemon..."
-                       autocomplete="off">
-                <ul x-show="showAttackerResults && attackerSearchResults.length > 0"
-                    class="search-results"
-                    @click.away="showAttackerResults = false">
-                    <template x-for="result in attackerSearchResults" :key="result.id">
-                        <li @click="selectPokemon('attacker', result)" x-text="result.name"></li>
-                    </template>
-                </ul>
+            <!-- Pokemon Search with Sprite -->
+            <div class="pokemon-search-row">
+                <div class="pokemon-sprite-small" x-show="attacker.speciesData">
+                    <img :src="getSpriteUrl('attacker')" :alt="attacker.speciesData?.name" @error="handleSpriteError($event)">
+                </div>
+                <div class="search-container">
+                    <input type="text"
+                           x-model="attackerSearch"
+                           @input.debounce.200ms="searchPokemon('attacker')"
+                           @focus="showAttackerResults = attackerSearchResults.length > 0"
+                           placeholder="Search Pokemon..."
+                           autocomplete="off">
+                    <ul x-show="showAttackerResults && attackerSearchResults.length > 0"
+                        class="search-results"
+                        @click.away="showAttackerResults = false">
+                        <template x-for="result in attackerSearchResults" :key="result.id">
+                            <li @click="selectPokemon('attacker', result)" x-text="result.name"></li>
+                        </template>
+                    </ul>
+                </div>
             </div>
 
             <!-- Form Selector -->
@@ -291,21 +296,26 @@
         <section class="pokemon-panel">
             <h2>Defender</h2>
 
-            <!-- Pokemon Search -->
-            <div class="search-container">
-                <input type="text"
-                       x-model="defenderSearch"
-                       @input.debounce.200ms="searchPokemon('defender')"
-                       @focus="showDefenderResults = defenderSearchResults.length > 0"
-                       placeholder="Search Pokemon..."
-                       autocomplete="off">
-                <ul x-show="showDefenderResults && defenderSearchResults.length > 0"
-                    class="search-results"
-                    @click.away="showDefenderResults = false">
-                    <template x-for="result in defenderSearchResults" :key="result.id">
-                        <li @click="selectPokemon('defender', result)" x-text="result.name"></li>
-                    </template>
-                </ul>
+            <!-- Pokemon Search with Sprite -->
+            <div class="pokemon-search-row">
+                <div class="pokemon-sprite-small" x-show="defender.speciesData">
+                    <img :src="getSpriteUrl('defender')" :alt="defender.speciesData?.name" @error="handleSpriteError($event)">
+                </div>
+                <div class="search-container">
+                    <input type="text"
+                           x-model="defenderSearch"
+                           @input.debounce.200ms="searchPokemon('defender')"
+                           @focus="showDefenderResults = defenderSearchResults.length > 0"
+                           placeholder="Search Pokemon..."
+                           autocomplete="off">
+                    <ul x-show="showDefenderResults && defenderSearchResults.length > 0"
+                        class="search-results"
+                        @click.away="showDefenderResults = false">
+                        <template x-for="result in defenderSearchResults" :key="result.id">
+                            <li @click="selectPokemon('defender', result)" x-text="result.name"></li>
+                        </template>
+                    </ul>
+                </div>
             </div>
 
             <!-- Form Selector -->

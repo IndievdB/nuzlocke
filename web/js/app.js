@@ -74,6 +74,23 @@ function calculator() {
             this.loadItems();
         },
 
+        // Get sprite URL for a Pokemon
+        getSpriteUrl(role) {
+            const target = role === 'attacker' ? this.attacker : this.defender;
+            if (!target.speciesData) return '';
+            const name = target.speciesData.name.toLowerCase()
+                .replace(/[^a-z0-9-]/g, '')
+                .replace(/^(.+)-mega(-[xy])?$/, 'mega$1$2')  // Handle mega forms
+                .replace(/^(.+)-alola$/, '$1-alola')
+                .replace(/^(.+)-galar$/, '$1-galar');
+            return `https://play.pokemonshowdown.com/sprites/gen5/${name}.png`;
+        },
+
+        // Handle sprite load errors
+        handleSpriteError(event) {
+            event.target.src = 'https://play.pokemonshowdown.com/sprites/gen5/0.png';
+        },
+
         // Search Pokemon (filters out form variants)
         async searchPokemon(role) {
             const query = role === 'attacker' ? this.attackerSearch : this.defenderSearch;

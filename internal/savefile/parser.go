@@ -693,8 +693,9 @@ func parsePokemon(data []byte) PartyPokemon {
 	// Read OT ID (bytes 4-7)
 	otID := binary.LittleEndian.Uint32(data[4:8])
 
-	// Read nickname (bytes 8-17)
-	nickname := decodeGen3String(data[8:18])
+	// Read base nickname (bytes 8-17, 10 characters)
+	// Extended nickname chars (11-12) are in Growth substruct, extracted after decryption
+	baseNickname := decodeGen3String(data[8:18])
 
 	// Read level from party data (byte 84)
 	level := int(data[84])
@@ -737,6 +738,27 @@ func parsePokemon(data []byte) PartyPokemon {
 	itemNum := rawItemID
 	if showdownID, ok := expansionItemToShowdown[rawItemID]; ok {
 		itemNum = showdownID
+	}
+
+	// Get extended nickname characters (11th and 12th) from Growth substruct
+	// nickname11: bytes 4-7, bits 21-28
+	// nickname12: bytes 10-11, bits 6-13
+	expData := binary.LittleEndian.Uint32(decryptedData[growthPos+4 : growthPos+8])
+	nickname11 := byte((expData >> 21) & 0xFF)
+	pokeballData := binary.LittleEndian.Uint16(decryptedData[growthPos+10 : growthPos+12])
+	nickname12 := byte((pokeballData >> 6) & 0xFF)
+
+	// Build full nickname (base + extended chars if present)
+	nickname := baseNickname
+	if nickname11 != 0xFF && nickname11 != 0 {
+		if char, ok := gen3CharTable[nickname11]; ok && char != 0 {
+			nickname += string(char)
+		}
+	}
+	if nickname12 != 0xFF && nickname12 != 0 {
+		if char, ok := gen3CharTable[nickname12]; ok && char != 0 {
+			nickname += string(char)
+		}
 	}
 
 	// Get moves from Attacks substructure (bytes 0-7, 4 moves of 2 bytes each)
