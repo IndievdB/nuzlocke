@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pokemon Damage Calculator</title>
+    <title>Nuzlocke Helper</title>
+    <link rel="icon" href="https://play.pokemonshowdown.com/sprites/itemicons/poke-ball.png" type="image/png">
     <link rel="stylesheet" href="/css/styles.css">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="/js/app.js?v=2"></script>
@@ -132,6 +133,7 @@
                 <div class="item-presets">
                     <button type="button" class="item-btn" @click="attacker.item = 'Choice Band'; showAttackerItemResults = false; saveState()" :class="{ active: attacker.item === 'Choice Band' }">C.Band</button>
                     <button type="button" class="item-btn" @click="attacker.item = 'Choice Specs'; showAttackerItemResults = false; saveState()" :class="{ active: attacker.item === 'Choice Specs' }">C.Specs</button>
+                    <button type="button" class="item-btn" @click="attacker.item = 'Choice Scarf'; showAttackerItemResults = false; saveState()" :class="{ active: attacker.item === 'Choice Scarf' }">C.Scarf</button>
                     <button type="button" class="item-btn" @click="attacker.item = 'Life Orb'; showAttackerItemResults = false; saveState()" :class="{ active: attacker.item === 'Life Orb' }">Life Orb</button>
                     <button type="button" class="item-btn" @click="attacker.item = ''; showAttackerItemResults = false; saveState()" :class="{ active: !attacker.item }">None</button>
                 </div>
@@ -187,6 +189,12 @@
                     <div class="stat-row">
                         <label>Atk:</label><input type="number" x-model.number="attacker.boosts.atk" min="-6" max="6" @change="saveState()">
                         <label>SpA:</label><input type="number" x-model.number="attacker.boosts.spa" min="-6" max="6" @change="saveState()">
+                        <label>Spe:</label><input type="number" x-model.number="attacker.boosts.spe" min="-6" max="6" @change="saveState()">
+                    </div>
+                    <div class="boost-presets">
+                        <button type="button" class="boost-btn" @click="attacker.boosts.spe = 1; saveState()" :class="{ active: attacker.boosts.spe === 1 }">+1 Spe</button>
+                        <button type="button" class="boost-btn" @click="attacker.boosts.spe = 2; saveState()" :class="{ active: attacker.boosts.spe === 2 }">+2 Spe</button>
+                        <button type="button" class="boost-btn" @click="attacker.boosts.spe = 0; saveState()" :class="{ active: attacker.boosts.spe === 0 }">0</button>
                     </div>
                 </div>
 
@@ -418,6 +426,7 @@
                     </ul>
                 </div>
                 <div class="item-presets">
+                    <button type="button" class="item-btn" @click="defender.item = 'Choice Scarf'; showDefenderItemResults = false; saveState()" :class="{ active: defender.item === 'Choice Scarf' }">C.Scarf</button>
                     <button type="button" class="item-btn" @click="defender.item = 'Assault Vest'; showDefenderItemResults = false; saveState()" :class="{ active: defender.item === 'Assault Vest' }">A.Vest</button>
                     <button type="button" class="item-btn" @click="defender.item = 'Eviolite'; showDefenderItemResults = false; saveState()" :class="{ active: defender.item === 'Eviolite' }">Eviolite</button>
                     <button type="button" class="item-btn" @click="defender.item = ''; showDefenderItemResults = false; saveState()" :class="{ active: !defender.item }">None</button>
@@ -474,6 +483,12 @@
                     <div class="stat-row">
                         <label>Def:</label><input type="number" x-model.number="defender.boosts.def" min="-6" max="6" @change="saveState()">
                         <label>SpD:</label><input type="number" x-model.number="defender.boosts.spd" min="-6" max="6" @change="saveState()">
+                        <label>Spe:</label><input type="number" x-model.number="defender.boosts.spe" min="-6" max="6" @change="saveState()">
+                    </div>
+                    <div class="boost-presets">
+                        <button type="button" class="boost-btn" @click="defender.boosts.spe = 1; saveState()" :class="{ active: defender.boosts.spe === 1 }">+1 Spe</button>
+                        <button type="button" class="boost-btn" @click="defender.boosts.spe = 2; saveState()" :class="{ active: defender.boosts.spe === 2 }">+2 Spe</button>
+                        <button type="button" class="boost-btn" @click="defender.boosts.spe = 0; saveState()" :class="{ active: defender.boosts.spe === 0 }">0</button>
                     </div>
                 </div>
 
@@ -485,6 +500,29 @@
             </div>
         </section>
     </main>
+
+    <!-- Speed Comparison -->
+    <section class="speed-panel" x-show="attacker.speciesData && defender.speciesData">
+        <h3>Speed Comparison</h3>
+        <div class="speed-comparison">
+            <div class="speed-pokemon" :class="{ 'speed-winner': getSpeedComparison()?.attackerFirst || getSpeedComparison()?.alwaysAttackerFirst }">
+                <span class="speed-label">Attacker</span>
+                <span class="speed-value" x-text="getSpeedComparison()?.attackerSpeed || '-'"></span>
+                <span class="speed-pokemon-name" x-text="attacker.speciesData?.name"></span>
+            </div>
+            <div class="speed-vs">
+                <span class="speed-result" x-text="getSpeedText()"></span>
+                <span class="quick-claw-note" x-show="getSpeedComparison()?.attackerQuickClaw || getSpeedComparison()?.defenderQuickClaw">
+                    Quick Claw: 20% to move first
+                </span>
+            </div>
+            <div class="speed-pokemon" :class="{ 'speed-winner': getSpeedComparison()?.defenderFirst || getSpeedComparison()?.alwaysDefenderFirst }">
+                <span class="speed-label">Defender</span>
+                <span class="speed-value" x-text="getSpeedComparison()?.defenderSpeed || '-'"></span>
+                <span class="speed-pokemon-name" x-text="defender.speciesData?.name"></span>
+            </div>
+        </div>
+    </section>
 
     <!-- Results -->
     <section class="results-panel" x-show="result">

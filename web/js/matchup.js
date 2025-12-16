@@ -10,10 +10,8 @@ function matchupApp() {
 
         // Config
         generation: 3,
-        enemyEvs: { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
-        enemyIvs: { hp: 15, atk: 15, def: 15, spa: 15, spd: 15, spe: 15 },
-        unknownEvs: true,
-        unknownIvs: true,
+        evMode: 'unknown',  // 'min', 'unknown', 'max'
+        ivMode: 'unknown',  // 'min', 'unknown', 'max'
 
         // Party data
         partyPokemon: [],
@@ -39,10 +37,8 @@ function matchupApp() {
                     const state = JSON.parse(saved);
                     this.enemy = state.enemy || { species: '', level: 50 };
                     this.generation = state.generation || 3;
-                    this.enemyEvs = state.enemyEvs || { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
-                    this.enemyIvs = state.enemyIvs || { hp: 15, atk: 15, def: 15, spa: 15, spd: 15, spe: 15 };
-                    this.unknownEvs = state.unknownEvs !== undefined ? state.unknownEvs : true;
-                    this.unknownIvs = state.unknownIvs !== undefined ? state.unknownIvs : true;
+                    this.evMode = state.evMode || 'unknown';
+                    this.ivMode = state.ivMode || 'unknown';
                     this.enemySearchQuery = state.enemySearchQuery || '';
                 }
             } catch (e) {
@@ -55,10 +51,8 @@ function matchupApp() {
                 const state = {
                     enemy: this.enemy,
                     generation: this.generation,
-                    enemyEvs: this.enemyEvs,
-                    enemyIvs: this.enemyIvs,
-                    unknownEvs: this.unknownEvs,
-                    unknownIvs: this.unknownIvs,
+                    evMode: this.evMode,
+                    ivMode: this.ivMode,
                     enemySearchQuery: this.enemySearchQuery
                 };
                 localStorage.setItem('matchup_state', JSON.stringify(state));
@@ -73,7 +67,15 @@ function matchupApp() {
                 if (saved) {
                     const state = JSON.parse(saved);
                     // Only use party Pokemon, not box Pokemon
-                    this.partyPokemon = state.party || [];
+                    const party = state.party || [];
+                    // Deduplicate by species+level+nickname to avoid display issues
+                    const seen = new Set();
+                    this.partyPokemon = party.filter(p => {
+                        const key = `${p.species}-${p.level}-${p.nickname || ''}`;
+                        if (seen.has(key)) return false;
+                        seen.add(key);
+                        return true;
+                    });
                 }
             } catch (e) {
                 console.error('Failed to load party data:', e);
@@ -126,26 +128,30 @@ function matchupApp() {
                 const response = await fetch(`/api/pokemon/${this.enemy.species}/learnset?gen=9`);
                 const data = await response.json();
 
-                // Filter to level-up moves at or below current level
-                const levelUpMoves = (data.learnset?.levelup || [])
+                // Filter to level-up moves at or below current level, deduplicate
+                const levelUpMoves = [...new Set((data.learnset?.levelup || [])
                     .filter(m => m.level <= this.enemy.level)
-                    .map(m => m.move);
+                    .map(m => m.move))];
 
                 // Fetch move details for each
                 this.enemyLearnset = [];
                 for (const moveId of levelUpMoves) {
                     try {
                         const moveResponse = await fetch(`/api/moves/${moveId}`);
+                        if (!moveResponse.ok) continue;
                         const moveData = await moveResponse.json();
-                        this.enemyLearnset.push({
-                            id: moveId,
-                            name: moveData.name,
-                            type: moveData.type,
-                            category: moveData.category,
-                            power: moveData.basePower,
-                            accuracy: moveData.accuracy === true ? '-' : moveData.accuracy,
-                            description: moveData.shortDesc || moveData.desc || ''
-                        });
+                        // Only add if we got valid data
+                        if (moveData && moveData.name && moveData.type) {
+                            this.enemyLearnset.push({
+                                id: moveId,
+                                name: moveData.name,
+                                type: moveData.type,
+                                category: moveData.category || 'Physical',
+                                power: moveData.basePower || 0,
+                                accuracy: moveData.accuracy === true ? '-' : (moveData.accuracy || '-'),
+                                description: moveData.shortDesc || moveData.desc || ''
+                            });
+                        }
                     } catch (e) {
                         console.error(`Failed to fetch move ${moveId}:`, e);
                     }
@@ -170,33 +176,33 @@ function matchupApp() {
             }
         },
 
-        applyPreset(preset) {
-            if (preset === 'min') {
-                this.enemyEvs = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
-                this.enemyIvs = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
-                this.unknownEvs = false;
-                this.unknownIvs = false;
-            } else if (preset === 'max') {
-                this.enemyEvs = { hp: 252, atk: 252, def: 252, spa: 252, spd: 252, spe: 252 };
-                this.enemyIvs = { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 };
-                this.unknownEvs = false;
-                this.unknownIvs = false;
-            }
+        setEvMode(mode) {
+            this.evMode = mode;
             this.onConfigChange();
         },
 
-        isMinPreset() {
-            return Object.values(this.enemyEvs).every(v => v === 0) &&
-                   Object.values(this.enemyIvs).every(v => v === 0);
+        setIvMode(mode) {
+            this.ivMode = mode;
+            this.onConfigChange();
         },
 
-        isMaxPreset() {
-            return Object.values(this.enemyEvs).every(v => v === 252) &&
-                   Object.values(this.enemyIvs).every(v => v === 31);
+        // Get EVs based on current mode
+        getEvsForMode(mode) {
+            if (mode === 'min') return { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
+            if (mode === 'max') return { hp: 252, atk: 252, def: 252, spa: 252, spd: 252, spe: 252 };
+            return null; // unknown
+        },
+
+        // Get IVs based on current mode
+        getIvsForMode(mode) {
+            if (mode === 'min') return { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
+            if (mode === 'max') return { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 };
+            return null; // unknown
         },
 
         async calculateAllMatchups() {
             if (!this.enemyData || this.partyPokemon.length === 0) return;
+            if (this.calculating) return; // Prevent concurrent calculations
 
             this.calculating = true;
             this.matchups = [];
@@ -227,7 +233,8 @@ function matchupApp() {
                     // Calculate damage for enemy's moves vs party member
                     const enemyMoveResults = [];
                     for (const move of this.enemyLearnset) {
-                        if (move.category === 'Status' || !move.power) continue;
+                        // Skip status moves and moves with no power (case-insensitive check)
+                        if (move.category?.toLowerCase() === 'status' || !move.power) continue;
 
                         const damage = await this.calculateDamage(
                             this.buildEnemyPokemon(),
@@ -243,9 +250,17 @@ function matchupApp() {
                         });
                     }
 
+                    // Deduplicate by move name, keeping highest damage version
+                    const uniqueMoves = new Map();
+                    for (const m of enemyMoveResults) {
+                        if (!uniqueMoves.has(m.name) || m.maxDamage > uniqueMoves.get(m.name).maxDamage) {
+                            uniqueMoves.set(m.name, m);
+                        }
+                    }
+
                     // Sort by max damage and take top 4
-                    enemyMoveResults.sort((a, b) => b.maxDamage - a.maxDamage);
-                    matchup.enemyThreats = enemyMoveResults.slice(0, 4).map(m => ({
+                    const sortedMoves = [...uniqueMoves.values()].sort((a, b) => b.maxDamage - a.maxDamage);
+                    matchup.enemyThreats = sortedMoves.slice(0, 4).map(m => ({
                         name: m.name,
                         type: m.type,
                         damage: m.damage
@@ -253,6 +268,13 @@ function matchupApp() {
 
                     this.matchups.push(matchup);
                 }
+
+                // Sort by worst case damage taken (lowest first = safest matchup)
+                this.matchups.sort((a, b) => {
+                    const aMaxDmg = this.getWorstCaseDamagePercent(a.enemyThreats);
+                    const bMaxDmg = this.getWorstCaseDamagePercent(b.enemyThreats);
+                    return aMaxDmg - bMaxDmg;
+                });
             } catch (e) {
                 console.error('Failed to calculate matchups:', e);
             }
@@ -260,12 +282,16 @@ function matchupApp() {
             this.calculating = false;
         },
 
-        buildEnemyPokemon() {
+        buildEnemyPokemon(statOverride = null) {
+            // Default to min values, scenarios will override as needed
+            const evs = statOverride?.evs || this.getEvsForMode(this.evMode) || { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
+            const ivs = statOverride?.ivs || this.getIvsForMode(this.ivMode) || { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
+
             return {
                 species: this.enemy.species,
                 level: this.enemy.level,
-                evs: this.enemyEvs,
-                ivs: this.enemyIvs,
+                evs: evs,
+                ivs: ivs,
                 nature: 'hardy', // Neutral nature
                 ability: '',
                 item: '',
@@ -324,26 +350,31 @@ function matchupApp() {
         },
 
         getScenarios(isEnemyAttacking) {
-            // If stats are known, just return one scenario
-            if (!this.unknownEvs && !this.unknownIvs) {
-                return [{ evs: this.enemyEvs, ivs: this.enemyIvs }];
+            const minEvs = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
+            const maxEvs = { hp: 252, atk: 252, def: 252, spa: 252, spd: 252, spe: 252 };
+            const minIvs = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
+            const maxIvs = { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 };
+
+            // If both EVs and IVs are known (not 'unknown'), return single scenario
+            if (this.evMode !== 'unknown' && this.ivMode !== 'unknown') {
+                const evs = this.evMode === 'min' ? minEvs : maxEvs;
+                const ivs = this.ivMode === 'min' ? minIvs : maxIvs;
+                return [{ evs, ivs }];
             }
 
             // For unknown stats, calculate min and max scenarios
+            // Use min values for min damage, max values for max damage
             const scenarios = [];
 
-            const minEvs = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
-            const maxEvs = this.unknownEvs ?
-                { hp: 252, atk: 252, def: 252, spa: 252, spd: 252, spe: 252 } :
-                this.enemyEvs;
+            // Min scenario: uses min EVs/IVs for whichever is unknown, or the set value
+            const minScenarioEvs = this.evMode === 'unknown' ? minEvs : (this.evMode === 'min' ? minEvs : maxEvs);
+            const minScenarioIvs = this.ivMode === 'unknown' ? minIvs : (this.ivMode === 'min' ? minIvs : maxIvs);
+            scenarios.push({ evs: minScenarioEvs, ivs: minScenarioIvs });
 
-            const minIvs = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
-            const maxIvs = this.unknownIvs ?
-                { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 } :
-                this.enemyIvs;
-
-            scenarios.push({ evs: minEvs, ivs: minIvs });
-            scenarios.push({ evs: maxEvs, ivs: maxIvs });
+            // Max scenario: uses max EVs/IVs for whichever is unknown, or the set value
+            const maxScenarioEvs = this.evMode === 'unknown' ? maxEvs : (this.evMode === 'min' ? minEvs : maxEvs);
+            const maxScenarioIvs = this.ivMode === 'unknown' ? maxIvs : (this.ivMode === 'min' ? minIvs : maxIvs);
+            scenarios.push({ evs: maxScenarioEvs, ivs: maxScenarioIvs });
 
             return scenarios;
         },
@@ -394,6 +425,19 @@ function matchupApp() {
             return 0;
         },
 
+        getWorstCaseDamagePercent(enemyThreats) {
+            if (!enemyThreats || enemyThreats.length === 0) return 0;
+            // Get the highest damage percentage from the top threat
+            // Format is like "23-44 (39-75%)" - we want the max percent (75)
+            const topThreat = enemyThreats[0];
+            if (!topThreat || topThreat.damage === '--') return 0;
+            const match = topThreat.damage.match(/\((\d+)-?(\d+)?%\)/);
+            if (match) {
+                return parseInt(match[2] || match[1], 10);
+            }
+            return 0;
+        },
+
         getSpriteUrl(species) {
             if (!species) return '';
             const name = species.toLowerCase().replace(/[^a-z0-9-]/g, '');
@@ -402,6 +446,43 @@ function matchupApp() {
 
         handleSpriteError(event) {
             event.target.src = 'https://play.pokemonshowdown.com/sprites/gen5/0.png';
+        },
+
+        // Navigate to damage calculator with party Pokemon vs enemy
+        goToCalculator(partyMember) {
+            const minEvs = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
+            const maxEvs = { hp: 252, atk: 252, def: 252, spa: 252, spd: 252, spe: 252 };
+            const minIvs = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
+            const maxIvs = { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 };
+
+            // For the calculator, use min values when unknown (damage calc will show range)
+            const evs = this.evMode === 'max' ? maxEvs : minEvs;
+            const ivs = this.ivMode === 'max' ? maxIvs : minIvs;
+
+            // Store the matchup data for the calculator to pick up
+            const matchupData = {
+                attacker: {
+                    species: partyMember.species,
+                    level: partyMember.level,
+                    nature: partyMember.nature,
+                    ability: partyMember.ability?.name || '',
+                    item: partyMember.item?.name || '',
+                    ivs: partyMember.ivs,
+                    evs: partyMember.evs,
+                    moves: partyMember.moves
+                },
+                defender: {
+                    species: this.enemy.species,
+                    level: this.enemy.level,
+                    evs: evs,
+                    ivs: ivs,
+                    evMode: this.evMode,
+                    ivMode: this.ivMode
+                },
+                generation: this.generation
+            };
+            localStorage.setItem('matchup_to_calculator', JSON.stringify(matchupData));
+            window.location.href = '/calculator';
         }
     };
 }

@@ -57,7 +57,8 @@ function catchApp() {
                 id: 'nestball',
                 name: 'Nest Ball',
                 getMultiplier: function() {
-                    return Math.max(1.0, Math.min(4.0, (41 - this.level) / 10));
+                    // Gen 3: (40 - level) / 10, minimum 1
+                    return Math.max(1.0, (40 - this.level) / 10);
                 }
             },
             {
@@ -197,6 +198,8 @@ function catchApp() {
         },
 
         // Gen 3 catch rate formula
+        // Formula: X = ((3M - 2H) * C * B / 3M) * S
+        // Four independent shake checks with Y = 1048560 / sqrt(sqrt(16711680 / X))
         calculateCatchProbability(ballMultiplier) {
             if (!this.selectedPokemon || !this.selectedPokemon.catchRate) return 0;
 
@@ -206,21 +209,32 @@ function catchApp() {
             const catchRate = this.selectedPokemon.catchRate;
             const statusBonus = this.getStatusMultiplier();
 
+            // Gen 3 uses integer math with floor at each step
             // HP factor: (3*HPmax - 2*HPcurrent) / (3*HPmax)
-            // With percentage: (3 - 2*hpPercent/100) / 3
-            const hpFactor = (3 - 2 * this.hpPercent / 100) / 3;
+            // Using 100 as HPmax (percentage-based), HPcurrent = hpPercent
+            const hpNumerator = 3 * 100 - 2 * this.hpPercent;  // (3M - 2H)
 
-            // Calculate 'a' value
-            const a = hpFactor * catchRate * ballMultiplier * statusBonus;
+            // Calculate modified catch rate 'a' (called X in Gen 3)
+            // a = floor(floor((3M - 2H) * C * B / 3M) * S)
+            // Simplified with percentage: a = floor(hpNumerator * catchRate * ballMultiplier / 300 * statusBonus)
+            let a = Math.floor((hpNumerator * catchRate * ballMultiplier) / 300);
+            a = Math.floor(a * statusBonus);
 
-            // If a >= 255, guaranteed catch
+            // Minimum of 1, if >= 255 guaranteed catch
+            if (a < 1) a = 1;
             if (a >= 255) return 1.0;
 
-            // Calculate shake check value 'b'
-            // b = 1048560 / sqrt(sqrt(16711680 / a))
-            const b = Math.floor(1048560 / Math.sqrt(Math.sqrt(16711680 / a)));
+            // Calculate shake check value 'b' (called Y in Gen 3)
+            // b = floor(1048560 / sqrt(sqrt(16711680 / a)))
+            // Gen 3 floors at each step
+            const innerDiv = Math.floor(16711680 / a);
+            const innerSqrt = Math.floor(Math.sqrt(innerDiv));
+            const outerSqrt = Math.floor(Math.sqrt(innerSqrt));
+            const b = Math.floor(1048560 / outerSqrt);
 
-            // Probability = (b / 65536)^4
+            // Four independent shake checks
+            // Probability of passing one check = b / 65536
+            // Probability of all four = (b / 65536)^4
             const prob = Math.pow(b / 65536, 4);
 
             return Math.min(1.0, prob);

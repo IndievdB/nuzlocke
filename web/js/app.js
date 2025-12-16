@@ -78,8 +78,116 @@ function calculator() {
             this.loadItems();
             // Load party data from shared localStorage
             this.loadPartyData();
-            // Restore saved state
-            await this.loadState();
+
+            // Check for matchup-to-calculator data (from clicking matchup card)
+            const matchupData = localStorage.getItem('matchup_to_calculator');
+            if (matchupData) {
+                localStorage.removeItem('matchup_to_calculator');
+                // Clear existing state first to ensure clean load
+                localStorage.removeItem('calculator_state');
+                await this.loadFromMatchup(JSON.parse(matchupData));
+            } else {
+                // Restore saved state
+                await this.loadState();
+            }
+        },
+
+        // Load data from matchup page
+        async loadFromMatchup(data) {
+            try {
+                // Reset state first
+                this.attacker = createDefaultPokemon();
+                this.defender = createDefaultPokemon();
+                this.attackerForms = [];
+                this.defenderForms = [];
+                this.attackerLearnset = null;
+                this.move = { name: '', isCrit: false };
+                this.result = null;
+
+                // Set generation
+                this.generation = String(data.generation || 3);
+
+                // Load attacker (party Pokemon)
+                if (data.attacker?.species) {
+                    const speciesId = data.attacker.species.toLowerCase().replace(/[^a-z0-9]/g, '');
+                    const response = await fetch(`/api/pokemon/${speciesId}`);
+                    const pokemon = await response.json();
+
+                    this.attacker.species = speciesId;
+                    this.attacker.speciesData = pokemon;
+                    this.attacker.level = data.attacker.level || 50;
+                    this.attacker.nature = data.attacker.nature?.toLowerCase() || 'hardy';
+                    this.attacker.ability = data.attacker.ability || pokemon.abilities?.['0'] || '';
+                    this.attacker.item = data.attacker.item || '';
+
+                    // IVs and EVs from party data
+                    if (data.attacker.ivs) {
+                        this.attacker.ivs = {
+                            hp: data.attacker.ivs.hp ?? data.attacker.ivs.HP ?? 31,
+                            atk: data.attacker.ivs.atk ?? data.attacker.ivs.attack ?? 31,
+                            def: data.attacker.ivs.def ?? data.attacker.ivs.defense ?? 31,
+                            spa: data.attacker.ivs.spa ?? data.attacker.ivs.spAtk ?? 31,
+                            spd: data.attacker.ivs.spd ?? data.attacker.ivs.spDef ?? 31,
+                            spe: data.attacker.ivs.spe ?? data.attacker.ivs.speed ?? 31
+                        };
+                        this.attacker.unknownIvs = false;
+                    }
+                    if (data.attacker.evs) {
+                        this.attacker.evs = {
+                            hp: data.attacker.evs.hp ?? data.attacker.evs.HP ?? 0,
+                            atk: data.attacker.evs.atk ?? data.attacker.evs.attack ?? 0,
+                            def: data.attacker.evs.def ?? data.attacker.evs.defense ?? 0,
+                            spa: data.attacker.evs.spa ?? data.attacker.evs.spAtk ?? 0,
+                            spd: data.attacker.evs.spd ?? data.attacker.evs.spDef ?? 0,
+                            spe: data.attacker.evs.spe ?? data.attacker.evs.speed ?? 0
+                        };
+                        this.attacker.unknownEvs = false;
+                    }
+
+                    this.attackerSearch = pokemon.name;
+                    await this.loadAttackerLearnset(speciesId);
+                    await this.loadForms('attacker', pokemon.baseSpecies || pokemon.name);
+
+                    // Set first known move if available
+                    if (data.attacker.moves?.length > 0) {
+                        const moveId = data.attacker.moves[0].name.toLowerCase().replace(/[^a-z0-9]/g, '');
+                        this.move.name = moveId;
+                    }
+                }
+
+                // Load defender (enemy Pokemon)
+                if (data.defender?.species) {
+                    const speciesId = data.defender.species.toLowerCase().replace(/[^a-z0-9]/g, '');
+                    const response = await fetch(`/api/pokemon/${speciesId}`);
+                    const pokemon = await response.json();
+
+                    this.defender.species = speciesId;
+                    this.defender.speciesData = pokemon;
+                    this.defender.level = data.defender.level || 50;
+                    this.defender.nature = 'hardy';
+                    this.defender.ability = pokemon.abilities?.['0'] || '';
+                    this.defender.item = '';
+
+                    // EVs/IVs from matchup config
+                    if (data.defender.evs) {
+                        this.defender.evs = data.defender.evs;
+                    }
+                    if (data.defender.ivs) {
+                        this.defender.ivs = data.defender.ivs;
+                    }
+                    this.defender.unknownEvs = data.defender.unknownEvs ?? true;
+                    this.defender.unknownIvs = data.defender.unknownIvs ?? true;
+
+                    this.defenderSearch = pokemon.name;
+                    await this.loadForms('defender', pokemon.baseSpecies || pokemon.name);
+                }
+
+                // Save state after loading
+                this.saveState();
+
+            } catch (e) {
+                console.error('Failed to load from matchup:', e);
+            }
         },
 
         // Load party data from shared localStorage
@@ -995,6 +1103,149 @@ function calculator() {
                 return '6.25%';
             }
             return '4.17%';
+        },
+
+        // Calculate speed stat for a Pokemon
+        calculateSpeed(pokemon, evOverride = null, ivOverride = null) {
+            if (!pokemon.speciesData) return 0;
+
+            const baseSpe = pokemon.speciesData.baseStats?.spe || 0;
+            const level = pokemon.level || 100;
+            const ev = evOverride !== null ? evOverride : (pokemon.evs?.spe || 0);
+            const iv = ivOverride !== null ? ivOverride : (pokemon.ivs?.spe || 31);
+
+            // Base stat calculation
+            let speed = Math.floor((Math.floor((2 * baseSpe + iv + Math.floor(ev / 4)) * level / 100) + 5));
+
+            // Nature modifier
+            const nature = pokemon.nature?.toLowerCase() || 'hardy';
+            const speedBoostNatures = ['jolly', 'timid', 'hasty', 'naive'];
+            const speedDropNatures = ['brave', 'relaxed', 'quiet', 'sassy'];
+            if (speedBoostNatures.includes(nature)) {
+                speed = Math.floor(speed * 1.1);
+            } else if (speedDropNatures.includes(nature)) {
+                speed = Math.floor(speed * 0.9);
+            }
+
+            // Speed boost stages
+            const boost = pokemon.boosts?.spe || 0;
+            if (boost > 0) {
+                speed = Math.floor(speed * (2 + boost) / 2);
+            } else if (boost < 0) {
+                speed = Math.floor(speed * 2 / (2 - boost));
+            }
+
+            // Item modifiers
+            const item = pokemon.item?.toLowerCase() || '';
+            if (item === 'choice scarf') {
+                speed = Math.floor(speed * 1.5);
+            } else if (item === 'iron ball' || item === 'macho brace' || item === 'power weight' ||
+                       item === 'power bracer' || item === 'power belt' || item === 'power lens' ||
+                       item === 'power band' || item === 'power anklet') {
+                speed = Math.floor(speed * 0.5);
+            }
+
+            // Paralysis halves speed in Gen 3 (quarters in later gens but we use Gen 3 formula)
+            if (pokemon.status === 'par') {
+                speed = Math.floor(speed * 0.25); // Gen 3 is 25%
+            }
+
+            return speed;
+        },
+
+        // Get speed comparison result
+        getSpeedComparison() {
+            if (!this.attacker.speciesData || !this.defender.speciesData) {
+                return null;
+            }
+
+            // Check for priority items
+            const attackerItem = this.attacker.item?.toLowerCase() || '';
+            const defenderItem = this.defender.item?.toLowerCase() || '';
+
+            let attackerQuickClaw = attackerItem === 'quick claw';
+            let defenderQuickClaw = defenderItem === 'quick claw';
+
+            // Handle unknown EVs/IVs
+            const attackerUnknown = this.attacker.unknownEvs || this.attacker.unknownIvs;
+            const defenderUnknown = this.defender.unknownEvs || this.defender.unknownIvs;
+
+            if (!attackerUnknown && !defenderUnknown) {
+                // Both known - simple comparison
+                const attackerSpeed = this.calculateSpeed(this.attacker);
+                const defenderSpeed = this.calculateSpeed(this.defender);
+
+                return {
+                    attackerSpeed,
+                    defenderSpeed,
+                    attackerFirst: attackerSpeed > defenderSpeed,
+                    defenderFirst: defenderSpeed > attackerSpeed,
+                    speedTie: attackerSpeed === defenderSpeed,
+                    attackerQuickClaw,
+                    defenderQuickClaw,
+                    isRange: false
+                };
+            }
+
+            // Calculate speed ranges for unknown stats
+            const attackerMinEv = this.attacker.unknownEvs ? 0 : (this.attacker.evs?.spe || 0);
+            const attackerMaxEv = this.attacker.unknownEvs ? 252 : (this.attacker.evs?.spe || 0);
+            const attackerMinIv = this.attacker.unknownIvs ? 0 : (this.attacker.ivs?.spe || 31);
+            const attackerMaxIv = this.attacker.unknownIvs ? 31 : (this.attacker.ivs?.spe || 31);
+
+            const defenderMinEv = this.defender.unknownEvs ? 0 : (this.defender.evs?.spe || 0);
+            const defenderMaxEv = this.defender.unknownEvs ? 252 : (this.defender.evs?.spe || 0);
+            const defenderMinIv = this.defender.unknownIvs ? 0 : (this.defender.ivs?.spe || 31);
+            const defenderMaxIv = this.defender.unknownIvs ? 31 : (this.defender.ivs?.spe || 31);
+
+            const attackerMinSpeed = this.calculateSpeed(this.attacker, attackerMinEv, attackerMinIv);
+            const attackerMaxSpeed = this.calculateSpeed(this.attacker, attackerMaxEv, attackerMaxIv);
+            const defenderMinSpeed = this.calculateSpeed(this.defender, defenderMinEv, defenderMinIv);
+            const defenderMaxSpeed = this.calculateSpeed(this.defender, defenderMaxEv, defenderMaxIv);
+
+            // Determine outcomes
+            const alwaysAttackerFirst = attackerMinSpeed > defenderMaxSpeed;
+            const alwaysDefenderFirst = defenderMinSpeed > attackerMaxSpeed;
+            const canTie = !(alwaysAttackerFirst || alwaysDefenderFirst);
+
+            return {
+                attackerSpeed: attackerUnknown ? `${attackerMinSpeed}-${attackerMaxSpeed}` : attackerMinSpeed,
+                defenderSpeed: defenderUnknown ? `${defenderMinSpeed}-${defenderMaxSpeed}` : defenderMinSpeed,
+                attackerMinSpeed,
+                attackerMaxSpeed,
+                defenderMinSpeed,
+                defenderMaxSpeed,
+                alwaysAttackerFirst,
+                alwaysDefenderFirst,
+                canTie,
+                attackerQuickClaw,
+                defenderQuickClaw,
+                isRange: true
+            };
+        },
+
+        // Get formatted speed comparison text
+        getSpeedText() {
+            const comparison = this.getSpeedComparison();
+            if (!comparison) return '';
+
+            if (!comparison.isRange) {
+                if (comparison.speedTie) {
+                    return 'Speed tie (50/50)';
+                } else if (comparison.attackerFirst) {
+                    return 'Attacker moves first';
+                } else {
+                    return 'Defender moves first';
+                }
+            } else {
+                if (comparison.alwaysAttackerFirst) {
+                    return 'Attacker always moves first';
+                } else if (comparison.alwaysDefenderFirst) {
+                    return 'Defender always moves first';
+                } else {
+                    return 'Speed depends on EVs/IVs';
+                }
+            }
         },
 
         // Get min damage bar style (green portion)

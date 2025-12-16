@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Matchup Calculator</title>
+    <title>Nuzlocke Helper</title>
+    <link rel="icon" href="https://play.pokemonshowdown.com/sprites/itemicons/poke-ball.png" type="image/png">
     <link rel="stylesheet" href="/css/styles.css">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="/js/matchup.js"></script>
@@ -76,17 +77,21 @@
 
                 <!-- EVs/IVs Config -->
                 <div class="stats-config">
-                    <div class="preset-buttons">
-                        <button @click="applyPreset('min')" :class="{ active: !unknownEvs && !unknownIvs && isMinPreset() }">Min Stats</button>
-                        <button @click="applyPreset('max')" :class="{ active: !unknownEvs && !unknownIvs && isMaxPreset() }">Max Stats</button>
+                    <div class="stat-option-group">
+                        <span class="stat-option-label">EVs:</span>
+                        <div class="stat-options">
+                            <button type="button" @click="setEvMode('min')" :class="{ active: evMode === 'min' }">Min</button>
+                            <button type="button" @click="setEvMode('unknown')" :class="{ active: evMode === 'unknown' }">Unknown</button>
+                            <button type="button" @click="setEvMode('max')" :class="{ active: evMode === 'max' }">Max</button>
+                        </div>
                     </div>
-                    <div class="unknown-toggles">
-                        <label class="checkbox-label">
-                            <input type="checkbox" x-model="unknownEvs" @change="onConfigChange()"> Unknown EVs
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" x-model="unknownIvs" @change="onConfigChange()"> Unknown IVs
-                        </label>
+                    <div class="stat-option-group">
+                        <span class="stat-option-label">IVs:</span>
+                        <div class="stat-options">
+                            <button type="button" @click="setIvMode('min')" :class="{ active: ivMode === 'min' }">Min</button>
+                            <button type="button" @click="setIvMode('unknown')" :class="{ active: ivMode === 'unknown' }">Unknown</button>
+                            <button type="button" @click="setIvMode('max')" :class="{ active: ivMode === 'max' }">Max</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -104,8 +109,8 @@
             <section class="matchups-section">
                 <h2>Party Matchups</h2>
                 <div class="matchups-grid">
-                    <template x-for="(matchup, index) in matchups" :key="index">
-                        <div class="matchup-card">
+                    <template x-for="(matchup, index) in matchups" :key="matchup.partyMember.species + '-' + matchup.partyMember.level + '-' + index">
+                        <div class="matchup-card clickable" @click="goToCalculator(matchup.partyMember)" title="Click to open in Damage Calculator">
                             <div class="matchup-header">
                                 <div class="party-sprite">
                                     <img :src="getSpriteUrl(matchup.partyMember.species)" :alt="matchup.partyMember.species" @error="handleSpriteError($event)">
@@ -128,8 +133,8 @@
                             <div class="moves-section">
                                 <h4>Your Moves vs Enemy</h4>
                                 <div class="moves-table">
-                                    <template x-for="move in matchup.yourMoves" :key="move.name">
-                                        <div class="move-row" :class="'type-bg-' + move.type.toLowerCase()">
+                                    <template x-for="(move, moveIdx) in matchup.yourMoves" :key="move.name + '-' + moveIdx">
+                                        <div class="move-row" :class="'type-bg-' + (move.type?.toLowerCase() || 'normal')">
                                             <span class="move-name" x-text="move.name"></span>
                                             <span class="move-damage" x-text="move.damage"></span>
                                         </div>
@@ -141,8 +146,8 @@
                             <div class="threats-section">
                                 <h4>Enemy Threats</h4>
                                 <div class="moves-table">
-                                    <template x-for="(move, i) in matchup.enemyThreats" :key="move.name">
-                                        <div class="move-row threat" :class="'type-bg-' + move.type.toLowerCase()">
+                                    <template x-for="(move, i) in matchup.enemyThreats" :key="move.name + '-' + i">
+                                        <div class="move-row threat" :class="'type-bg-' + (move.type?.toLowerCase() || 'normal')">
                                             <span class="threat-rank" x-text="(i + 1) + '.'"></span>
                                             <span class="move-name" x-text="move.name"></span>
                                             <span class="move-damage" x-text="move.damage"></span>
@@ -173,11 +178,11 @@
                         <span>Acc</span>
                         <span>Description</span>
                     </div>
-                    <template x-for="move in enemyLearnset" :key="move.id">
+                    <template x-for="(move, moveIndex) in enemyLearnset" :key="move.id + '-' + moveIndex">
                         <div class="moveset-row">
                             <span class="move-name" x-text="move.name"></span>
-                            <span class="move-type"><span class="type-badge small" :class="'type-' + move.type.toLowerCase()" x-text="move.type"></span></span>
-                            <span class="move-category" x-text="move.category.substring(0, 3)"></span>
+                            <span class="move-type"><span class="type-badge small" :class="'type-' + (move.type?.toLowerCase() || 'normal')" x-text="move.type || '?'"></span></span>
+                            <span class="move-category" x-text="(move.category || 'Phy').substring(0, 3)"></span>
                             <span class="move-power" x-text="move.power || '-'"></span>
                             <span class="move-accuracy" x-text="move.accuracy || '-'"></span>
                             <span class="move-desc" x-text="move.description"></span>
