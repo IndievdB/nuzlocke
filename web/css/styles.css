@@ -2399,6 +2399,20 @@ nav a:hover, nav a.active {
     z-index: 1000;
 }
 
+/* Map Page */
+.map-container {
+    width: 100%;
+    height: calc(100vh - 150px);
+    min-height: 500px;
+}
+
+.map-container iframe {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    background: #16213e;
+}
+
 /* Responsive */
 @media (max-width: 900px) {
     .search-row {
