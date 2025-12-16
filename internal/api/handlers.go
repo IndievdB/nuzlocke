@@ -387,6 +387,7 @@ type PartyPokemonResponse struct {
 	IVs          savefile.PokemonStats  `json:"ivs"`
 	EVs          savefile.PokemonStats  `json:"evs"`
 	CurrentHP    int                    `json:"currentHp"`
+	Friendship   int                    `json:"friendship"`
 }
 
 // BoxPokemonResponse represents a Pokemon in a PC box with enriched data
@@ -403,6 +404,7 @@ type BoxPokemonResponse struct {
 	Stats        savefile.PokemonStats `json:"stats"`
 	IVs          savefile.PokemonStats `json:"ivs"`
 	EVs          savefile.PokemonStats `json:"evs"`
+	Friendship   int                   `json:"friendship"`
 }
 
 // ParseSaveResponse is the response for the parse save endpoint
@@ -451,6 +453,7 @@ func (h *Handler) HandleParseSave(w http.ResponseWriter, r *http.Request) {
 			IVs:          p.IVs,
 			EVs:          p.EVs,
 			CurrentHP:    p.CurrentHP,
+			Friendship:   p.Friendship,
 		}
 
 		// Resolve species
@@ -537,6 +540,7 @@ func (h *Handler) HandleParseSave(w http.ResponseWriter, r *http.Request) {
 				NatureEffect: savefile.GetNatureEffect(p.Nature),
 				IVs:          p.IVs,
 				EVs:          p.EVs,
+				Friendship:   p.Friendship,
 			}
 
 			// Resolve species

@@ -31,6 +31,7 @@ type PartyPokemon struct {
 	EVs         PokemonStats `json:"evs"`
 	CurrentHP   int          `json:"currentHp"`
 	AbilitySlot int          `json:"abilitySlot"` // 0 = first ability, 1 = second ability
+	Friendship  int          `json:"friendship"`
 }
 
 // BoxPokemon represents a Pokemon in PC storage (80 bytes, no calculated stats)
@@ -45,6 +46,7 @@ type BoxPokemon struct {
 	EVs         PokemonStats `json:"evs"`
 	AbilitySlot int          `json:"abilitySlot"`
 	Experience  uint32       `json:"experience"`
+	Friendship  int          `json:"friendship"`
 }
 
 // ParseResult contains the parsed save data
@@ -826,6 +828,9 @@ func parsePokemon(data []byte) PartyPokemon {
 		SpDef:   int((ivData >> 25) & 0x1F),
 	}
 
+	// Get friendship from Growth substructure byte 9
+	friendship := int(decryptedData[growthPos+9])
+
 	// Get stats from party data section (bytes 86-99)
 	// Party data: status(4), level(1), pokerus(1), currentHP(2), maxHP(2), atk(2), def(2), spe(2), spa(2), spd(2)
 	currentHP := int(binary.LittleEndian.Uint16(data[86:88]))
@@ -850,6 +855,7 @@ func parsePokemon(data []byte) PartyPokemon {
 		EVs:         evs,
 		CurrentHP:   currentHP,
 		AbilitySlot: abilitySlot,
+		Friendship:  friendship,
 	}
 }
 
@@ -1054,6 +1060,9 @@ func parseBoxPokemon(data []byte) BoxPokemon {
 		SpDef:   int((ivData >> 25) & 0x1F),
 	}
 
+	// Get friendship from Growth substructure byte 9
+	friendship := int(decryptedData[growthPos+9])
+
 	// Calculate level from experience (using Medium Fast as approximation)
 	// Medium Fast: EXP = n^3 where n is level
 	level := expToLevel(experience)
@@ -1069,6 +1078,7 @@ func parseBoxPokemon(data []byte) BoxPokemon {
 		EVs:         evs,
 		AbilitySlot: abilitySlot,
 		Experience:  experience,
+		Friendship:  friendship,
 	}
 }
 

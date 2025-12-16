@@ -58,7 +58,7 @@
                                      @error="handleSpriteError($event)">
                             </div>
                             <div class="party-info">
-                                <span class="pokemon-name" x-text="pokemon.nickname && pokemon.nickname.toLowerCase() !== pokemon.species.toLowerCase() ? pokemon.nickname : pokemon.species"></span>
+                                <span class="pokemon-name has-tooltip" x-text="pokemon.nickname && pokemon.nickname.toLowerCase() !== pokemon.species.toLowerCase() ? pokemon.nickname : pokemon.species" :data-tooltip="'Friendship: ' + pokemon.friendship"></span>
                                 <span class="pokemon-species" x-show="pokemon.nickname && pokemon.nickname.toLowerCase() !== pokemon.species.toLowerCase()" x-text="'(' + pokemon.species + ')'"></span>
                                 <div class="pokemon-types" x-show="pokemon.types && pokemon.types.length > 0">
                                     <template x-for="type in pokemon.types" :key="type">
@@ -156,7 +156,7 @@
                                                  @error="handleSpriteError($event)">
                                         </div>
                                         <div class="party-info">
-                                            <span class="pokemon-name" x-text="pokemon.nickname && pokemon.nickname.toLowerCase() !== pokemon.species.toLowerCase() ? pokemon.nickname : pokemon.species"></span>
+                                            <span class="pokemon-name has-tooltip" x-text="pokemon.nickname && pokemon.nickname.toLowerCase() !== pokemon.species.toLowerCase() ? pokemon.nickname : pokemon.species" :data-tooltip="'Friendship: ' + pokemon.friendship"></span>
                                             <span class="pokemon-species" x-show="pokemon.nickname && pokemon.nickname.toLowerCase() !== pokemon.species.toLowerCase()" x-text="'(' + pokemon.species + ')'"></span>
                                             <div class="pokemon-types" x-show="pokemon.types && pokemon.types.length > 0">
                                                 <template x-for="type in pokemon.types" :key="type">

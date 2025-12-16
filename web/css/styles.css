@@ -1077,6 +1077,7 @@ nav a:hover, nav a.active {
 
 .party-info .pokemon-types {
     display: flex;
+    justify-content: center;
     gap: 0.25rem;
     margin-top: 0.25rem;
 }
