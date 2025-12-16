@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matchup Calculator</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="/js/matchup.js"></script>
+</head>
+<body x-data="matchupApp()" x-init="init()">
+    <header>
+        <h1>Matchup Calculator</h1>
+        <nav>
+            <a href="/calculator">Damage</a>
+            <a href="/moves">Moves</a>
+            <a href="/items">Items</a>
+            <a href="/party">Party</a>
+            <a href="/catch">Catch</a>
+            <a href="/matchup" class="active">Matchup</a>
+        </nav>
+    </header>
+
+    <main class="matchup-layout">
+        <!-- Enemy Pokemon Selector -->
+        <section class="enemy-selector">
+            <h2>Enemy Pokemon</h2>
+            <div class="enemy-config">
+                <div class="search-row">
+                    <div class="search-container">
+                        <input type="text"
+                               x-model="enemySearchQuery"
+                               @input.debounce.200ms="searchEnemy()"
+                               @focus="showEnemyResults = enemySearchResults.length > 0"
+                               placeholder="Search Pokemon..."
+                               autocomplete="off">
+                        <ul x-show="showEnemyResults && enemySearchResults.length > 0"
+                            class="search-results"
+                            @click.away="showEnemyResults = false">
+                            <template x-for="result in enemySearchResults" :key="result.id">
+                                <li @click="selectEnemy(result)" x-text="result.name"></li>
+                            </template>
+                        </ul>
+                    </div>
+                    <div class="level-input">
+                        <label>Level:</label>
+                        <input type="number" x-model.number="enemy.level" min="1" max="100" @change="onEnemyChange()">
+                    </div>
+                </div>
+
+                <!-- Selected Enemy Display -->
+                <div class="selected-enemy" x-show="enemyData">
+                    <div class="enemy-sprite">
+                        <img :src="getSpriteUrl(enemy.species)" :alt="enemy.species" @error="handleSpriteError($event)">
+                    </div>
+                    <div class="enemy-info">
+                        <span class="enemy-name" x-text="enemyData?.name"></span>
+                        <div class="enemy-types" x-show="enemyData?.types">
+                            <template x-for="type in (enemyData?.types || [])" :key="type">
+                                <span class="type-badge" :class="'type-' + type.toLowerCase()" x-text="type"></span>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Generation Toggle -->
+                <div class="gen-toggle">
+                    <label>Generation:</label>
+                    <label class="radio-label">
+                        <input type="radio" x-model.number="generation" value="3" @change="onConfigChange()"> Gen 3
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" x-model.number="generation" value="9" @change="onConfigChange()"> Gen 9
+                    </label>
+                </div>
+
+                <!-- EVs/IVs Config -->
+                <div class="stats-config">
+                    <div class="preset-buttons">
+                        <button @click="applyPreset('min')" :class="{ active: !unknownEvs && !unknownIvs && isMinPreset() }">Min Stats</button>
+                        <button @click="applyPreset('max')" :class="{ active: !unknownEvs && !unknownIvs && isMaxPreset() }">Max Stats</button>
+                    </div>
+                    <div class="unknown-toggles">
+                        <label class="checkbox-label">
+                            <input type="checkbox" x-model="unknownEvs" @change="onConfigChange()"> Unknown EVs
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" x-model="unknownIvs" @change="onConfigChange()"> Unknown IVs
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- No Party Warning -->
+        <template x-if="partyPokemon.length === 0">
+            <section class="no-party-warning">
+                <p>No party data found. Please upload a save file on the <a href="/party">Party page</a> first.</p>
+            </section>
+        </template>
+
+        <!-- Party Matchups -->
+        <template x-if="partyPokemon.length > 0 && enemyData">
+            <section class="matchups-section">
+                <h2>Party Matchups</h2>
+                <div class="matchups-grid">
+                    <template x-for="(matchup, index) in matchups" :key="index">
+                        <div class="matchup-card">
+                            <div class="matchup-header">
+                                <div class="party-sprite">
+                                    <img :src="getSpriteUrl(matchup.partyMember.species)" :alt="matchup.partyMember.species" @error="handleSpriteError($event)">
+                                </div>
+                                <div class="party-info">
+                                    <span class="party-name" x-text="matchup.partyMember.nickname || matchup.partyMember.species"></span>
+                                    <span class="party-species" x-show="matchup.partyMember.nickname && matchup.partyMember.nickname.toLowerCase() !== matchup.partyMember.species.toLowerCase()" x-text="'(' + matchup.partyMember.species + ')'"></span>
+                                    <div class="party-details">
+                                        <span class="party-level" x-text="'Lv. ' + matchup.partyMember.level"></span>
+                                        <div class="party-types">
+                                            <template x-for="type in (matchup.partyMember.types || [])" :key="type">
+                                                <span class="type-badge small" :class="'type-' + type.toLowerCase()" x-text="type"></span>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Your Moves vs Enemy -->
+                            <div class="moves-section">
+                                <h4>Your Moves vs Enemy</h4>
+                                <div class="moves-table">
+                                    <template x-for="move in matchup.yourMoves" :key="move.name">
+                                        <div class="move-row" :class="'type-bg-' + move.type.toLowerCase()">
+                                            <span class="move-name" x-text="move.name"></span>
+                                            <span class="move-damage" x-text="move.damage"></span>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+
+                            <!-- Enemy Threats -->
+                            <div class="threats-section">
+                                <h4>Enemy Threats</h4>
+                                <div class="moves-table">
+                                    <template x-for="(move, i) in matchup.enemyThreats" :key="move.name">
+                                        <div class="move-row threat" :class="'type-bg-' + move.type.toLowerCase()">
+                                            <span class="threat-rank" x-text="(i + 1) + '.'"></span>
+                                            <span class="move-name" x-text="move.name"></span>
+                                            <span class="move-damage" x-text="move.damage"></span>
+                                        </div>
+                                    </template>
+                                    <template x-if="matchup.enemyThreats.length === 0">
+                                        <div class="no-threats">No damaging moves</div>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </section>
+        </template>
+
+        <!-- Enemy Moveset -->
+        <template x-if="enemyData && enemyLearnset.length > 0">
+            <section class="moveset-section">
+                <h2>Enemy Moveset at Level <span x-text="enemy.level"></span></h2>
+                <p class="moveset-note">Level-up moves only (Gen 9 learnset, no TM/Tutor)</p>
+                <div class="moveset-table">
+                    <div class="moveset-header">
+                        <span>Move</span>
+                        <span>Type</span>
+                        <span>Cat</span>
+                        <span>Pwr</span>
+                        <span>Acc</span>
+                        <span>Description</span>
+                    </div>
+                    <template x-for="move in enemyLearnset" :key="move.id">
+                        <div class="moveset-row">
+                            <span class="move-name" x-text="move.name"></span>
+                            <span class="move-type"><span class="type-badge small" :class="'type-' + move.type.toLowerCase()" x-text="move.type"></span></span>
+                            <span class="move-category" x-text="move.category.substring(0, 3)"></span>
+                            <span class="move-power" x-text="move.power || '-'"></span>
+                            <span class="move-accuracy" x-text="move.accuracy || '-'"></span>
+                            <span class="move-desc" x-text="move.description"></span>
+                        </div>
+                    </template>
+                </div>
+            </section>
+        </template>
+
+        <!-- Loading State -->
+        <div x-show="calculating" class="calculating-overlay">
+            <p>Calculating matchups...</p>
+        </div>
+    </main>
+
+    <footer>
+        <p>Matchup Calculator - Compare your party against enemy Pokemon</p>
+    </footer>
+</body>
+</html>

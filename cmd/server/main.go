@@ -65,6 +65,9 @@ func main() {
 	mux.HandleFunc("/items", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, filepath.Join(absWebDir, "items.html"))
 	})
+	mux.HandleFunc("/matchup", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, filepath.Join(absWebDir, "matchup.html"))
+	})
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path == "/" {
 			http.Redirect(w, r, "/calculator", http.StatusFound)
