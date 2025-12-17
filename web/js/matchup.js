@@ -9,7 +9,7 @@ function matchupApp() {
         enemyLearnset: [],
 
         // Config
-        generation: 3,
+        generation: 9,
         evMode: 'unknown',  // 'min', 'unknown', 'max'
         ivMode: 'unknown',  // 'min', 'unknown', 'max'
 
@@ -36,7 +36,7 @@ function matchupApp() {
                 if (saved) {
                     const state = JSON.parse(saved);
                     this.enemy = state.enemy || { species: '', level: 50 };
-                    this.generation = state.generation || 3;
+                    this.generation = state.generation || 9;
                     this.evMode = state.evMode || 'unknown';
                     this.ivMode = state.ivMode || 'unknown';
                     this.enemySearchQuery = state.enemySearchQuery || '';

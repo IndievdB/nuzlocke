@@ -1,7 +1,7 @@
 function calculator() {
     return {
         // Generation setting
-        generation: '3',
+        generation: '9',
 
         // Pokemon data
         attacker: createDefaultPokemon(),
@@ -105,7 +105,7 @@ function calculator() {
                 this.result = null;
 
                 // Set generation
-                this.generation = String(data.generation || 3);
+                this.generation = String(data.generation || 9);
 
                 // Load attacker (party Pokemon)
                 if (data.attacker?.species) {
