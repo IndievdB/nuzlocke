@@ -337,16 +337,38 @@ function matchupApp() {
             if (!minResult || !maxResult) return '--';
             if (minResult.maxDamage === 0) return '--';
 
-            // Format the result
-            const minDmg = minResult.minDamage;
-            const maxDmg = maxResult.maxDamage;
-            const minPct = minResult.minPercent?.toFixed(0) || '?';
-            const maxPct = maxResult.maxPercent?.toFixed(0) || '?';
+            // Check if this is a multi-hit move
+            const isMultiHit = (minResult.minHits > 1 || minResult.maxHits > 1);
 
-            if (minDmg === maxDmg) {
-                return `${minDmg} (${minPct}%)`;
+            // For multi-hit moves, use total damage; otherwise use single-hit damage
+            let minDmg, maxDmg, minPct, maxPct;
+            if (isMultiHit) {
+                // Min total = min damage per hit * min hits
+                // Max total = max damage per hit * max hits
+                minDmg = minResult.minTotalDmg;
+                maxDmg = maxResult.maxTotalDmg;
+                minPct = minResult.minTotalPct?.toFixed(0) || '?';
+                maxPct = maxResult.maxTotalPct?.toFixed(0) || '?';
+            } else {
+                minDmg = minResult.minDamage;
+                maxDmg = maxResult.maxDamage;
+                minPct = minResult.minPercent?.toFixed(0) || '?';
+                maxPct = maxResult.maxPercent?.toFixed(0) || '?';
             }
-            return `${minDmg}-${maxDmg} (${minPct}-${maxPct}%)`;
+
+            let result;
+            if (minDmg === maxDmg) {
+                result = `${minDmg} (${minPct}%)`;
+            } else {
+                result = `${minDmg}-${maxDmg} (${minPct}-${maxPct}%)`;
+            }
+
+            // Add hit count indicator for multi-hit moves
+            if (isMultiHit) {
+                result += ` [${minResult.minHits}-${minResult.maxHits}x]`;
+            }
+
+            return result;
         },
 
         getScenarios(isEnemyAttacking) {

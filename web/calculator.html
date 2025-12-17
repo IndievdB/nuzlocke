@@ -543,6 +543,14 @@
                 </div>
             </template>
 
+            <!-- Multi-hit total -->
+            <template x-if="result?.minHits > 1 || result?.maxHits > 1">
+                <div class="multihit-info">
+                    <span class="multihit-label" x-text="'(' + result?.minHits + '-' + result?.maxHits + ' hits)'"></span>
+                    <span class="multihit-total" x-text="'Total: ' + result?.minTotalDmg + '-' + result?.maxTotalDmg + ' (' + result?.minTotalPct?.toFixed(1) + '%-' + result?.maxTotalPct?.toFixed(1) + '%)'"></span>
+                </div>
+            </template>
+
             <!-- Range result (with unknowns) -->
             <template x-if="result?.hasRange">
                 <div class="damage-range-multi">

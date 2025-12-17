@@ -63,6 +63,12 @@ func (c *Calculator) Calculate(req *CalculateRequest) *models.DamageResult {
 	result := models.NewDamageResult(damages, req.Defender.GetMaxHP())
 	result.Factors = factors
 
+	// Set multi-hit info if applicable
+	minHits, maxHits := req.Move.GetMultihit()
+	if minHits > 1 || maxHits > 1 {
+		result.SetMultiHit(minHits, maxHits, req.Defender.GetMaxHP())
+	}
+
 	// Calculate KO chance
 	result.CalculateKO(req.Defender.GetCurrentHP(), req.Defender.GetMaxHP())
 

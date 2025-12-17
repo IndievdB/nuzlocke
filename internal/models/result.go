@@ -10,11 +10,19 @@ type DamageResult struct {
 	// Damage values
 	Damages []int `json:"damages"` // All 16 damage rolls (85-100%)
 
-	// Damage range
+	// Damage range (per hit for multi-hit moves)
 	MinDamage    int     `json:"minDamage"`
 	MaxDamage    int     `json:"maxDamage"`
 	MinPercent   float64 `json:"minPercent"`
 	MaxPercent   float64 `json:"maxPercent"`
+
+	// Multi-hit info
+	MinHits       int     `json:"minHits,omitempty"`       // Minimum number of hits (0 if not multi-hit)
+	MaxHits       int     `json:"maxHits,omitempty"`       // Maximum number of hits
+	MinTotalDmg   int     `json:"minTotalDmg,omitempty"`   // Min damage * min hits
+	MaxTotalDmg   int     `json:"maxTotalDmg,omitempty"`   // Max damage * max hits
+	MinTotalPct   float64 `json:"minTotalPct,omitempty"`   // Min total as percent
+	MaxTotalPct   float64 `json:"maxTotalPct,omitempty"`   // Max total as percent
 
 	// KO information
 	KOChance     *KOChance `json:"ko,omitempty"`
@@ -72,6 +80,23 @@ func NewDamageResult(damages []int, defenderMaxHP int) *DamageResult {
 	}
 
 	return result
+}
+
+// SetMultiHit calculates and sets multi-hit damage totals
+func (r *DamageResult) SetMultiHit(minHits, maxHits, defenderMaxHP int) {
+	if minHits <= 1 && maxHits <= 1 {
+		return // Not a multi-hit move
+	}
+
+	r.MinHits = minHits
+	r.MaxHits = maxHits
+	r.MinTotalDmg = r.MinDamage * minHits
+	r.MaxTotalDmg = r.MaxDamage * maxHits
+
+	if defenderMaxHP > 0 {
+		r.MinTotalPct = float64(r.MinTotalDmg) / float64(defenderMaxHP) * 100
+		r.MaxTotalPct = float64(r.MaxTotalDmg) / float64(defenderMaxHP) * 100
+	}
 }
 
 // CalculateKO calculates KO probability
