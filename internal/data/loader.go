@@ -443,13 +443,15 @@ func (s *Store) GetMoveByNum(num int) *Move {
 }
 
 // GetItemByNum returns an Item by its number
-// Prefers battle items (with flingBasePower) over key items when there are duplicates
+// Prefers battle items over key/mail items when there are duplicates
 func (s *Store) GetItemByNum(num int) *Item {
 	var fallback *Item
 	for _, item := range s.Items {
 		if item.Num == num {
-			// Battle items have flingBasePower, key items don't
-			if item.FlingBasePower > 0 {
+			// Prefer items with battle effects
+			if item.FlingBasePower > 0 || item.OnBasePower || item.OnModifyAtk ||
+				item.OnModifyDef || item.OnModifySpA || item.OnModifySpD ||
+				item.OnModifySpe || item.OnModifyDamage {
 				return item
 			}
 			// Keep first match as fallback if no battle item found
