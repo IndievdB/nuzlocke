@@ -649,73 +649,75 @@ func ParseGen3Save(data []byte) (*ParseResult, error) {
 
 	// Determine which save slot is more recent by checking the save index
 	// The save index is at offset 0xFFC in each sector's footer
+	// We need to find a sector with a valid signature (0x08012025) to get the save index
 	saveSlots := []int{0x0000, 0xE000} // Save A and Save B base addresses
 	saveIndexes := make([]uint32, 2)
 
 	for i, slotBase := range saveSlots {
-		// Check the first sector's save index (all sectors in a slot have the same save index)
-		footerOffset := slotBase + 0xFFC
-		if footerOffset+4 <= len(data) {
-			saveIndexes[i] = binary.LittleEndian.Uint32(data[footerOffset : footerOffset+4])
-		}
-	}
-
-	// Sort save slots by save index (higher = more recent), descending
-	if saveIndexes[1] > saveIndexes[0] {
-		saveSlots = []int{0xE000, 0x0000} // Save B is more recent
-	} else {
-		saveSlots = []int{0x0000, 0xE000} // Save A is more recent (or equal)
-	}
-
-	for _, slotBase := range saveSlots {
-		// Find Section 1 (Team/Items) by checking sector footers
-		section1Offset := -1
-
+		// Check each sector to find one with a valid signature
 		for sectorIdx := 0; sectorIdx < 14; sectorIdx++ {
 			sectorBase := slotBase + (sectorIdx * 0x1000)
-			footerOffset := sectorBase + 0xFF4
+			signatureOffset := sectorBase + 0xFF8
+			saveIndexOffset := sectorBase + 0xFFC
 
-			if footerOffset+4 > len(data) {
+			if saveIndexOffset+4 > len(data) {
 				continue
 			}
 
-			sectionID := binary.LittleEndian.Uint16(data[footerOffset : footerOffset+2])
-			if sectionID == 1 {
-				section1Offset = sectorBase
+			// Check for valid signature (0x08012025)
+			signature := binary.LittleEndian.Uint32(data[signatureOffset : signatureOffset+4])
+			if signature == 0x08012025 {
+				saveIndexes[i] = binary.LittleEndian.Uint32(data[saveIndexOffset : saveIndexOffset+4])
 				break
 			}
 		}
+	}
 
-		if section1Offset == -1 {
+	// Use the save slot with the higher save index (more recent)
+	var slotBase int
+	if saveIndexes[1] > saveIndexes[0] {
+		slotBase = 0xE000 // Save B is more recent
+	} else {
+		slotBase = 0x0000 // Save A is more recent (or equal)
+	}
+
+	// Find Section 1 (Team/Items) by checking sector footers
+	section1Offset := -1
+
+	for sectorIdx := 0; sectorIdx < 14; sectorIdx++ {
+		sectorBase := slotBase + (sectorIdx * 0x1000)
+		footerOffset := sectorBase + 0xFF4
+
+		if footerOffset+4 > len(data) {
 			continue
 		}
 
+		sectionID := binary.LittleEndian.Uint16(data[footerOffset : footerOffset+2])
+		if sectionID == 1 {
+			section1Offset = sectorBase
+			break
+		}
+	}
+
+	if section1Offset != -1 {
 		partyCountOffset := section1Offset + 0x234
 		partyDataOffset := section1Offset + 0x238
 
-		if partyDataOffset+600 > len(data) {
-			continue
-		}
+		if partyDataOffset+600 <= len(data) {
+			partyCount := int(data[partyCountOffset])
+			if partyCount >= 1 && partyCount <= 6 {
+				// Parse each party Pokemon
+				for i := 0; i < partyCount; i++ {
+					pokemonOffset := partyDataOffset + (i * 100)
+					pokemon := parsePokemon(data[pokemonOffset : pokemonOffset+100])
+					if pokemon.SpeciesNum > 0 && pokemon.SpeciesNum <= 1025 {
+						result.Party = append(result.Party, pokemon)
+					}
+				}
 
-		partyCount := int(data[partyCountOffset])
-		if partyCount < 1 || partyCount > 6 {
-			continue
-		}
-
-		// Parse each party Pokemon
-		for i := 0; i < partyCount; i++ {
-			pokemonOffset := partyDataOffset + (i * 100)
-			pokemon := parsePokemon(data[pokemonOffset : pokemonOffset+100])
-			if pokemon.SpeciesNum > 0 && pokemon.SpeciesNum <= 1025 {
-				result.Party = append(result.Party, pokemon)
+				// Parse box Pokemon from the same save slot
+				result.Boxes = parseBoxes(data, slotBase)
 			}
-		}
-
-		// Parse box Pokemon from the same save slot
-		result.Boxes = parseBoxes(data, slotBase)
-
-		if len(result.Party) > 0 {
-			break
 		}
 	}
 
