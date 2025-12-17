@@ -647,8 +647,25 @@ func ParseGen3Save(data []byte) (*ParseResult, error) {
 	// Section 1 contains party data at offset 0x234 (count) and 0x238 (data)
 	// Sections 5-13 contain PC box storage
 
-	// Try Save B first (usually more recent), then Save A
-	saveSlots := []int{0xE000, 0x0000}
+	// Determine which save slot is more recent by checking the save index
+	// The save index is at offset 0xFFC in each sector's footer
+	saveSlots := []int{0x0000, 0xE000} // Save A and Save B base addresses
+	saveIndexes := make([]uint32, 2)
+
+	for i, slotBase := range saveSlots {
+		// Check the first sector's save index (all sectors in a slot have the same save index)
+		footerOffset := slotBase + 0xFFC
+		if footerOffset+4 <= len(data) {
+			saveIndexes[i] = binary.LittleEndian.Uint32(data[footerOffset : footerOffset+4])
+		}
+	}
+
+	// Sort save slots by save index (higher = more recent), descending
+	if saveIndexes[1] > saveIndexes[0] {
+		saveSlots = []int{0xE000, 0x0000} // Save B is more recent
+	} else {
+		saveSlots = []int{0x0000, 0xE000} // Save A is more recent (or equal)
+	}
 
 	for _, slotBase := range saveSlots {
 		// Find Section 1 (Team/Items) by checking sector footers
