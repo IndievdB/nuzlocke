@@ -2434,6 +2434,138 @@ nav a:hover, nav a.active {
     background: #16213e;
 }
 
+/* Tab Navigation */
+.tab-nav {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.tab-nav button {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    background: #2a2a4e;
+    border: 1px solid #3a3a6e;
+    border-radius: 6px;
+    color: #aaa;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+    position: relative;
+}
+
+.tab-nav button:hover {
+    background: #3a3a6e;
+    color: #fff;
+}
+
+.tab-nav button.active {
+    background: #4a4a8e;
+    color: #fff;
+    border-color: #6a6abe;
+}
+
+.tab-badge {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: #4ade80;
+    border-radius: 50%;
+    margin-left: 0.5rem;
+}
+
+.tab-content {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* Bag Inventory Styles */
+.bag-pockets {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.pocket-section h2,
+.search-section h2 {
+    font-size: 1.1rem;
+    color: #a0a0ff;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #2a2a4e;
+}
+
+.items-layout .search-section {
+    margin-top: 1.5rem;
+}
+
+.pocket-count {
+    color: #888;
+    font-weight: normal;
+}
+
+.items-grid.inventory {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 0.75rem;
+}
+
+.item-card.inventory-item {
+    background: #1e1e3e;
+    border: 1px solid #3a3a6e;
+    border-radius: 6px;
+    padding: 0.75rem;
+}
+
+.item-card.inventory-item .item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.item-card.inventory-item .item-name {
+    font-weight: 600;
+    color: #fff;
+}
+
+.item-card.inventory-item .item-quantity {
+    color: #4ade80;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.item-card.inventory-item .item-desc {
+    font-size: 0.85rem;
+    color: #999;
+    line-height: 1.4;
+}
+
+/* Pocket-specific styling */
+.item-card.key-item {
+    border-left: 3px solid #f59e0b;
+}
+
+.item-card.pokeball-item {
+    border-left: 3px solid #ef4444;
+}
+
+.item-card.tm-item {
+    border-left: 3px solid #8b5cf6;
+}
+
+.item-card.berry-item {
+    border-left: 3px solid #22c55e;
+}
+
+.item-card.pc-item {
+    border-left: 3px solid #3b82f6;
+    opacity: 0.85;
+}
+
 /* Responsive */
 @media (max-width: 900px) {
     .search-row {
@@ -2457,5 +2589,13 @@ nav a:hover, nav a.active {
     .moveset-header span:last-child,
     .moveset-row .move-desc {
         display: none;
+    }
+
+    .items-grid.inventory {
+        grid-template-columns: 1fr;
+    }
+
+    .tab-nav {
+        flex-direction: column;
     }
 }

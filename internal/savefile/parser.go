@@ -49,10 +49,27 @@ type BoxPokemon struct {
 	Friendship  int          `json:"friendship"`
 }
 
+// BagItem represents an item in the player's bag or PC storage
+type BagItem struct {
+	ItemNum  int `json:"itemNum"`
+	Quantity int `json:"quantity"`
+}
+
+// BagPockets contains all bag pocket contents
+type BagPockets struct {
+	PCItems   []BagItem `json:"pcItems"`   // Items stored in PC
+	Items     []BagItem `json:"items"`     // General items pocket
+	KeyItems  []BagItem `json:"keyItems"`  // Key items pocket
+	PokeBalls []BagItem `json:"pokeBalls"` // Poke Balls pocket
+	TMsHMs    []BagItem `json:"tmsHms"`    // TMs and HMs pocket
+	Berries   []BagItem `json:"berries"`   // Berries pocket
+}
+
 // ParseResult contains the parsed save data
 type ParseResult struct {
 	Party []PartyPokemon `json:"party"`
 	Boxes [][]BoxPokemon `json:"boxes"` // 14 boxes, each up to 30 Pokemon
+	Bag   *BagPockets    `json:"bag"`   // Bag and PC item storage
 }
 
 // Substructure order lookup table (personality % 24)
@@ -164,28 +181,36 @@ func GetNatureEffect(nature string) NatureEffect {
 
 // expansionItemToShowdown maps pokeemerald-expansion item IDs to Showdown item IDs
 var expansionItemToShowdown = map[int]int{
-	6: 188,
-	7: 304,
-	8: 303,
-	9: 101,
-	10: 115,
-	11: 494,
-	12: 372,
-	13: 401,
-	14: 266,
-	15: 246,
-	16: 264,
-	17: 294,
-	18: 153,
-	19: 258,
-	20: 137,
-	21: 194,
-	22: 111,
-	23: 425,
-	24: 465,
-	25: 325,
-	26: 661,
-	27: 64,
+	// Poke Balls (IDs 1-16 in expansion)
+	1:  276, // Master Ball
+	2:  521, // Ultra Ball
+	3:  174, // Great Ball
+	4:  345, // Poke Ball
+	5:  425, // Safari Ball
+	6:  304, // Net Ball (overrides the heal ball mapping below if needed)
+	7:  101, // Dive Ball
+	8:  303, // Nest Ball
+	9:  401, // Repeat Ball
+	10: 494, // Timer Ball
+	11: 266, // Luxury Ball
+	12: 363, // Premier Ball
+	13: 115, // Dusk Ball
+	14: 188, // Heal Ball
+	15: 372, // Quick Ball
+	16: 64,  // Cherish Ball
+
+	// Special balls (IDs 17-27 in expansion)
+	17: 294, // Moon Ball
+	18: 153, // Friend Ball
+	19: 258, // Love Ball
+	20: 137, // Fast Ball
+	21: 194, // Heavy Ball
+	22: 111, // Dream Ball
+	23: 425, // Safari Ball (duplicate, but ok)
+	24: 465, // Sport Ball
+	25: 325, // Park Ball
+	26: 661, // Beast Ball
+	27: 64,  // Cherish Ball (duplicate, but ok)
 	53: 22,
 	133: 696,
 	134: 697,
@@ -635,6 +660,7 @@ func ParseGen3Save(data []byte) (*ParseResult, error) {
 	result := &ParseResult{
 		Party: []PartyPokemon{},
 		Boxes: make([][]BoxPokemon, 14),
+		Bag:   &BagPockets{},
 	}
 	for i := range result.Boxes {
 		result.Boxes[i] = []BoxPokemon{}
@@ -717,6 +743,9 @@ func ParseGen3Save(data []byte) (*ParseResult, error) {
 
 				// Parse box Pokemon from the same save slot
 				result.Boxes = parseBoxes(data, slotBase)
+
+				// Parse bag items (needs slotBase to find both section 0 and section 1)
+				result.Bag = parseBagItems(data, slotBase)
 			}
 		}
 	}
@@ -1112,4 +1141,102 @@ func expToLevel(exp uint32) int {
 		}
 	}
 	return 1
+}
+
+// parseBagItems parses all bag pockets from Section 1
+// Emerald bag pocket offsets (relative to section start):
+// - PC Items: 0x0498, 50 slots
+// - Items: 0x0560, 30 slots
+// - Key Items: 0x05D8, 30 slots
+// - Poke Balls: 0x0650, 16 slots
+// - TMs/HMs: 0x0690, 64 slots
+// - Berries: 0x0790, 46 slots
+// Each slot is 4 bytes: 2 bytes item ID, 2 bytes encrypted quantity
+// pokeemerald-expansion encrypts quantities with a key stored in section 0 at offset 0x44
+func parseBagItems(data []byte, slotBase int) *BagPockets {
+	bag := &BagPockets{
+		PCItems:   []BagItem{},
+		Items:     []BagItem{},
+		KeyItems:  []BagItem{},
+		PokeBalls: []BagItem{},
+		TMsHMs:    []BagItem{},
+		Berries:   []BagItem{},
+	}
+
+	// Find section 0 and section 1 offsets
+	section0Offset := -1
+	section1Offset := -1
+	for sectorIdx := 0; sectorIdx < 14; sectorIdx++ {
+		sectorBase := slotBase + (sectorIdx * 0x1000)
+		footerOffset := sectorBase + 0xFF4
+		if footerOffset+4 > len(data) {
+			continue
+		}
+		sectionID := int(binary.LittleEndian.Uint16(data[footerOffset : footerOffset+2]))
+		if sectionID == 0 {
+			section0Offset = sectorBase
+		} else if sectionID == 1 {
+			section1Offset = sectorBase
+		}
+	}
+
+	if section0Offset == -1 || section1Offset == -1 {
+		return bag
+	}
+
+	// Get the encryption key from section 0 at offset 0x44
+	// pokeemerald-expansion uses this to encrypt bag item quantities
+	keyOffset := section0Offset + 0x44
+	encryptionKey := uint16(0)
+	if keyOffset+2 <= len(data) {
+		encryptionKey = binary.LittleEndian.Uint16(data[keyOffset : keyOffset+2])
+	}
+
+	// Helper function to parse a pocket
+	parsePocket := func(offset, maxSlots int) []BagItem {
+		items := []BagItem{}
+		for i := 0; i < maxSlots; i++ {
+			slotOffset := section1Offset + offset + (i * 4)
+			if slotOffset+4 > len(data) {
+				break
+			}
+
+			itemID := int(binary.LittleEndian.Uint16(data[slotOffset : slotOffset+2]))
+			encryptedQty := binary.LittleEndian.Uint16(data[slotOffset+2 : slotOffset+4])
+
+			// Skip empty slots
+			if itemID == 0 {
+				continue
+			}
+
+			// Decrypt quantity by XORing with the encryption key
+			quantity := int(encryptedQty ^ encryptionKey)
+
+			// Skip if quantity is invalid (0 or unreasonably high)
+			if quantity <= 0 || quantity > 999 {
+				continue
+			}
+
+			// Convert expansion item ID to Showdown ID
+			showdownID := itemID
+			if mappedID, ok := expansionItemToShowdown[itemID]; ok {
+				showdownID = mappedID
+			}
+
+			items = append(items, BagItem{
+				ItemNum:  showdownID,
+				Quantity: quantity,
+			})
+		}
+		return items
+	}
+
+	bag.PCItems = parsePocket(0x0498, 50)
+	bag.Items = parsePocket(0x0560, 30)
+	bag.KeyItems = parsePocket(0x05D8, 30)
+	bag.PokeBalls = parsePocket(0x0650, 16)
+	bag.TMsHMs = parsePocket(0x0690, 64)
+	bag.Berries = parsePocket(0x0790, 46)
+
+	return bag
 }

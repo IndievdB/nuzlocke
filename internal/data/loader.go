@@ -443,7 +443,7 @@ func (s *Store) GetMoveByNum(num int) *Move {
 }
 
 // GetItemByNum returns an Item by its number
-// Prefers battle items over key/mail items when there are duplicates
+// Prefers battle items and Poke Balls over key/mail/gardening items when there are duplicates
 func (s *Store) GetItemByNum(num int) *Item {
 	var fallback *Item
 	for _, item := range s.Items {
@@ -454,7 +454,11 @@ func (s *Store) GetItemByNum(num int) *Item {
 				item.OnModifySpe || item.OnModifyDamage {
 				return item
 			}
-			// Keep first match as fallback if no battle item found
+			// Prefer Poke Balls (name ends with "Ball" but not gardening items)
+			if strings.HasSuffix(item.Name, "Ball") && !strings.Contains(item.ID, "mud") {
+				return item
+			}
+			// Keep first match as fallback if no preferred item found
 			if fallback == nil {
 				fallback = item
 			}

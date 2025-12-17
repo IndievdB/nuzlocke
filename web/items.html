@@ -11,7 +11,7 @@
 </head>
 <body x-data="itemsApp()" x-init="init()">
     <header>
-        <h1>Item Lookup</h1>
+        <h1>Items</h1>
         <nav>
             <a href="/calculator">Damage</a>
             <a href="/moves">Moves</a>
@@ -24,8 +24,121 @@
     </header>
 
     <main class="items-layout">
-        <!-- Search Section -->
+        <!-- Bag Inventory Section -->
+        <template x-if="hasBagItems()">
+            <div class="bag-pockets">
+                <!-- Items Pocket -->
+                <template x-if="bag.items && bag.items.length > 0">
+                    <section class="pocket-section">
+                        <h2>Items <span class="pocket-count" x-text="'(' + bag.items.length + ')'"></span></h2>
+                        <div class="items-grid inventory">
+                            <template x-for="(item, idx) in bag.items" :key="'item-' + idx">
+                                <div class="item-card inventory-item">
+                                    <div class="item-header">
+                                        <span class="item-name" x-text="item.name"></span>
+                                        <span class="item-quantity" x-text="'x' + item.quantity"></span>
+                                    </div>
+                                    <div class="item-desc" x-text="item.description || 'No description'"></div>
+                                </div>
+                            </template>
+                        </div>
+                    </section>
+                </template>
+
+                <!-- Key Items Pocket -->
+                <template x-if="bag.keyItems && bag.keyItems.length > 0">
+                    <section class="pocket-section">
+                        <h2>Key Items <span class="pocket-count" x-text="'(' + bag.keyItems.length + ')'"></span></h2>
+                        <div class="items-grid inventory">
+                            <template x-for="(item, idx) in bag.keyItems" :key="'key-' + idx">
+                                <div class="item-card inventory-item key-item">
+                                    <div class="item-header">
+                                        <span class="item-name" x-text="item.name"></span>
+                                    </div>
+                                    <div class="item-desc" x-text="item.description || 'No description'"></div>
+                                </div>
+                            </template>
+                        </div>
+                    </section>
+                </template>
+
+                <!-- Poke Balls Pocket -->
+                <template x-if="bag.pokeBalls && bag.pokeBalls.length > 0">
+                    <section class="pocket-section">
+                        <h2>Poke Balls <span class="pocket-count" x-text="'(' + bag.pokeBalls.length + ')'"></span></h2>
+                        <div class="items-grid inventory">
+                            <template x-for="(item, idx) in bag.pokeBalls" :key="'ball-' + idx">
+                                <div class="item-card inventory-item pokeball-item">
+                                    <div class="item-header">
+                                        <span class="item-name" x-text="item.name"></span>
+                                        <span class="item-quantity" x-text="'x' + item.quantity"></span>
+                                    </div>
+                                    <div class="item-desc" x-text="item.description || 'No description'"></div>
+                                </div>
+                            </template>
+                        </div>
+                    </section>
+                </template>
+
+                <!-- TMs/HMs Pocket -->
+                <template x-if="bag.tmsHms && bag.tmsHms.length > 0">
+                    <section class="pocket-section">
+                        <h2>TMs & HMs <span class="pocket-count" x-text="'(' + bag.tmsHms.length + ')'"></span></h2>
+                        <div class="items-grid inventory">
+                            <template x-for="(item, idx) in bag.tmsHms" :key="'tm-' + idx">
+                                <div class="item-card inventory-item tm-item">
+                                    <div class="item-header">
+                                        <span class="item-name" x-text="item.name"></span>
+                                        <span class="item-quantity" x-text="'x' + item.quantity"></span>
+                                    </div>
+                                    <div class="item-desc" x-text="item.description || 'No description'"></div>
+                                </div>
+                            </template>
+                        </div>
+                    </section>
+                </template>
+
+                <!-- Berries Pocket -->
+                <template x-if="bag.berries && bag.berries.length > 0">
+                    <section class="pocket-section">
+                        <h2>Berries <span class="pocket-count" x-text="'(' + bag.berries.length + ')'"></span></h2>
+                        <div class="items-grid inventory">
+                            <template x-for="(item, idx) in bag.berries" :key="'berry-' + idx">
+                                <div class="item-card inventory-item berry-item">
+                                    <div class="item-header">
+                                        <span class="item-name" x-text="item.name"></span>
+                                        <span class="item-quantity" x-text="'x' + item.quantity"></span>
+                                    </div>
+                                    <div class="item-desc" x-text="item.description || 'No description'"></div>
+                                </div>
+                            </template>
+                        </div>
+                    </section>
+                </template>
+
+                <!-- PC Items -->
+                <template x-if="bag.pcItems && bag.pcItems.length > 0">
+                    <section class="pocket-section">
+                        <h2>PC Storage <span class="pocket-count" x-text="'(' + bag.pcItems.length + ')'"></span></h2>
+                        <div class="items-grid inventory">
+                            <template x-for="(item, idx) in bag.pcItems" :key="'pc-' + idx">
+                                <div class="item-card inventory-item pc-item">
+                                    <div class="item-header">
+                                        <span class="item-name" x-text="item.name"></span>
+                                        <span class="item-quantity" x-text="'x' + item.quantity"></span>
+                                    </div>
+                                    <div class="item-desc" x-text="item.description || 'No description'"></div>
+                                </div>
+                            </template>
+                        </div>
+                    </section>
+                </template>
+            </div>
+        </template>
+
+        <!-- Item Search Section -->
         <section class="search-section">
+            <h2>Item Search</h2>
             <div class="search-container large">
                 <input type="text"
                        x-model="searchQuery"
@@ -52,11 +165,6 @@
         <!-- Empty State -->
         <div class="empty-state" x-show="searchQuery && filteredItems.length === 0">
             <p>No items found matching your search.</p>
-        </div>
-
-        <!-- Initial State -->
-        <div class="empty-state" x-show="!searchQuery && !loading">
-            <p>Search for items to see their descriptions.</p>
         </div>
 
         <!-- Loading State -->

@@ -407,10 +407,28 @@ type BoxPokemonResponse struct {
 	Friendship   int                   `json:"friendship"`
 }
 
+// BagItemResponse represents a bag item with resolved name and description
+type BagItemResponse struct {
+	Name        string `json:"name"`
+	Quantity    int    `json:"quantity"`
+	Description string `json:"description"`
+}
+
+// BagPocketsResponse contains all bag pockets with resolved item names
+type BagPocketsResponse struct {
+	PCItems   []BagItemResponse `json:"pcItems"`
+	Items     []BagItemResponse `json:"items"`
+	KeyItems  []BagItemResponse `json:"keyItems"`
+	PokeBalls []BagItemResponse `json:"pokeBalls"`
+	TMsHMs    []BagItemResponse `json:"tmsHms"`
+	Berries   []BagItemResponse `json:"berries"`
+}
+
 // ParseSaveResponse is the response for the parse save endpoint
 type ParseSaveResponse struct {
 	Party []PartyPokemonResponse   `json:"party"`
 	Boxes [][]BoxPokemonResponse   `json:"boxes"`
+	Bag   *BagPocketsResponse      `json:"bag"`
 }
 
 // HandleParseSave handles POST /api/nuzlocke/parse
@@ -631,6 +649,39 @@ func (h *Handler) HandleParseSave(w http.ResponseWriter, r *http.Request) {
 			}
 
 			response.Boxes[boxIdx] = append(response.Boxes[boxIdx], pokemon)
+		}
+	}
+
+	// Process bag items
+	if result.Bag != nil {
+		resolveBagPocket := func(items []savefile.BagItem) []BagItemResponse {
+			resolved := make([]BagItemResponse, 0, len(items))
+			for _, item := range items {
+				itemData := h.Store.GetItemByNum(item.ItemNum)
+				if itemData != nil {
+					resolved = append(resolved, BagItemResponse{
+						Name:        itemData.Name,
+						Quantity:    item.Quantity,
+						Description: itemData.Desc,
+					})
+				} else {
+					resolved = append(resolved, BagItemResponse{
+						Name:        "Unknown Item",
+						Quantity:    item.Quantity,
+						Description: "",
+					})
+				}
+			}
+			return resolved
+		}
+
+		response.Bag = &BagPocketsResponse{
+			PCItems:   resolveBagPocket(result.Bag.PCItems),
+			Items:     resolveBagPocket(result.Bag.Items),
+			KeyItems:  resolveBagPocket(result.Bag.KeyItems),
+			PokeBalls: resolveBagPocket(result.Bag.PokeBalls),
+			TMsHMs:    resolveBagPocket(result.Bag.TMsHMs),
+			Berries:   resolveBagPocket(result.Bag.Berries),
 		}
 	}
 

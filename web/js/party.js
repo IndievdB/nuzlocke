@@ -2,6 +2,7 @@ function partyApp() {
     return {
         party: [],
         boxes: [], // 14 boxes, each an array of Pokemon
+        bag: null, // Bag pockets with items
         fileName: '',
         lastFile: null,
         error: '',
@@ -18,6 +19,7 @@ function partyApp() {
                     const state = JSON.parse(saved);
                     this.party = state.party || [];
                     this.boxes = state.boxes || [];
+                    this.bag = state.bag || null;
                     this.fileName = state.fileName || '';
                 }
             } catch (e) {
@@ -30,6 +32,7 @@ function partyApp() {
                 const state = {
                     party: this.party,
                     boxes: this.boxes,
+                    bag: this.bag,
                     fileName: this.fileName
                 };
                 localStorage.setItem('nuzlocke_party', JSON.stringify(state));
@@ -41,6 +44,7 @@ function partyApp() {
         discardParty() {
             this.party = [];
             this.boxes = [];
+            this.bag = null;
             this.fileName = '';
             this.lastFile = null;
             localStorage.removeItem('nuzlocke_party');
@@ -73,6 +77,7 @@ function partyApp() {
             this.loading = true;
             this.party = [];
             this.boxes = [];
+            this.bag = null;
 
             try {
                 const arrayBuffer = await file.arrayBuffer();
@@ -93,10 +98,17 @@ function partyApp() {
                 console.log('Parsed save data:', result);
                 this.party = result.party || [];
                 this.boxes = result.boxes || [];
+                this.bag = result.bag || null;
 
                 // Count total box Pokemon
                 const boxCount = this.boxes.reduce((sum, box) => sum + (box ? box.length : 0), 0);
                 console.log(`Found ${this.party.length} party Pokemon and ${boxCount} box Pokemon`);
+                if (this.bag) {
+                    const bagCount = (this.bag.items?.length || 0) + (this.bag.keyItems?.length || 0) +
+                        (this.bag.pokeBalls?.length || 0) + (this.bag.tmsHms?.length || 0) +
+                        (this.bag.berries?.length || 0) + (this.bag.pcItems?.length || 0);
+                    console.log(`Found ${bagCount} unique items in bag`);
+                }
 
                 if (this.party.length === 0) {
                     this.error = 'No party Pokemon found in save file.';
